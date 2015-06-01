@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <artifactId>react-backstrap</artifactId>
+    <groupId>com.leaguekit</groupId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>React Backstrap</name>
+    <description>JS Library for building Single Page Applications using Backbone, Bootstrap, and React</description>
+
+    <properties>
+        <backbone.version>1.1.2-4</backbone.version>
+        <bootstrap.version>3.3.2-1</bootstrap.version>
+        <jquery.version>1.11.2</jquery.version>
+        <requirejs.version>2.1.16</requirejs.version>
+    </properties>
+
+    <dependencies>
+        <!-- bootstrap -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <!-- backbone -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>backbonejs</artifactId>
+            <version>${backbone.version}</version>
+        </dependency>
+        <!-- jquery -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <!-- requirejs -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>requirejs</artifactId>
+            <version>${requirejs.version}</version>
+        </dependency>
+        <!-- react -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>react</artifactId>
+            <version>0.13.3</version>
+        </dependency>
+        
+    </dependencies>
+
+</project>
