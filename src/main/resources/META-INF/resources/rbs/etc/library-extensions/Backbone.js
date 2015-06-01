@@ -2,7 +2,80 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
   "use strict";
 
   Backbone.Model = (function (oldModel) {
+    var oldGet = oldModel.prototype.get;
+    var oldSet = oldModel.prototype.set;
     return oldModel.extend({
+      // allow getting nested attributes via strings that are separated with a period
+      get: function (attribute) {
+        var pcs;
+        // if attribute isn't a string or is a single piece, just use the old get
+        if (typeof attribute !== "string" || (pcs = attribute.split(".")).length === 1) {
+          return oldGet.apply(this, arguments);
+        }
+
+        var firstPc = pcs.shift();
+        var val = oldGet.call(this, firstPc);
+
+        var pc;
+        while (pcs.length > 0 && typeof val !== "undefined" && val !== null) {
+          pc = pcs.shift();
+          if (typeof val.get === "function") {
+            val = val.get(pc);
+          } else {
+            val = val[pc];
+          }
+        }
+        return val;
+      },
+
+      set: function (key, val, options) {
+        // defer to the Backbone version if we don't get an object or a string for the first argument
+        if (typeof key !== "object" && typeof key !== "string") {
+          return oldSet.apply(this, arguments);
+        }
+
+        // if we do get a hash of attributes to set, just call the key, val version for each key to simplify the remaining code
+        if (typeof key === "object") {
+          _.each(key, function (value, attribute) {
+            this.set(value, attribute, options);
+          }, this);
+          return this;
+        }
+
+        // at this point we know key is a string
+        var pcs = key.split(".");
+        // if we're not setting a nested attribute, defer to the old version
+        if (pcs.length === 1) {
+          return oldSet.apply(this, arguments);
+        }
+
+        // this is where the special logic starts - if we are setting a nested attribute, we will just use the old set
+        // on the first piece of the attribute, but modify the object that we are setting and trigger a change event on
+        // the nested attribute
+
+        var firstPc = pcs.shift();
+        var toSet = this.get(firstPc);
+        var ptr = toSet;
+        // modify toSet with the new val
+        while (pcs.length > 1) {
+          var nextPc = pcs.shift();
+          // if it's not set, just put an empty object there
+          if (ptr[nextPc] === null || typeof ptr[nextPc] === "undefined") {
+            ptr[nextPc] = {};
+          }
+          // move the ptr down a level
+          ptr = ptr[nextPc];
+        }
+
+        ptr[pcs.shift()] = val;
+
+        // set toSet back into the parent using oldSet, silently
+        oldSet.call(this, firstPc, toSet, _.extend(options, { silent: true }));
+        // then trigger the change to the attribute
+        this.trigger("change:" + key, this, val, options);
+        return this;
+      },
+
       parse: function (response, options) {
         return response ? JSOG.parse(JSOG.stringify(response)) : response;
       }

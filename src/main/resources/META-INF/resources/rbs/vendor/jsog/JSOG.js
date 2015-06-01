@@ -1,4 +1,4 @@
-(function () {
+define([], function () {
   "use strict";
   var JSOG, JSOG_OBJECT_ID, hasCustomJsonificaiton, isArray, nextId;
 
@@ -39,9 +39,11 @@
           '@id': id
         };
         for (key in original) {
-          value = original[key];
-          if (key !== JSOG_OBJECT_ID) {
-            result[key] = doEncode(value);
+          if (original.hasOwnProperty(key)) {
+            value = original[key];
+            if (key !== JSOG_OBJECT_ID) {
+              result[key] = doEncode(value);
+            }
           }
         }
         return result;
@@ -117,7 +119,7 @@
           return results;
         })();
       };
-      if (encoded == null) {
+      if (encoded === null || typeof encoded === "undefined") {
         return encoded;
       } else if (isArray(encoded)) {
         return decodeArray(encoded);
@@ -138,20 +140,5 @@
     return JSOG.decode(JSON.parse(str));
   };
 
-  if ((typeof module !== "undefined" && module !== null) && module.exports) {
-    module.exports = JSOG;
-  }
-
-  if (typeof window !== "undefined" && window !== null) {
-    window.JSOG = JSOG;
-  }
-
-  if (typeof define === 'function' && define.amd) {
-    define('JSOG', [], function () {
-      return JSOG;
-    });
-  }
-
   return JSOG;
-
-}).call(this);
+});
