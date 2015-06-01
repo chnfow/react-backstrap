@@ -1,25 +1,27 @@
 @import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap.min.css');
 @import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap-theme.min.css');
-@import url('../../webjars/selectize.js/0.12.1/css/selectize.bootstrap3.css');
 
-[class^="col-"]{
+[class^="col-"] {
     margin-bottom: 10px;
 }
 
-#loading-progress{
-    opacity:  0;
+#loading-progress {
+    opacity: 0;
     width: 0;
     height: 3px;
     background-color: darkseagreen;
-    position: fixed;top:0;left:0;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 99999;
 }
 
-#loading-progress.loading{
+#loading-progress.loading {
     opacity: 0.9;
     width: 75%;
     transition: opacity 1s ease-out, width 5s ease;
 }
+
 #loading-progress.loading.done {
     width: 100%;
     opacity: 0;
@@ -33,5 +35,5 @@
 /* apply font smoothing everywhere */
 body {
     -webkit-font-smoothing: antialiased;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
