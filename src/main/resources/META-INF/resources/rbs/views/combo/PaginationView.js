@@ -1,4 +1,4 @@
-define(["backbone", "lkjs/views/collection/UnorderedListView", "lkjs/views/model/ListItemView", "bootstrap"],
+define(["backbone", "rbs/views/collection/UnorderedListView", "rbs/views/model/ListItemView", "bootstrap"],
   function (Backbone, ulView, liView) {
   "use strict";
 

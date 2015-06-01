@@ -1,12 +1,10 @@
 /**
  * jQuery extensions
  */
-define(["jquery"], function ($) {
+define(["original-jquery"], function ($) {
   "use strict";
   /**
-   * This function extracts data from a form
-   * input names can be separated by periods to indicate nesting of objects
-   * This does not handle arrays gracefully
+   * This function extracts data from a jquery element's inputs, including the selected input, and does some processing to certain types of data
    */
   $.fn.extend({
     formData: function () {
@@ -39,10 +37,6 @@ define(["jquery"], function ($) {
         toReturn[name] = val;
       });
       return toReturn;
-    },
-
-    attrRcr: function (attr) {
-      return $(this).closest("[" + attr + "]").attr(attr);
     }
   });
 
@@ -64,4 +58,6 @@ define(["jquery"], function ($) {
     }
     return true;
   };
+
+  return $;
 });

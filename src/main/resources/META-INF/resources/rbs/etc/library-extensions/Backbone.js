@@ -131,41 +131,5 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
 
   })(Backbone.Collection);
 
-
-  Backbone.View = (function (oldView) {
-    return oldView.extend({
-      // extend this instance with the options parameters passed in
-      constructor: function (options) {
-        if (options) {
-          _.extend(this, _.pick(options, this.options));
-        }
-        oldView.apply(this, arguments);
-      },
-
-      addClass: function (classes) {
-        if (typeof this.className === "function") {
-          this.className = _.partial(function (oldClassName) {
-            return oldClassName.call(this) + " " + classes;
-          }, this.className);
-        } else if (typeof this.className === "string") {
-          this.className += " " + classes;
-        } else {
-          this.className = classes;
-        }
-      },
-
-      applyAttributes: function () {
-        var attr = _.result(this, "attributes");
-        var cn = _.result(this, "className");
-        if (attr && typeof attr === "object") {
-          this.$el.attr(attr);
-        }
-        if (typeof cn === "string") {
-          this.$el.attr("class", cn);
-        }
-      }
-    });
-  })(Backbone.View);
-
   return Backbone;
 });

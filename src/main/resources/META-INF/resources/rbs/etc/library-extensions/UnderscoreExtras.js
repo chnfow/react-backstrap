@@ -23,20 +23,6 @@ define(["underscore"], function (_) {
     });
   };
 
-  // this function creates a span that displays the icon
-  var iconTemplate = _.template(' <span class="glyphicon glyphicon-<%- icon %>"></span> ');
-  util.icon = function (iconName) {
-    return iconTemplate({icon: iconName});
-  };
-
-  util.canRender = function (view) {
-    return (view && typeof view.render === "function");
-  };
-
-  util.canRemove = function (view) {
-    return (view && typeof view.remove === "function");
-  };
-
   util.capitalize = function (string) {
     if (typeof string !== "string") {
       console.error("Value passed to capitalize is not a string", string);
@@ -58,7 +44,9 @@ define(["underscore"], function (_) {
     return toReturn;
   };
 
-
+  /**
+   * Used to concatenate a list of arguments into a path that may or may not end/start with "/"
+   */
   util.path = function () {
     var toReturn = "";
     for (var i = 0, j = arguments.length; i < j; i++) {
@@ -92,6 +80,9 @@ define(["underscore"], function (_) {
     return toReturn;
   };
 
+  /**
+   * Takes a string, splits it, removes the empty pieces, and joins the result
+   */
   util.removeEmptyValues = function (string, splitter) {
     var pieces = string.split(splitter);
     var toReturn = [];
