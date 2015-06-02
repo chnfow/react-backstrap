@@ -12,7 +12,7 @@ define(["backbone", "underscore-extras"], function (Backbone, _) {
                 console.error("CollectionViews must be initiated with a collection");
             }
             if (!this.modelView) {
-                console.error("All collection views must be instantiated with a model view");
+                console.error("All collection components must be instantiated with a model view");
             }
 
             this.safeRerender = _.debounce(this.render, 50);
@@ -23,19 +23,19 @@ define(["backbone", "underscore-extras"], function (Backbone, _) {
 
         syncViews: function () {
             var newViews = {};
-            // create views for any models that are in the collection and don't have views
+            // create components for any models that are in the collection and don't have components
             this.collection.each(function (oneModel) {
                 newViews[oneModel.cid] = this.views[oneModel.cid] || new this.modelView({ model: oneModel });
             }, this);
 
-            // call remove on the views that are no longer in the collection
+            // call remove on the components that are no longer in the collection
             _.each(this.views, function (oneView) {
                 if (!newViews[oneView.model.cid]) {
                     oneView.remove();
                 }
             }, this);
 
-            // set the views for this collection to the views
+            // set the components for this collection to the components
             this.views = newViews;
             this.safeRerender();
         },

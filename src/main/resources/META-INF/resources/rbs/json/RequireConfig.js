@@ -1,3 +1,9 @@
+/**
+ * This file is used when bootstrapping the application to define all the pointers to the vendor files, since the
+ * vendor files may be upgraded in version without the client application being aware of the upgrade
+ * These upgrades can be transparent if the client application is using the components provided in this module, since
+ * those modules should be updated alongside the version upgrades
+ */
 define({
   baseUrl: "",
 

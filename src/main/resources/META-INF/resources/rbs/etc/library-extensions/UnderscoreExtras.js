@@ -1,4 +1,4 @@
-define(["underscore"], function (_) {
+define(["underscore", "react"], function (_, React) {
   "use strict";
   var util = {};
 
@@ -93,6 +93,8 @@ define(["underscore"], function (_) {
     });
     return toReturn.join(splitter);
   };
+
+  util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);
   return _;
