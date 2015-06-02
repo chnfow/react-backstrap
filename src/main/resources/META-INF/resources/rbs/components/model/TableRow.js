@@ -1,5 +1,5 @@
 /**
- * Renders a row of model attributes
+ * Renders a table row of model attributes
  */
 define(["react", "../mixins/Model", "underscore-extras"], function (React, model, _) {
   "use strict";
