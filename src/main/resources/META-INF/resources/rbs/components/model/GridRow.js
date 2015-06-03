@@ -1,31 +1,33 @@
 /**
- * Renders a bootstrap grid row of model attributes
+ * Renders a bootstrap grid row of model attributes in form groups
  */
-define([ "react", "underscore-extras" ],
-    function (React, _) {
+define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore-extras"],
+  function (React, model, formGroup, _) {
     "use strict";
     return _.rf({
 
-        propTypes: {
-            size: React.PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"])
-        },
+      mixins: [model, formGroup],
 
-        getDefaultProps: function () {
-            return {
-                size: "md"
-            };
-        },
+      propTypes: {
+        size: React.PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"])
+      },
 
-        render: function () {
-            var origChildren = this.getChildren();
-            var children = _.map(origChildren, function (oneChildComponent) {
-                var columns = oneChildComponent.props.columns || Math.floor((12 / (origChildren.length)));
-                var colClass = ["col", this.props.size, columns].join("-");
-                return React.DOM.div({ className: colClass }, oneChildComponent);
-            }, this);
+      getDefaultProps: function () {
+        return {
+          size: "md"
+        };
+      },
 
-            return React.DOM.div(_.extend({}, this.props, { className: "row" }), children);
-        }
+      render: function () {
+        var origChildren = this.getChildren();
+        var children = _.map(origChildren, function (oneChildComponent) {
+          var columns = oneChildComponent.props.columns || Math.floor((12 / (origChildren.length)));
+          var colClass = ["col", this.props.size, columns].join("-");
+          return React.DOM.div({className: colClass}, oneChildComponent);
+        }, this);
+
+        return React.DOM.div(_.extend({}, this.props, {className: "row"}), children);
+      }
 
     });
-});
+  });
