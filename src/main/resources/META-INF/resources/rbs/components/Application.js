@@ -1,19 +1,17 @@
 define(["react", "underscore-extras"], function (React, _) {
   "use strict";
 
-  return _.rf({
-    propTypes: {
+  var RCSST = React.addons.CSSTransitionGroup;
 
-    },
+  return _.rf({
+    propTypes: {},
 
     getInitialState: function () {
 
     },
-    
-    getDefaultProps: function () {
-      return {
 
-      };
+    getDefaultProps: function () {
+      return RCSST(_.extend({}, this.props), this.props.children);
     },
 
     render: function () {
