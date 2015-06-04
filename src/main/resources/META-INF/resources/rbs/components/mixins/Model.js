@@ -1,4 +1,4 @@
-define(["react", "underscore", "./Events", "jquery-extras", "../attribute/Attributes"], function (React, _, events, $, attributes) {
+define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes"], function (React, _, events, $, attributes) {
   "use strict";
   return React.createMixin({
     mixins: [events],

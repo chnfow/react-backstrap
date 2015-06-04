@@ -5,7 +5,7 @@ define(["react", "backbone", "underscore"], function (React, Backbone, _) {
       _.extend(this, Backbone.Events);
     },
 
-    componentDidUnmount: function () {
+    componentWillUnmount: function () {
       this.stopListening();
     }
   });

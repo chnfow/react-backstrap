@@ -37,7 +37,7 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
         // if we do get a hash of attributes to set, just call the key, val version for each key to simplify the remaining code
         if (typeof key === "object") {
           _.each(key, function (value, attribute) {
-            this.set(value, attribute, options);
+            this.set(attribute, value, options);
           }, this);
           return this;
         }
@@ -52,10 +52,13 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
         // this is where the special logic starts - if we are setting a nested attribute, we will just use the old set
         // on the first piece of the attribute, but modify the object that we are setting and trigger a change event on
         // the nested attribute
-
         var firstPc = pcs.shift();
         var toSet = this.get(firstPc);
+        if (toSet === null || typeof toSet !== "object") {
+          toSet = {};
+        }
         var ptr = toSet;
+
         // modify toSet with the new val
         while (pcs.length > 1) {
           var nextPc = pcs.shift();
@@ -70,7 +73,7 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
         ptr[pcs.shift()] = val;
 
         // set toSet back into the parent using oldSet, silently
-        oldSet.call(this, firstPc, toSet, _.extend(options, { silent: true }));
+        oldSet.call(this, firstPc, toSet, _.extend({}, options, { silent: true }));
         // then trigger the change to the attribute
         this.trigger("change:" + key, this, val, options);
         return this;
@@ -84,7 +87,7 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
 
   Backbone.Collection = (function (oldCollection) {
     return oldCollection.extend({
-      model: Backbone.DeepModel,
+      model: Backbone.Model,
       pageNo: 0,
       pageParam: "X-First-Result",
       pageSize: 20,
@@ -203,6 +206,9 @@ define(["original-backbone", "jsog", "jquery", "underscore-extras"], function (B
     });
 
   })(Backbone.Collection);
+
+  // don't use Backbone views :)
+  delete Backbone.View;
 
   return Backbone;
 });

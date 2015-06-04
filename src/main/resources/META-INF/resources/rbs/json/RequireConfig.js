@@ -18,7 +18,7 @@ define({
     "text": "webjars/requirejs-text/2.0.10-3/text",
     "facebook": "//connect.facebook.net/en_US/sdk",
     "jsog": "rbs/vendor/jsog/JSOG",
-    "react": "webjars/react/0.13.3/react-with-addons.min",
+    "react": "webjars/react/0.13.3/react-with-addons",//.min",
     "raf": "rbs/vendor/polyfill/rAF",
     "ga": "//www.google-analytics.com/analytics"
   },

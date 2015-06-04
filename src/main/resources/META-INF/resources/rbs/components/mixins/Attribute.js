@@ -1,11 +1,13 @@
-define(["react", "./Events", "jquery-extras"], function (React, events, $) {
+define(["react", "./Events", "jquery"], function (React, events, $) {
   "use strict";
   return React.createMixin({
     mixins: [events],
+
     propTypes: {
       model: React.PropTypes.object.isRequired,
       attribute: React.PropTypes.string.isRequired
     },
+
     componentDidMount: function () {
       var pcs = this.props.attribute.split(".");
       // for each of the pieces
