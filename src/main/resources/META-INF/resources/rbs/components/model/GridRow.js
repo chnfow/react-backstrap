@@ -1,7 +1,7 @@
 /**
  * Renders a bootstrap grid row of model attributes in form groups
  */
-define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore-extras"],
+define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"],
   function (React, model, formGroup, _) {
     "use strict";
     return _.rf({

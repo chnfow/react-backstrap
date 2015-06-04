@@ -1,4 +1,4 @@
-define(["react", "underscore-extras"], function (React, _) {
+define(["react", "underscore"], function (React, _) {
   "use strict";
 
   var RCSST = React.addons.CSSTransitionGroup;

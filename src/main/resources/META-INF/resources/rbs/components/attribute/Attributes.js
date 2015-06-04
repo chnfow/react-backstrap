@@ -2,7 +2,7 @@
  * All the attribute views that render a single attribute of a model in some way - since these are relatively simple
  * in that they just implement two way binding to a model's attribute, they are grouped in a single file
  */
-define(["react", "../mixins/Attribute", "../layout/Icon", "underscore-extras"], function (React, attribute, icon, _) {
+define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], function (React, attribute, icon, _) {
   "use strict";
 
   var exports = {};

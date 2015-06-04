@@ -1,7 +1,7 @@
 /**
  * Renders a collection in a div
  */
-define(["react", "underscore-extras", "../mixins/Collection"], function (React, _, collection) {
+define(["react", "underscore", "../mixins/Collection"], function (React, _, collection) {
     "use strict";
 
     return _.rf({

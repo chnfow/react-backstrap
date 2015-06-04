@@ -1,4 +1,4 @@
-define(["underscore", "react"], function (_, React) {
+define(["original-underscore", "react"], function (_, React) {
   "use strict";
   var util = {};
 

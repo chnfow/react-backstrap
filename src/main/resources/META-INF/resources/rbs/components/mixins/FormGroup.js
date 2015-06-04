@@ -1,11 +1,11 @@
 /**
  * A mixin that provides a function for creating a form group to wrap an input
  */
-define(["react"], function (React) {
+define(["react", "underscore"], function (React) {
   "use strict";
   return React.createMixin({
     makeFormGroup: function (component) {
-        var formGroupChildren;
+        var formGroupChildren = [];
         // add the form-control class
         var oldClass = component.props.className;
         var newClass = "form-control ";
@@ -25,7 +25,7 @@ define(["react"], function (React) {
         formGroupChildren.push(newComponent);
         // if the component has a label, point it at the new component
         if (newComponent.props.label) {
-          formGroupChildren.shift(React.DOM.label({ htmlFor: newComponent.props.id }), newComponent.props.label);
+          formGroupChildren.unshift(React.DOM.label({ htmlFor: newComponent.props.id }, newComponent.props.label));
         }
         return React.DOM.div({ className: "form-group" }, formGroupChildren);
     }

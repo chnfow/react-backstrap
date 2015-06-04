@@ -1,7 +1,7 @@
 /**
  * Renders a table row of model attributes
  */
-define(["react", "../mixins/Model", "underscore-extras"], function (React, model, _) {
+define(["react", "../mixins/Model", "underscore"], function (React, model, _) {
   "use strict";
 
   return _.rf({

@@ -1,4 +1,4 @@
-define(["react", "underscore-extras", "../mixins/Attribute", "../mixins/Collection", "./Select"],
+define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", "./Select"],
   function (React, _, attribute, collection, select) {
 
     "use strict";

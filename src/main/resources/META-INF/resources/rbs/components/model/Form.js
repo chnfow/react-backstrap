@@ -1,7 +1,7 @@
 /**
  * Represent a model in a <form></form>
  */
-define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore-extras"], function (React, model, formGroup, _) {
+define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"], function (React, model, formGroup, _) {
   "use strict";
 
   return _.rf({

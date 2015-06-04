@@ -1,4 +1,4 @@
-define(["react", "underscore-extras", "../layout/Icon", "jquery"], function (React, _, icon, $) {
+define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, icon, $) {
   "use strict";
 
   return _.rf({
@@ -24,7 +24,7 @@ define(["react", "underscore-extras", "../layout/Icon", "jquery"], function (Rea
     componentDidMount: function () {
       // prevent double-clicks
       this.beforeOnClick = _.debounce(this.beforeOnClick, 500, true);
-      
+
       if (this.props.ajaxButton) {
         this.toLoading = _.bind(this.setLoading, this, true);
         $(document).ajaxStart(this.toLoading);

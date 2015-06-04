@@ -6,7 +6,7 @@
  * link: link URL
  * dropdown: a collection of models with icon/text/link representing links in a submenu
  */
-define(["backbone", "jquery", "../layout/ContainerView", "../collection/UnorderedListView", "../model/ListItemView", "Button", "underscore-extras", "bootstrap"],
+define(["backbone", "jquery", "../layout/ContainerView", "../collection/UnorderedListView", "../model/ListItemView", "Button", "underscore", "bootstrap"],
     function (Backbone, $, containerView, ulView, liView, buttonView, _) {
     "use strict";
 
