@@ -8,7 +8,8 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection"],
       mixins: [attribute, collection],
 
       propTypes: {
-        valueAttribute: React.PropTypes.string
+        valueAttribute: React.PropTypes.string,
+        placeholder: React.PropTypes.string
       },
 
       getDefaultProps: function () {
@@ -25,9 +26,19 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection"],
           }, oneModel);
         }, this);
 
+        if (this.props.placeholder) {
+          options.unshift(React.DOM.option({ value: "" }, this.props.placeholder));
+        }
+
+        // if it's null or undefined, make sure the placeholder is selected when rendered
+        var value = this.getValue();
+        if (value === null || typeof value === "undefined") {
+          value = "";
+        }
+
         return React.DOM.select(_.extend({}, this.props, {
           onChange: this.saveData,
-          value: this.getValue(),
+          value: value,
           name: this.props.attribute
         }), options);
       }

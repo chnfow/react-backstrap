@@ -1,4 +1,4 @@
-define(["original-backbone", "jsog", "jquery", "underscore"], function (Backbone, JSOG, $, _) {
+define(["original-backbone", "jsog", "jquery", "original-underscore"], function (Backbone, JSOG, $, _) {
   "use strict";
 
   Backbone.Model = (function (oldModel) {
