@@ -8,7 +8,7 @@ define(["react", "underscore-extras", "../mixins/Collection"], function (React, 
         mixins: [collection],
 
         render: function () {
-            return React.DOM.div(_.extend({}, this.props), this.getChildren());
+            return React.DOM.div(_.extend({}, this.props), this.getModels());
         }
     });
 

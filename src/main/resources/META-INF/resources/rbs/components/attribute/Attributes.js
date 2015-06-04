@@ -13,7 +13,8 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore-extras"], 
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
         value: this.getValue(),
-        onChange: this.saveData
+        onChange: this.saveData,
+        name: this.props.attribute
       }));
     }
   });
@@ -52,7 +53,8 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore-extras"], 
       return React.DOM.input(_.extend({}, this.props, {
         type: "checkbox",
         value: Boolean(this.getValue()),
-        onChange: this.saveData
+        onChange: this.saveData,
+        name: this.props.attribute
       }));
     }
   });
@@ -62,7 +64,8 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore-extras"], 
     render: function () {
       return React.DOM.textarea(_.extend({}, this.props, {
         value: this.getValue(),
-        onChange: this.saveData
+        onChange: this.saveData,
+        name: this.props.attribute
       }));
     }
   });

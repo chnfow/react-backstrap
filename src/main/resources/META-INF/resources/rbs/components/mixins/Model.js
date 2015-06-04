@@ -8,7 +8,7 @@ define(["react", "underscore", "./Events", "jquery-extras", "../attribute/Attrib
     },
 
     // this function takes an array of model attributes and returns the resulting children from the description
-    getChildren: function () {
+    getAttributes: function () {
       return _.without(_.map(this.props.attributes, function (oneAttribute) {
         var comp = oneAttribute.component;
         var viewType;

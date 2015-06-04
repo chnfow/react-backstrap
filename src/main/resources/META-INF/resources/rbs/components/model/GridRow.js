@@ -19,7 +19,7 @@ define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore-extras"],
       },
 
       render: function () {
-        var origChildren = this.getChildren();
+        var origChildren = this.getAttributes();
         var children = _.map(origChildren, function (oneChildComponent) {
           var columns = oneChildComponent.props.columns || Math.floor((12 / (origChildren.length)));
           var colClass = ["col", this.props.size, columns].join("-");

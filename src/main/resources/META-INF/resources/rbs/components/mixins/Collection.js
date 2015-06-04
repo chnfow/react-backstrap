@@ -13,7 +13,7 @@ define(["react", "./Events", "underscore-extras"], function (React, events, _) {
       this.listenTo(this.props.collection, "add remove reset", function () { this.forceUpdate(); });
     },
 
-    getChildren: function () {
+    getModels: function () {
       return this.collection.map(function (oneModel) {
         return this.props.component({ model: oneModel });
       });

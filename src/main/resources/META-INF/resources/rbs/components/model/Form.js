@@ -7,7 +7,7 @@ define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore-extras"],
   return _.rf({
     mixins: [model, formGroup],
     render: function () {
-      var children = _.map(this.getChildren(), this.makeFormGroup);
+      var children = _.map(this.getAttributes(), this.makeFormGroup);
 
       return React.DOM.form(_.extend({}, this.props, {
         onSubmit: this.beforeSubmit
