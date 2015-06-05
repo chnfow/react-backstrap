@@ -3,6 +3,17 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
 
     "use strict";
 
+    var funcOrAttributes = React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ]);
+
+    var funcOrAttribute = React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      React.PropTypes.string
+    ]);
+
     var KEY_DOWN = 40;
     var KEY_UP = 38;
     var KEY_ENTER = 13;
@@ -13,21 +24,39 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
       mixins: [attribute, collection],
 
       propTypes: {
+        valueAttirbute: React.PropTypes.string,
         multiple: React.PropTypes.bool,
         // what aspect of the model do we search on
-        searchOn: React.PropTypes.oneOfType([
-          React.PropTypes.func,
-          React.PropTypes.string,
-          React.PropTypes.arrayOf(React.PropTypes.string)
-        ])
+        searchOn: funcOrAttributes,
+        // how we would like to group the results
+        groupBy: funcOrAttribute,
+        // how to get the label of a group
+        getGroupLabel: React.PropTypes.func,
+        // whether to close after selecting a value in a multi-select input
+        closeOnSelect: React.PropTypes.bool
       },
 
       getDefaultProps: function () {
         return {
+          valueAttribute: "id",
           multiple: false,
           // search on the text attribute of the model
-          searchOn: "name"
+          searchOn: "name",
+          // by default the label of a group is the group value
+          getGroupLabel: function (groupVal) {
+            return groupVal;
+          },
+          closeOnSelect: false
         };
+      },
+
+      getGroupOf: function (model) {
+        if (typeof this.props.groupBy === "string") {
+          return model.get(this.props.groupBy);
+        } else if (typeof this.props.groupBy === "function") {
+          return this.props.groupBy.call(this, model);
+        }
+        return null;
       },
 
       getInitialState: function () {
@@ -53,9 +82,24 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
       // this returns an array of models for which the getSearchValues function returns a value that includes the
       // search parameter q
       getResults: function (q) {
+        var selectedVals = this.getValue();
+        // get an array of current values
+        if (typeof selectedVals === "undefined" || selectedVals === null) {
+          selectedVals = [];
+        } else {
+          if (!_.isArray(selectedVals)) {
+            selectedVals = [selectedVals];
+          }
+        }
+
         return this.props.collection.filter(function (oneModel) {
+          // no search text entered
           if (q.length === 0) {
             return true;
+          }
+          // val is already selected
+          if (_.contains(selectedVals, oneModel.get(this.props.valueAttribute))) {
+            return false;
           }
           var values = this.getSearchValues(oneModel);
           return _.some(values, function (oneValue) {
@@ -94,16 +138,18 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
           return;
         }
         // make sure whatever is hilited is scrolled into view for the results div
-        var results = this.refs.results.getDOMNode();
-        var hilited = this.refs["result-" + hilite].getDOMNode();
-        var resultsTop = results.scrollTop;
-        var hiliteTop = hilited.offsetTop;
-        var resultsBottom = results.scrollTop + results.offsetHeight;
-        var hiliteBottom = hilited.offsetTop + hilited.offsetHeight;
+        var dropdownNode = this.refs.results.getDOMNode();
+        var hilitedNode = this.refs["result-" + hilite].getDOMNode();
+        var resultsTop = dropdownNode.scrollTop;
+        var hiliteTop = hilitedNode.offsetTop;
         if (resultsTop > hiliteTop) {
-          results.scrollTop = hiliteTop;
-        } else if (resultsBottom < hiliteBottom) {
-          results.scrollTop = hiliteBottom - results.offsetHeight;
+          dropdownNode.scrollTop = hiliteTop;
+        } else {
+          var resultsBottom = dropdownNode.scrollTop + dropdownNode.offsetHeight;
+          var hiliteBottom = hilitedNode.offsetTop + hilitedNode.offsetHeight;
+          if (resultsBottom < hiliteBottom) {
+            dropdownNode.scrollTop = hiliteBottom - dropdownNode.offsetHeight;
+          }
         }
         this.setState({
           hilite: hilite
@@ -134,12 +180,34 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
       selectResult: function (resultIndex, e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(this.state.results[resultIndex]);
+        var selectedModel = this.state.results[resultIndex];
+        if (!selectedModel) {
+          return;
+        }
+        if (!this.props.multiple) {
+          this.props.model.set(this.props.attribute, selectedModel.get(this.props.valueAttribute));
+        } else {
+          var currentValue = this.getValue();
+          if (typeof currentValue === "undefined" || currentValue === null) {
+            currentValue = [];
+          }
+          if (!_.isArray(currentValue)) {
+            currentValue = [currentValue];
+          }
+          if (!_.contains(currentValue, selectedModel.get(this.props.valueAttribute))) {
+            currentValue.push(selectedModel.get(this.props.valueAttribute));
+          }
+          this.props.model.set(this.props.attribute, currentValue);
+        }
+        if (!this.props.multiple || this.props.closeOnSelect) {
+          this.refs.search.blur();
+        }
       },
 
       closeResults: function () {
         this.setState({
-          open: false
+          open: false,
+          searchText: ""
         });
       },
 
@@ -159,6 +227,8 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
           }
         }));
         children.push(realSelect);
+
+        var val = this.getValue();
 
         // fake input is a div that contains the real input plus the selected items
         var fakeInput = React.DOM.div(_.extend({}, this.props, {

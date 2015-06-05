@@ -28,7 +28,10 @@ define(["react", "./Events", "underscore"], function (React, events, _) {
 
     // takes a model and returns a single component view for that model
     getSingleComponentView: function (oneModel) {
-      return this.props.modelComponent({model: oneModel});
+      return this.props.modelComponent({
+        key: oneModel.cid,
+        model: oneModel
+      });
     }
 
   });

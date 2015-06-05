@@ -31,7 +31,11 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
             console.error("Valid component not passed for model attribute", oneAttribute);
             return null;
           }
-          return viewType(_.extend({}, oneAttribute, {model: this.props.model, ref: this.props.attribute}));
+          return viewType(_.extend({}, oneAttribute, {
+            model: this.props.model,
+            key: this.props.attribute,
+            ref: this.props.attribute
+          }));
         }, this), null);
       }
 

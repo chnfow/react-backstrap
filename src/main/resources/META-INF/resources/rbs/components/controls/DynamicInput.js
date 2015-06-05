@@ -75,7 +75,8 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
       }
       var container = this.refs.container.getDOMNode();
       if (container.parentNode) {
-        newWidth = Math.min(newWidth, container.parentNode.clientWidth);
+        var parentStyle = this.getStyle(container.parentNode);
+        newWidth = Math.min(newWidth, container.parentNode.clientWidth - (parseFloat(parentStyle.paddingLeft) + parseFloat(parentStyle.paddingRight)));
       }
 
       if (newWidth !== this.state.width) {
