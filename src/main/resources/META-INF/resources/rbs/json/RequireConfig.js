@@ -15,7 +15,7 @@ define({
     "bootstrap": "webjars/bootstrap/3.3.2-1/js/bootstrap.min",
     "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
     "original-underscore": "webjars/underscorejs/1.6.0/underscore-min",
-    "fb": "//connect.FB.net/en_US/sdk",
+    "fb": "//connect.facebook.net/en_US/sdk",
     "jsog": "rbs/vendor/jsog/JSOG",
     "react": "webjars/react/0.13.3/react-with-addons",//.min",
     "raf": "rbs/vendor/polyfill/rAF",

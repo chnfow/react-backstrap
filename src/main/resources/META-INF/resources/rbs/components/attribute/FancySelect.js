@@ -1,7 +1,12 @@
-define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", "./Select"],
-  function (React, _, attribute, collection, select) {
+define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", "./Select", "../controls/DynamicInput"],
+  function (React, _, attribute, collection, select, dynamicInput) {
 
     "use strict";
+
+    var KEY_DOWN = 40;
+    var KEY_UP = 38;
+    var KEY_ENTER = 13;
+    var KEY_BACKSPACE = 8;
 
     return _.rf({
 
@@ -21,7 +26,7 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         return {
           multiple: false,
           // search on the text attribute of the model
-          searchOn: "text"
+          searchOn: "name"
         };
       },
 
@@ -83,24 +88,53 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         return toReturn || [];
       },
 
-      moveHilite: function (e) {
-        if (e.keyCode === 40) {
-          // DOWN key
-          this.setState({
-            hilite: Math.min(this.state.hilite + 1, Math.max(this.state.results.length - 1, 0))
-          });
-        } else if (e.keyCode === 38) {
-          // UP Key
-          this.setState({
-            hilite: Math.max(this.state.hilite - 1, 0)
-          });
+      setHilite: function (hilite) {
+        hilite = Math.max(Math.min(hilite, this.state.results.length - 1), 0);
+        if (hilite === this.state.hilite) {
+          return;
+        }
+        // make sure whatever is hilited is scrolled into view for the results div
+        var results = this.refs.results.getDOMNode();
+        var hilited = this.refs["result-" + hilite].getDOMNode();
+        var resultsTop = results.scrollTop;
+        var hiliteTop = hilited.offsetTop;
+        var resultsBottom = results.scrollTop + results.offsetHeight;
+        var hiliteBottom = hilited.offsetTop + hilited.offsetHeight;
+        if (resultsTop > hiliteTop) {
+          results.scrollTop = hiliteTop;
+        } else if (resultsBottom < hiliteBottom) {
+          results.scrollTop = hiliteBottom - results.offsetHeight;
+        }
+        this.setState({
+          hilite: hilite
+        });
+      },
+
+      handleKeydown: function (e) {
+        switch (e.keyCode) {
+          case KEY_DOWN:
+            this.setHilite(this.state.hilite + 1);
+            break;
+          case KEY_UP:
+            this.setHilite(this.state.hilite - 1);
+            break;
+          case KEY_ENTER:
+            this.selectResult(this.state.hilite, e);
+            break;
         }
       },
 
       openResults: function () {
         this.setState({
-          open: true
+          open: true,
+          results: this.getResults(this.state.searchText)
         });
+      },
+
+      selectResult: function (resultIndex, e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log(this.state.results[resultIndex]);
       },
 
       closeResults: function () {
@@ -109,9 +143,16 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         });
       },
 
+      // handle a click of the select field
+      handleSelectClick: function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.refs.search.focus();
+      },
+
       render: function () {
         var children = [];
-        // render a hidden select so this.saveData works as expected
+        // render a hidden select so $.formData() works as expected
         var realSelect = select(_.extend({}, this.props, {
           style: {
             display: "none"
@@ -119,38 +160,54 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         }));
         children.push(realSelect);
 
-        var autoCompleteInput = React.DOM.input(_.extend({}, this.props, {
-          onChange: this.doSearch,
-          onKeyDown: this.moveHilite,
-          onFocus: this.openResults,
-          onBlur: this.closeResults,
-          value: this.state.searchText
-        }));
-        children.push(autoCompleteInput);
+        // fake input is a div that contains the real input plus the selected items
+        var fakeInput = React.DOM.div(_.extend({}, this.props, {
+          onMouseDown: this.handleSelectClick
+        }), [
+          dynamicInput({
+            style: { outline: 0, border: 0 },
+            ref: "search",
+            onChange: this.doSearch,
+            onKeyDown: this.handleKeydown,
+            onFocus: this.openResults,
+            onBlur: this.closeResults,
+            value: this.state.searchText
+          })
+        ]);
+        children.push(fakeInput);
 
         if (this.state.open) {
           var i = 0;
           // take the models and turn them into model components, then wrap each one in a autocomplete-search-result div
           var results = _.map(this.getModels(this.state.results), function (oneResultComponent) {
-            var style = (i++ === this.state.hilite) ? { backgroundColor: "yellow" } : {};
-            return React.DOM.div({ className: "autocomplete-search-result", style: style }, oneResultComponent);
+            var myIndex = i++;
+            var style = (myIndex === this.state.hilite) ? { backgroundColor: "yellow" } : {};
+            return React.DOM.div({
+              className: "autocomplete-search-result",
+              ref: "result-" + myIndex,
+              style: style,
+              onMouseOver: _.bind(this.setHilite, this, myIndex),
+              onMouseDown: _.bind(this.selectResult, this, myIndex)
+            }, oneResultComponent);
           }, this);
           // put all the results in an absolutely positioned div under the search box
           var searchResults = React.DOM.div({
             className: "autocomplete-search-results",
+            ref: "results",
             style: {
-              position: "absolute",
               width: "100%",
-              left: 0
+              position: "absolute",
+              overflowY: "auto",
+              maxHeight: "400px"
             }
           }, results);
           children.push(searchResults);
         }
 
         return React.DOM.div({
+          className: "select-container",
           style: {
-            position: "relative",
-            className: "autocomplete-container"
+            position: "relative"
           }
         }, children);
       }

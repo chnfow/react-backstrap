@@ -1,10 +1,10 @@
-define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/Autocomplete"],
-  function (React, _, events, $, attributes, select, autocomplete) {
+define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/FancySelect"],
+  function (React, _, events, $, attributes, select, fancyselect) {
     "use strict";
 
     var attributeComponentMap = _.extend(_.clone(attributes), {
       select: select,
-      autocomplete: autocomplete
+      fancyselect: fancyselect
     });
 
     return React.createMixin({
@@ -22,7 +22,7 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
           var comp = oneAttribute.component;
           var viewType;
           if (typeof comp === "string") {
-            viewType = attributeComponentMap[comp];
+            viewType = attributeComponentMap[comp.toLowerCase()];
           }
           if (typeof comp === "function") {
             viewType = comp;
