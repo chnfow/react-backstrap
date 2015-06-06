@@ -33,8 +33,7 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
           }
           return viewType(_.extend({}, oneAttribute, {
             model: this.props.model,
-            key: this.props.attribute,
-            ref: this.props.attribute
+            key: oneAttribute
           }));
         }, this), null);
       }

@@ -23,7 +23,7 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
             val = val.get(pc);
           } else {
             if (pcs.length === 0 && _.isArray(val) && typeof val[pc] === "undefined") {
-              return _.pluck(val, "id");
+              return _.pluck(val, pc);
             }
             val = val[pc];
           }

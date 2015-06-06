@@ -1,5 +1,5 @@
-define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", "./Select", "../controls/DynamicInput"],
-  function (React, _, attribute, collection, select, dynamicInput) {
+define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Collection", "./Select", "../controls/DynamicInput"],
+  function (React, _, $, attribute, collection, select, dynamicInput) {
 
     "use strict";
 
@@ -18,6 +18,14 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
     var KEY_UP = 38;
     var KEY_ENTER = 13;
     var KEY_BACKSPACE = 8;
+    var KEY_LEFT = 37;
+    var KEY_RIGHT = 39;
+    var KEY_ESCAPE = 27;
+    var KEY_PAGE_UP = 33;
+    var KEY_PAGE_DOWN = 34;
+    var KEY_HOME = 36;
+    var KEY_END = 35;
+
 
     return _.rf({
 
@@ -61,27 +69,44 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
 
       getInitialState: function () {
         return {
+          // currently typed search text
           searchText: "",
+          // where the cursor is placed in the input (between which selected elements)
+          cursorPosition: 0,
+          // which option is hilited
           hilite: 0,
+          // the current search results
           results: [],
+          // whether the dropdown is open (forced to match the input focus status)
           open: false
         };
+      },
+
+      // enforce that the component is focused if open, and blurred if closed
+      componentDidUpdate: function () {
+        if (this.state.open) {
+          this.refs.search.focus();
+        } else {
+          this.refs.search.blur();
+        }
       },
 
       doSearch: function (e) {
         var q = e.target.value;
         var results = this.getResults(q);
-
+        var hilite = Math.max(0, Math.min(this.state.hilite, results.length - 1));
         this.setState({
           searchText: q,
           results: results,
-          hilite: 0
+          hilite: hilite
         });
       },
 
       // this returns an array of models for which the getSearchValues function returns a value that includes the
       // search parameter q
       getResults: function (q) {
+        q = q || this.state.searchText;
+
         var selectedVals = this.getValue();
         // get an array of current values
         if (typeof selectedVals === "undefined" || selectedVals === null) {
@@ -93,13 +118,13 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         }
 
         return this.props.collection.filter(function (oneModel) {
-          // no search text entered
-          if (q.length === 0) {
-            return true;
-          }
           // val is already selected
           if (_.contains(selectedVals, oneModel.get(this.props.valueAttribute))) {
             return false;
+          }
+          // no search text entered
+          if (q.length === 0) {
+            return true;
           }
           var values = this.getSearchValues(oneModel);
           return _.some(values, function (oneValue) {
@@ -156,14 +181,38 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         });
       },
 
+      setCursorPosition: function (cp) {
+
+      },
+
       handleKeydown: function (e) {
+
         switch (e.keyCode) {
+          //handle key navigation of the result list
           case KEY_DOWN:
             this.setHilite(this.state.hilite + 1);
             break;
           case KEY_UP:
             this.setHilite(this.state.hilite - 1);
             break;
+          case KEY_PAGE_UP:
+            this.setHilite(this.state.hilite - 10);
+            break;
+          case KEY_PAGE_DOWN:
+            this.setHilite(this.state.hilite + 10);
+            break;
+          case KEY_END:
+            e.preventDefault();
+            this.setHilite(this.state.results.length - 1);
+            break;
+          case KEY_HOME:
+            e.preventDefault();
+            this.setHilite(0);
+            break;
+          case KEY_ESCAPE:
+            this.refs.search.blur();
+            break;
+          // handle key selection of a result
           case KEY_ENTER:
             this.selectResult(this.state.hilite, e);
             break;
@@ -181,27 +230,31 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         e.preventDefault();
         e.stopPropagation();
         var selectedModel = this.state.results[resultIndex];
+        // should never happen
         if (!selectedModel) {
           return;
         }
+        var modelVal = selectedModel.get(this.props.valueAttribute);
         if (!this.props.multiple) {
-          this.props.model.set(this.props.attribute, selectedModel.get(this.props.valueAttribute));
+          this.props.model.set(this.props.attribute, modelVal);
         } else {
           var currentValue = this.getValue();
-          if (typeof currentValue === "undefined" || currentValue === null) {
-            currentValue = [];
+          var newValue = [modelVal];
+          if (_.isArray(currentValue)) {
+            newValue = currentValue.concat(newValue);
           }
-          if (!_.isArray(currentValue)) {
-            currentValue = [currentValue];
-          }
-          if (!_.contains(currentValue, selectedModel.get(this.props.valueAttribute))) {
-            currentValue.push(selectedModel.get(this.props.valueAttribute));
-          }
-          this.props.model.set(this.props.attribute, currentValue);
+          this.props.model.set(this.props.attribute, newValue);
         }
+        var open = this.state.open;
         if (!this.props.multiple || this.props.closeOnSelect) {
-          this.refs.search.blur();
+          open = false;
         }
+        var newResults = this.getResults();
+        this.setState({
+          results: newResults,
+          open: open,
+          hilite: Math.min(this.state.hilite, newResults.length)
+        });
       },
 
       closeResults: function () {
@@ -218,6 +271,18 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         this.refs.search.focus();
       },
 
+      getDisplayItem: function (className, model) {
+        return React.DOM.span({
+          className: className
+        }, this.getSingleComponentView(model));
+      },
+
+      findModelByValue: function (value) {
+        var findObj = {};
+        findObj[this.props.valueAttribute] = value;
+        return this.props.collection.findWhere(findObj);
+      },
+
       render: function () {
         var children = [];
         // render a hidden select so $.formData() works as expected
@@ -228,22 +293,71 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
         }));
         children.push(realSelect);
 
-        var val = this.getValue();
+        // get the value
+        var currentValue = this.getValue();
+        var selectedItems = [];
+        if (!this.props.multiple) {
+          if (this.state.searchText.length === 0) {
+            var model = this.findModelByValue(currentValue);
+            if (model) {
+              selectedItems = [this.getDisplayItem("fancy-select-single-choice", model)];
+            }
+          }
+        } else {
+          if (_.isArray(currentValue)) {
+            var selectedModels = _.filter(_.map(currentValue, this.findModelByValue, this), Boolean);
+            selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "fancy-select-multiple-choice"));
+          }
+        }
 
+        //only display the placeholder if there is no value selected
+        var placeholder;
+        if (this.props.placeholder) {
+          if (this.props.multiple) {
+            if (!_.isArray(currentValue) || currentValue.length === 0) {
+              placeholder = this.props.placeholder;
+            }
+          } else {
+            if (!currentValue || currentValue === "") {
+              placeholder = this.props.placeholder;
+            }
+          }
+        }
+
+        var insideInput;
+        var typingArea = dynamicInput({
+          className: "fancy-select-type-area",
+          ref: "search",
+          key: "search",
+          onChange: this.doSearch,
+          onKeyDown: this.handleKeydown,
+          onFocus: this.openResults,
+          onBlur: this.closeResults,
+          value: this.state.searchText,
+          placeholder: placeholder
+        });
+        if (!this.props.multiple) {
+          insideInput = [selectedItems, typingArea];
+        } else {
+          var position = selectedItems.length - this.state.cursorPosition;
+          selectedItems.splice(position, 0, typingArea);
+          insideInput = selectedItems;
+        }
+
+        // show a caret to indicate whether the input is open
+        insideInput.push(React.DOM.span({
+          className: "caret"
+        }));
+
+        var openClassName = "";
+        if (this.state.open) {
+          openClassName = "dropup";
+        }
         // fake input is a div that contains the real input plus the selected items
         var fakeInput = React.DOM.div(_.extend({}, this.props, {
-          onMouseDown: this.handleSelectClick
-        }), [
-          dynamicInput({
-            style: { outline: 0, border: 0 },
-            ref: "search",
-            onChange: this.doSearch,
-            onKeyDown: this.handleKeydown,
-            onFocus: this.openResults,
-            onBlur: this.closeResults,
-            value: this.state.searchText
-          })
-        ]);
+          onMouseDown: this.handleSelectClick,
+          className: "fancy-select-fake-input " + openClassName + " " + (this.props.className || "")
+        }), insideInput);
         children.push(fakeInput);
 
         if (this.state.open) {
@@ -251,34 +365,27 @@ define(["react", "underscore", "../mixins/Attribute", "../mixins/Collection", ".
           // take the models and turn them into model components, then wrap each one in a autocomplete-search-result div
           var results = _.map(this.getModels(this.state.results), function (oneResultComponent) {
             var myIndex = i++;
-            var style = (myIndex === this.state.hilite) ? { backgroundColor: "yellow" } : {};
+            var optionClass = "fancy-select-search-result";
+            if (myIndex === this.state.hilite) {
+              optionClass += " hilited";
+            }
             return React.DOM.div({
-              className: "autocomplete-search-result",
+              className: optionClass,
               ref: "result-" + myIndex,
-              style: style,
               onMouseOver: _.bind(this.setHilite, this, myIndex),
               onMouseDown: _.bind(this.selectResult, this, myIndex)
             }, oneResultComponent);
           }, this);
           // put all the results in an absolutely positioned div under the search box
           var searchResults = React.DOM.div({
-            className: "autocomplete-search-results",
-            ref: "results",
-            style: {
-              width: "100%",
-              position: "absolute",
-              overflowY: "auto",
-              maxHeight: "400px"
-            }
+            className: "fancy-select-search-results",
+            ref: "results"
           }, results);
           children.push(searchResults);
         }
 
         return React.DOM.div({
-          className: "select-container",
-          style: {
-            position: "relative"
-          }
+          className: "fancy-select-container"
         }, children);
       }
 

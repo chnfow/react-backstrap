@@ -10,3 +10,69 @@ body {
     -webkit-font-smoothing: antialiased;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
+
+/*
+fancy-select
+*/
+/* the container returned by the fancy select */
+.fancy-select-container {
+    position: relative;
+}
+
+/* where the typing in the select goes */
+.fancy-select-type-area {
+    outline: 0;
+    border: 0;
+}
+
+/* container for the search results */
+.fancy-select-search-results {
+    width: 100%;
+    position: absolute;
+    overflow-y: auto;
+    max-height: 20em;
+    background-color: white;
+    z-index: 10;
+}
+
+/* a container for a single result in a select dropdown */
+.fancy-select-search-result {
+    padding: 1em;
+    cursor: pointer;
+}
+
+/* a hilited result */
+.fancy-select-search-result.hilited {
+    background-color: #5897fb;
+    color: white;
+}
+
+/* this class wraps each of the selected options in a single select */
+.fancy-select-single-choice {
+    display: inline-block;
+}
+
+/* this class wraps each of the selected options in a multiple select */
+.fancy-select-multiple-choice {
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 2px;
+    text-shadow: 0 1px 0 rgba(0, 51, 83, 0.3);
+    background-color: #1b9dec;
+    color: white;
+}
+
+/* this is the element that wraps the typing area and the selected options */
+.fancy-select-fake-input {
+    height: auto !important;
+    cursor: pointer;
+}
+.fancy-select-fake-input.dropup {
+    cursor: default;
+}
+.fancy-select-fake-input .caret {
+    position: absolute;
+    top: 50%;
+    margin-top: -2px;
+    right: 8px;
+}
