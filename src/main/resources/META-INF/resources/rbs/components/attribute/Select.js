@@ -292,9 +292,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         var newValue = _.clone(currentValue);
         newValue.splice(realIndex, 1);
         this.props.model.set(this.props.attribute, newValue);
-        this.setState({
-          cursorPosition: this.state.cursorPosition - 1
-        });
+        this.setCursorPosition(countFromLast - 1);
       },
 
       openResults: function () {

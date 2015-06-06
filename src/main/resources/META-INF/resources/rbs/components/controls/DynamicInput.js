@@ -23,6 +23,10 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
       return {};
     },
 
+    getInput: function () {
+      return this.refs.input.getDOMNode();
+    },
+
     getInitialState: function () {
       return {
         width: 0,
