@@ -14,7 +14,7 @@ define(["react"], function (React) {
         var classes = [];
         if (this.props.name) {
           classes.push("glyphicon");
-          classes.push("glyphicon-" + name);
+          classes.push("glyphicon-" + this.props.name);
         }
         if (this.props.className) {
           classes.push(this.props.className);

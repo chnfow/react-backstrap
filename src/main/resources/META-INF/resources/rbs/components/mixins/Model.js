@@ -1,10 +1,9 @@
-define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/FancySelect"],
-  function (React, _, events, $, attributes, select, fancyselect) {
+define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select"],
+  function (React, _, events, $, attributes, select) {
     "use strict";
 
     var attributeComponentMap = _.extend(_.clone(attributes), {
-      select: select,
-      fancyselect: fancyselect
+      select: select
     });
 
     return React.createMixin({
@@ -32,8 +31,7 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
             return null;
           }
           return viewType(_.extend({}, oneAttribute, {
-            model: this.props.model,
-            key: oneAttribute
+            model: this.props.model
           }));
         }, this), null);
       }

@@ -33,11 +33,14 @@ fancy-select
     max-height: 20em;
     background-color: white;
     z-index: 10;
+    border-radius: 0 0 0.5em 0.5em;
+    border: 1px solid slategray;
+    border-top-width: 0;
 }
 
 /* a container for a single result in a select dropdown */
 .fancy-select-search-result {
-    padding: 1em;
+    padding: 0.8em;
     cursor: pointer;
 }
 
@@ -66,6 +69,9 @@ fancy-select
 .fancy-select-fake-input {
     height: auto !important;
     cursor: pointer;
+    overflow-x: hidden;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 .fancy-select-fake-input.dropup {
     cursor: default;

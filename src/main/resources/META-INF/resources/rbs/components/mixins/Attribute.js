@@ -11,14 +11,10 @@ define(["react", "underscore", "./Events", "jquery"], function (React, _, events
     componentDidMount: function () {
       var pcs = this.props.attribute.split(".");
 
-      var fu = _.debounce(_.bind(function () {
-        this.forceUpdate();
-      }, this), 10);
-
       // for each of the pieces
       for (var i = 1; i <= pcs.length; i++) {
         var attribute = pcs.slice(0, i).join(".");
-        this.listenTo(this.props.model, "change:" + attribute, fu);
+        this.listenTo(this.props.model, "change:" + attribute, this.update);
       }
     },
 
