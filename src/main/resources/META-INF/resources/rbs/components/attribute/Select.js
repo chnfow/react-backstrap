@@ -25,6 +25,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
     var KEY_PAGE_DOWN = 34;
     var KEY_HOME = 36;
     var KEY_END = 35;
+    var KEY_DELETE = 46;
 
 
     return _.rf({
@@ -47,6 +48,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
       getDefaultProps: function () {
         return {
           valueAttribute: "id",
+          placeholder: "Select...",
           multiple: false,
           // search on the text attribute of the model
           searchOn: "name",
@@ -104,7 +106,8 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         this.setState({
           searchText: q,
           results: results,
-          hilite: hilite
+          hilite: hilite,
+          cursorPosition: 0
         });
       },
 
@@ -198,7 +201,18 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
       },
 
       setCursorPosition: function (cp) {
-
+        var value = this.getValue();
+        if (!_.isArray(value)) {
+          cp = 0;
+        } else {
+          cp = Math.max(Math.min(value.length, cp), 0);
+        }
+        if (cp === this.state.cursorPosition) {
+          return;
+        }
+        this.setState({
+          cursorPosition: cp
+        });
       },
 
       handleKeydown: function (e) {
@@ -235,13 +249,59 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
           case KEY_ENTER:
             this.selectResult(this.state.hilite, e);
             break;
+          case KEY_LEFT:
+            if (this.state.searchText.length > 0) {
+              return;
+            }
+            this.setCursorPosition(this.state.cursorPosition + 1);
+            break;
+          case KEY_RIGHT:
+            if (this.state.searchText.length > 0) {
+              return;
+            }
+            this.setCursorPosition(this.state.cursorPosition - 1);
+            break;
+          case KEY_BACKSPACE:
+            if (this.state.searchText.length > 0) {
+              return;
+            }
+            this.removeSelectedItemAt(this.state.cursorPosition + 1);
+            break;
+          case KEY_DELETE:
+            if (this.state.searchText.length > 0) {
+              return;
+            }
+            this.removeSelectedItemAt(this.state.cursorPosition);
+            break;
         }
+      },
+
+      removeSelectedItemAt: function (countFromLast) {
+        if (typeof countFromLast !== "number" || !this.props.multiple) {
+          this.props.model.unset(this.props.attribute);
+          return;
+        }
+        var currentValue = this.getValue();
+        if (this.props.multiple && !_.isArray(currentValue)) {
+          return;
+        }
+        var realIndex = currentValue.length - countFromLast;
+        if (currentValue.length <= realIndex || realIndex < 0) {
+          return;
+        }
+        var newValue = _.clone(currentValue);
+        newValue.splice(realIndex, 1);
+        this.props.model.set(this.props.attribute, newValue);
+        this.setState({
+          cursorPosition: this.state.cursorPosition - 1
+        });
       },
 
       openResults: function () {
         this.setState({
           open: true,
-          results: this.getResults(this.state.searchText)
+          results: this.getResults(this.state.searchText),
+          cursorPosition: 0
         });
       },
 

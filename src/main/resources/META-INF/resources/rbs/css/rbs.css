@@ -70,11 +70,11 @@ fancy-select
     height: auto !important;
     cursor: pointer;
     overflow-x: hidden;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
 }
 .fancy-select-fake-input.dropup {
     cursor: default;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 .fancy-select-fake-input .caret {
     position: absolute;
