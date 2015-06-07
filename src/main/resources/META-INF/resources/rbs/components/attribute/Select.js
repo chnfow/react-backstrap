@@ -341,9 +341,13 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
           this.props.model.set(this.props.attribute, modelVal);
         } else {
           var currentValue = this.getValue();
-          var newValue = [modelVal];
+          var newValue = _.clone(newValue);
           if (_.isArray(currentValue)) {
-            newValue = currentValue.concat(newValue);
+            newValue = _.clone(currentValue);
+            var length = currentValue.length;
+            newValue.splice(Math.max(0, length - this.state.cursorPosition), 0, modelVal);
+          } else {
+            newValue = [modelVal];
           }
           this.props.model.set(this.props.attribute, newValue);
         }
@@ -352,13 +356,21 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         }
         var newResults = this.getResults("");
         if (!this.props.multiple || this.props.closeOnSelect) {
-          this.refs.search.blur();
+          this.focusNextElement();
         } else {
           this.setHilite(Math.min(this.state.hilite, newResults.length - 1));
           this.setState({
             results: newResults,
             searchText: ""
           });
+        }
+      },
+
+      focusNextElement: function () {
+        var tabbables = $(":tabbable");
+        var tabbingAt = tabbables.index($(this.refs.search.getInput()));
+        if (tabbingAt !== -1) {
+          $(tabbables.get(tabbingAt + 1)).focus();
         }
       },
 

@@ -11,7 +11,7 @@ define({
     "backbone": "rbs/etc/library-extensions/Backbone",
     "original-backbone": "webjars/backbonejs/1.1.2/backbone-min",
     "jquery": "rbs/etc/library-extensions/jQueryExtensions",
-    "original-jquery": "webjars/jquery/1.11.2/jquery.min",
+    "original-jquery": "webjars/jquery/1.11.3/jquery.min",
     "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
     "original-underscore": "webjars/underscorejs/1.8.3/underscore-min",
     "fb": "//connect.facebook.net/en_US/sdk",
@@ -24,9 +24,6 @@ define({
   shim: {
     "fb": {
       exports: "fb"
-    },
-    "deep-model": {
-      deps: ["original-backbone"]
     },
     "jsog": {
       exports: "JSOG"
