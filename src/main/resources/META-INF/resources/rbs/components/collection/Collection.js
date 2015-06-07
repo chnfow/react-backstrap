@@ -9,8 +9,22 @@ define(["react", "underscore", "../mixins/Collection"], function (React, _, coll
 
         mixins: [collection],
 
+        propTypes: {
+            tagName: React.PropTypes.string
+        },
+
+        getDefaultProps: function () {
+            return {
+                tagName: "div"
+            };
+        },
+
         render: function () {
-            return React.DOM.div(_.extend({}, this.props), this.getModels());
+            var containerType = React.DOM[this.props.tagName];
+            if (!containerType) {
+                containerType = React.DOM.div;
+            }
+            return containerType(_.extend({}, this.props), this.getModels());
         }
     });
 

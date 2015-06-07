@@ -111,7 +111,8 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         this.setState({
           searchText: q,
           results: results,
-          hilite: hilite
+          hilite: hilite,
+          cursorPosition: 0
         });
       },
 
@@ -310,7 +311,8 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         this.setState({
           open: true,
           searchText: "",
-          results: this.getResults("")
+          results: this.getResults(""),
+          cursorPosition: 0
         });
       },
 

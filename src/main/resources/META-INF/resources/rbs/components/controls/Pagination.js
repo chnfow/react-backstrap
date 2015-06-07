@@ -1,123 +1,92 @@
-define(["backbone", "rbs/components/collection/UnorderedListView", "rbs/components/model/ListItemView", "bootstrap"],
-  function (Backbone, ulView, liView) {
-  "use strict";
+define(["react", "underscore", "../mixins/Events"],
+  function (React, _, events) {
+    "use strict";
 
-  var pageView = liView.extend({
-    className: function () {
-      var classes = ["page-button"];
-      if (this.model.get("active")) {
-        classes.push("active");
-      }
-      if (this.model.get("disabled")) {
-        classes.push("disabled");
-      }
-      return classes.join(" ");
-    },
+    return _.rf({
+      displayName: "Pagination",
 
-    attributes: function () {
-      return { "data-page-no": this.model.get("id") };
-    },
+      mixins: [events],
 
-    initialize: function () {
-      liView.prototype.initialize.apply(this, arguments);
-      this.listenTo(this.model, "change:active change:disabled change:pageNo", this.render);
-    },
+      propTypes: {
+        collection: React.PropTypes.object.isRequired,
+        nextPage: React.PropTypes.string,
+        previousPage: React.PropTypes.string,
+        size: React.PropTypes.string
+      },
 
-    modelAttributes: [
-      {
-        tagName: "a",
-        attributes: { href: "#" },
-        attribute: "text",
-        view: "span",
-        // don't do escaping
-        formatFunction: function (val) {
-          return val;
+      componentDidMount: function () {
+        this.listenTo(this.props.collection, "add remove reset sync", this.update);
+      },
+
+      getDefaultProps: function () {
+        return {
+          previousPage: "&laquo;",
+          nextPage: "&raquo;",
+          size: "lg",
+          className: ""
+        };
+      },
+
+      handlePageClick: function (page) {
+        if (page === "N") {
+          this.props.collection.nextPage();
         }
-      }
-    ]
-  });
+        if (page === "P") {
+          this.props.collection.prevPage();
+        }
+        if (!isNaN(parseInt(page))) {
+          this.props.collection.setPageNo(parseInt(page));
+        }
+      },
 
-  return Backbone.View.extend({
-    tagName: "nav",
-
-    options: ["nextPage", "previousPage", "size"],
-
-    previousPage: "&laquo;",
-    nextPage: "&raquo;",
-    size: "lg",
-
-    events: {
-      "click .page-button": "setPage"
-    },
-
-    initialize: function () {
-      if (!this.collection) {
-        console.error("Pagination controls require a collection");
-      }
-      this.pageCollection = new Backbone.Collection();
-      this.setPageCollection();
-      // whenever the collection changes, make sure the page selector reflect that
-      this.listenTo(this.collection, "add remove reset", _.debounce(this.setPageCollection, 20));
-
-      this.controls = new ulView({
-        className: "pagination" + ((this.size) ? (" pagination-" + this.size) : ""),
-        collection: this.pageCollection,
-        modelView: pageView
-      });
-    },
-
-    getNumPages: function () {
-      var numRecords = this.collection.size();
-      var pageSize = this.collection.pageSize;
-      var numPages = Math.max(Math.ceil(numRecords / pageSize), 1);
-      return numPages;
-    },
-
-    /**
-     * This function takes the collection and determines the page numbers to display
-     */
-    setPageCollection: function () {
-      var pages = [];
-
-      var numPages = this.getNumPages();
-      pages.push({
-        text: this.previousPage,
-        id: "P",
-        disabled: this.collection.pageNo === 0
-      });
-      for (var i = 0; i < numPages; i++) {
-        var active = (i === this.collection.pageNo);
-        pages.push({
-          id: i,
-          text: i + 1,
-          active: active
+      getPage: function (pageObject) {
+        var classes = ["page-button"];
+        if (pageObject.active) {
+          classes.push("active");
+        }
+        if (pageObject.disabled) {
+          classes.push("disabled");
+        }
+        return React.DOM.li({
+          className: classes.join(" "),
+          dangerouslySetInnerHTML: {__html: pageObject.text},
+          onClick: _.bind(this.handlePageClick, this, pageObject.page)
         });
-      }
-      pages.push({
-        text: this.nextPage,
-        id: "N",
-        disabled: (this.collection.pageNo === (numPages - 1))
-      });
-      this.pageCollection.set(pages);
-    },
+      },
 
-    setPage: function (e) {
-      var page = $(e.target).attrRcr("data-page-no");
-      if (page === "N") {
-        this.collection.nextPage();
-      }
-      if (page === "P") {
-        this.collection.prevPage();
-      }
-      if (!isNaN(parseInt(page))) {
-        this.collection.setPageNo(parseInt(page));
-      }
-    },
+      getNumPages: function () {
+        var numRecords = this.props.collection.size();
+        var pageSize = this.props.collection.pageSize;
+        return Math.max(Math.ceil(numRecords / pageSize), 1);
+      },
 
-    render: function () {
-      this.$el.empty();
-      this.$el.append(this.controls.render().$el);
-      return this;
-    }
+      render: function () {
+        var pageButtons;
+
+        var numPages = this.getNumPages();
+        pageButtons.push(this.getPage({
+          page: "P",
+          text: this.props.previousPage,
+          disabled: this.props.collection.pageNo === 0
+        }));
+        for (var i = 0; i < numPages; i++) {
+          var active = (i === this.props.collection.pageNo);
+          pageButtons.push(this.getPage({
+            page: i,
+            text: i + 1,
+            active: active
+          }));
+        }
+        pageButtons.push({
+          page: "N",
+          text: this.props.nextPage,
+          disabled: (this.props.collection.pageNo === (numPages - 1))
+        });
+
+        return React.DOM.nav(_.extend({}, this.props, {
+          className: this.props.className + " pagination pagination-" + this.props.size
+        }), pageButtons);
+      }
+    });
+
   });
-});
