@@ -27,13 +27,18 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
     var KEY_END = 35;
     var KEY_DELETE = 46;
 
+    var CHANGE_WITHOUT_UPDATE = ["hilite", "open"];
 
     return _.rf({
 
       mixins: [attribute, collection],
 
+      displayName: "Fancy Select",
+
       propTypes: {
-        valueAttirbute: React.PropTypes.string,
+        // which attribute represents the value of a single model in the option list
+        valueAttribute: React.PropTypes.string,
+        // whether it supports multiple selected options
         multiple: React.PropTypes.bool,
         // what aspect of the model do we search on
         searchOn: funcOrAttributes,
@@ -73,18 +78,18 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         return {
           // currently typed search text
           searchText: "",
+          // the current search results
+          results: [],
           // where the cursor is placed in the input (between which selected elements)
           cursorPosition: 0,
           // which option is hilited
           hilite: 0,
-          // the current search results
-          results: [],
           // whether the dropdown is open (forced to match the input focus status)
           open: false
         };
       },
 
-      // enforce that the component is focused if open, and blurred if closed
+      // if the dropdown is open, make sure typing works
       componentDidUpdate: function () {
         if (this.state.open) {
           this.refs.search.focus();
@@ -92,10 +97,10 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
       },
 
       shouldComponentUpdate: function (nextProps, nextState) {
-        // if just the hilite changes, let the set hilite method take care of it
+        // the state variables in the CHANGE_WITHOUT_UPDATE array are manually updated
         return (!_.isEqual(
-          _.omit(this.state, "hilite"),
-          _.omit(nextState, "hilite")
+          _.omit(this.state, CHANGE_WITHOUT_UPDATE),
+          _.omit(nextState, CHANGE_WITHOUT_UPDATE)
         ));
       },
 
@@ -106,16 +111,13 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         this.setState({
           searchText: q,
           results: results,
-          hilite: hilite,
-          cursorPosition: 0
+          hilite: hilite
         });
       },
 
       // this returns an array of models for which the getSearchValues function returns a value that includes the
       // search parameter q
       getResults: function (q) {
-        q = (typeof q === "undefined") ? this.state.searchText : q;
-
         var selectedVals = this.getValue();
         // get an array of current values
         if (typeof selectedVals === "undefined" || selectedVals === null) {
@@ -177,25 +179,29 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         if (hilite === this.state.hilite) {
           return;
         }
-        // component won't update if just the hilite changes, so we should do the hiliting here in case it doesn't update
-        $(this.refs["result-" + this.state.hilite].getDOMNode()).removeClass("hilited");
+        // remove hilite from the old if it's still there
+        var oldRef = this.refs["result-" + this.state.hilite];
+        if (oldRef) {
+          $(oldRef.getDOMNode()).removeClass("hilited");
+        }
+        // add hilite to the new ref
         $(this.refs["result-" + hilite].getDOMNode()).addClass("hilited");
         this.setState({hilite: hilite}, this.scrollHiliteIntoView);
       },
 
       // make sure whatever is hilited is scrolled into view for the results div
       scrollHiliteIntoView: function () {
-        var dropdownNode = this.refs.results.getDOMNode();
+        var resultsNode = this.refs.results.getDOMNode();
         var hilitedNode = this.refs["result-" + this.state.hilite].getDOMNode();
-        var resultsTop = dropdownNode.scrollTop;
+        var resultsTop = resultsNode.scrollTop;
         var hiliteTop = hilitedNode.offsetTop;
         if (resultsTop > hiliteTop) {
-          dropdownNode.scrollTop = hiliteTop;
+          resultsNode.scrollTop = hiliteTop;
         } else {
-          var resultsBottom = dropdownNode.scrollTop + dropdownNode.offsetHeight;
+          var resultsBottom = resultsNode.scrollTop + resultsNode.offsetHeight;
           var hiliteBottom = hilitedNode.offsetTop + hilitedNode.offsetHeight;
           if (resultsBottom < hiliteBottom) {
-            dropdownNode.scrollTop = hiliteBottom - dropdownNode.offsetHeight;
+            resultsNode.scrollTop = hiliteBottom - resultsNode.offsetHeight;
           }
         }
       },
@@ -243,7 +249,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
             this.setHilite(0);
             break;
           case KEY_ESCAPE:
-            this.refs.search.blur();
+            this.closeResults();
             break;
           // handle key selection of a result
           case KEY_ENTER:
@@ -296,18 +302,30 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
       },
 
       openResults: function () {
+        // in case we don't have to re-render, just add the open class to the results dropdown
+        var results = $(this.refs.results.getDOMNode());
+        var fakeInput = $(this.refs.fakeInput.getDOMNode());
+        results.addClass("fancy-select-search-results-open");
+        fakeInput.addClass("dropup");
         this.setState({
           open: true,
-          results: this.getResults(this.state.searchText),
-          cursorPosition: 0
+          searchText: "",
+          results: this.getResults("")
         });
       },
 
       closeResults: function () {
-        this.setState({
-          open: false,
-          searchText: ""
-        });
+        // in case we don't have to re-render, just remove the class from the results dropdown
+        var results = $(this.refs.results.getDOMNode());
+        var fakeInput = $(this.refs.fakeInput.getDOMNode());
+        results.removeClass("fancy-select-search-results-open");
+        fakeInput.removeClass("dropup");
+        if (this.state.open) {
+          this.setState({
+            open: false,
+            searchText: ""
+          });
+        }
       },
 
       selectResult: function (resultIndex, e) {
@@ -330,33 +348,31 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
           this.props.model.set(this.props.attribute, newValue);
         }
         if (!this.props.multiple || this.props.closeOnSelect) {
-          this.refs.search.blur();
+          this.closeResults();
         }
         var newResults = this.getResults("");
-        var open = true;
         if (!this.props.multiple || this.props.closeOnSelect) {
-          open = false;
+          this.refs.search.blur();
+        } else {
+          this.setHilite(Math.min(this.state.hilite, newResults.length - 1));
+          this.setState({
+            results: newResults,
+            searchText: ""
+          });
         }
-        this.setState({
-          results: newResults,
-          searchText: "",
-          open: open,
-          hilite: Math.min(this.state.hilite, newResults.length)
-        });
       },
 
       // handle a click of the select field
       handleSelectClick: function (e) {
         e.preventDefault();
         e.stopPropagation();
-        this.setState({
-          open: true
-        });
+        this.refs.search.focus();
       },
 
       getDisplayItem: function (className, model) {
         return React.DOM.span({
-          className: className
+          className: className,
+          key: model.get(this.props.valueAttribute)
         }, this.getSingleComponentView(model));
       },
 
@@ -414,7 +430,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
           placeholder: placeholder
         });
         if (!this.props.multiple) {
-          insideInput = [selectedItems, typingArea];
+          insideInput = selectedItems.concat(typingArea);
         } else {
           var position = selectedItems.length - this.state.cursorPosition;
           selectedItems.splice(position, 0, typingArea);
@@ -432,6 +448,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         }
 
         var fakeInputProps = _.omit(_.extend({}, this.props, {
+          ref: "fakeInput",
           onMouseDown: this.handleSelectClick,
           className: "fancy-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id");
@@ -439,29 +456,27 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         var fakeInput = React.DOM.div(fakeInputProps, insideInput);
         children.push(fakeInput);
 
-        if (this.state.open) {
-          var i = 0;
-          // take the models and turn them into model components, then wrap each one in a autocomplete-search-result div
-          var results = _.map(this.getModels(this.state.results), function (oneResultComponent) {
-            var myIndex = i++;
-            var optionClass = "fancy-select-search-result";
-            if (myIndex === this.state.hilite) {
-              optionClass += " hilited";
-            }
-            return React.DOM.div({
-              className: optionClass,
-              ref: "result-" + myIndex,
-              onMouseOver: _.bind(this.setHilite, this, myIndex),
-              onMouseDown: _.bind(this.selectResult, this, myIndex)
-            }, oneResultComponent);
-          }, this);
-          // put all the results in an absolutely positioned div under the search box
-          var searchResults = React.DOM.div({
-            className: "fancy-select-search-results",
-            ref: "results"
-          }, results);
-          children.push(searchResults);
-        }
+        var i = 0;
+        // take the models and turn them into model components, then wrap each one in a autocomplete-search-result div
+        var results = _.map(this.getModels(this.state.results), function (oneResultComponent) {
+          var myIndex = i++;
+          var optionClass = "fancy-select-search-result";
+          if (myIndex === this.state.hilite) {
+            optionClass += " hilited";
+          }
+          return React.DOM.div({
+            className: optionClass,
+            ref: "result-" + myIndex,
+            onMouseOver: _.bind(this.setHilite, this, myIndex),
+            onMouseDown: _.bind(this.selectResult, this, myIndex)
+          }, oneResultComponent);
+        }, this);
+        // put all the results in an absolutely positioned div under the search box
+        var searchResults = React.DOM.div({
+          className: "fancy-select-search-results" + ((this.state.open) ? " fancy-select-search-results-open" : ""),
+          ref: "results"
+        }, results);
+        children.push(searchResults);
 
         return React.DOM.div({
           className: "fancy-select-container",
@@ -469,5 +484,7 @@ define(["react", "underscore", "jquery", "../mixins/Attribute", "../mixins/Colle
         }, children);
       }
 
-    });
-  });
+    })
+      ;
+  })
+;

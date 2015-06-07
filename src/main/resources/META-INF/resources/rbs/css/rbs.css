@@ -36,6 +36,10 @@ fancy-select
     border-radius: 0 0 0.5em 0.5em;
     border: 1px solid slategray;
     border-top-width: 0;
+    display: none;
+}
+.fancy-select-search-results.fancy-select-search-results-open {
+    display: block;
 }
 
 /* a container for a single result in a select dropdown */

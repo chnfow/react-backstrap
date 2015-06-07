@@ -5,6 +5,8 @@ define(["react", "underscore", "../mixins/Collection"], function (React, _, coll
     "use strict";
 
     return _.rf({
+        displayName: "Generic Collection View",
+
         mixins: [collection],
 
         render: function () {

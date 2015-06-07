@@ -5,7 +5,7 @@ define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"],
   function (React, model, formGroup, _) {
     "use strict";
     return _.rf({
-
+      displayName: "Model Grid Row",
       mixins: [model, formGroup],
 
       propTypes: {

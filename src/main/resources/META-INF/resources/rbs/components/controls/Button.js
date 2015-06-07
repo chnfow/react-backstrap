@@ -2,6 +2,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
   "use strict";
 
   return _.rf({
+    displayName: "Fancy Button",
 
     propTypes: {
       icon: React.PropTypes.string,

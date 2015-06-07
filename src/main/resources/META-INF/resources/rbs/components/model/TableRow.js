@@ -5,6 +5,7 @@ define(["react", "../mixins/Model", "underscore"], function (React, model, _) {
   "use strict";
 
   return _.rf({
+    displayName: "Model Table Row",
     mixins: [model],
     render: function () {
       // wrap all the children attributes in table cells

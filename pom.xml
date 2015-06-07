@@ -38,6 +38,7 @@
         <jquery.version>1.11.2</jquery.version>
         <requirejs.version>2.1.16</requirejs.version>
         <react.version>0.13.3</react.version>
+        <underscore.version>1.8.3</underscore.version>
     </properties>
 
     <dependencies>
@@ -52,6 +53,12 @@
             <groupId>org.webjars</groupId>
             <artifactId>backbonejs</artifactId>
             <version>${backbone.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.webjars</artifactId>
+                    <groupId>underscorejs</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- jquery -->
         <dependency>
@@ -70,6 +77,12 @@
             <groupId>org.webjars</groupId>
             <artifactId>react</artifactId>
             <version>${react.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>underscorejs</artifactId>
+            <version>${underscore.version}</version>
         </dependency>
 
     </dependencies>
