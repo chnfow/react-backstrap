@@ -12,7 +12,45 @@ body {
 }
 
 /*
-fancy-select
+ There should be spacing between text in a button and the icon
+*/
+.btn>.glyphicon+* {
+    margin-left: 0.4em;
+}
+
+/*
+modal animations
+*/
+.modal {
+    display: block !important;
+}
+.modal-backdrop {
+    height: 100%;
+    width: 100%;
+    opacity: 0.2;
+}
+.modal-transition-enter {
+    opacity: 0.01;
+    margin-top: -40px;
+    transition: opacity .3s ease-in-out, margin-top 0.3s ease-in-out;
+}
+.modal-transition-enter.modal-transition-enter-active {
+    margin-top: 0;
+    opacity: 1;
+}
+.modal-transition-leave {
+    opacity: 1;
+    margin-top: 0;
+    transition: opacity .3s ease-in, margin-top 0.3s ease-in-out;
+}
+.modal-transition-leave.modal-transition-leave-active {
+    margin-top: -40px;
+    opacity: 0;
+}
+
+
+/*
+ select
 */
 /* the container returned by the fancy select */
 .fancy-select-container {

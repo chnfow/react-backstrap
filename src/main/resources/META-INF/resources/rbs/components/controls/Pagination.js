@@ -11,7 +11,7 @@ define(["react", "underscore", "../mixins/Events"],
         collection: React.PropTypes.object.isRequired,
         nextPage: React.PropTypes.string,
         previousPage: React.PropTypes.string,
-        size: React.PropTypes.string
+        size: React.PropTypes.oneOf(["sm", "lg"])
       },
 
       componentDidMount: function () {
@@ -22,7 +22,7 @@ define(["react", "underscore", "../mixins/Events"],
         return {
           previousPage: "&laquo;",
           nextPage: "&raquo;",
-          size: "lg",
+          size: "sm",
           className: ""
         };
       },
@@ -49,9 +49,11 @@ define(["react", "underscore", "../mixins/Events"],
         }
         return React.DOM.li({
           className: classes.join(" "),
-          dangerouslySetInnerHTML: {__html: pageObject.text},
           onClick: _.bind(this.handlePageClick, this, pageObject.page)
-        });
+        }, React.DOM.a({
+          href: "#",
+          dangerouslySetInnerHTML: {__html: pageObject.text}
+        }));
       },
 
       getNumPages: function () {
@@ -61,14 +63,16 @@ define(["react", "underscore", "../mixins/Events"],
       },
 
       render: function () {
-        var pageButtons;
+        var pageButtons = [];
 
         var numPages = this.getNumPages();
-        pageButtons.push(this.getPage({
-          page: "P",
-          text: this.props.previousPage,
-          disabled: this.props.collection.pageNo === 0
-        }));
+        pageButtons.push(
+          this.getPage({
+            page: "P",
+            text: this.props.previousPage,
+            disabled: this.props.collection.pageNo === 0
+          })
+        );
         for (var i = 0; i < numPages; i++) {
           var active = (i === this.props.collection.pageNo);
           pageButtons.push(this.getPage({
@@ -77,15 +81,19 @@ define(["react", "underscore", "../mixins/Events"],
             active: active
           }));
         }
-        pageButtons.push({
-          page: "N",
-          text: this.props.nextPage,
-          disabled: (this.props.collection.pageNo === (numPages - 1))
-        });
+        pageButtons.push(
+          this.getPage({
+            page: "N",
+            text: this.props.nextPage,
+            disabled: this.props.collection.pageNo === (numPages - 1)
+          })
+        );
 
         return React.DOM.nav(_.extend({}, this.props, {
-          className: this.props.className + " pagination pagination-" + this.props.size
-        }), pageButtons);
+          className: this.props.className
+        }), React.DOM.ul({
+          className: "pagination pagination-" + this.props.size
+        }, pageButtons));
       }
     });
 
