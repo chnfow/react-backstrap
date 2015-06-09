@@ -14,40 +14,65 @@ body {
 /*
  There should be spacing between text in a button and the icon
 */
-.btn>.glyphicon+* {
+.btn > .glyphicon + * {
     margin-left: 0.4em;
 }
 
 /*
-modal animations
+modal opening and closing animations
 */
 .modal {
     display: block !important;
 }
+
 .modal-backdrop {
     height: 100%;
     width: 100%;
     opacity: 0.2;
 }
+
 .modal-transition-enter {
     opacity: 0.01;
     margin-top: -40px;
-    transition: opacity .3s ease-in-out, margin-top 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out, margin-top 0.3s ease-in-out;
 }
+
 .modal-transition-enter.modal-transition-enter-active {
     margin-top: 0;
     opacity: 1;
 }
+
 .modal-transition-leave {
     opacity: 1;
     margin-top: 0;
-    transition: opacity .3s ease-in, margin-top 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in, margin-top 0.3s ease-in-out;
 }
+
 .modal-transition-leave.modal-transition-leave-active {
     margin-top: -40px;
     opacity: 0;
 }
 
+/*
+dropdown animations
+*/
+.dropdown-menu-transition-enter {
+    opacity: 0.01;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.dropdown-menu-transition-enter.dropdown-menu-transition-enter-active {
+    opacity: 1;
+}
+
+.dropdown-menu-transition-leave {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.dropdown-menu-transition-leave.dropdown-menu-transition-leave-active {
+    opacity: 0;
+}
 
 /*
  select
@@ -76,6 +101,7 @@ modal animations
     border-top-width: 0;
     display: none;
 }
+
 .fancy-select-search-results.fancy-select-search-results-open {
     display: block;
 }
@@ -113,11 +139,13 @@ modal animations
     cursor: pointer;
     overflow-x: hidden;
 }
+
 .fancy-select-fake-input.dropup {
     cursor: default;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
 .fancy-select-fake-input .caret {
     position: absolute;
     top: 50%;

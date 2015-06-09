@@ -10,7 +10,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   // generic input view
   var input = _.rf({
     displayName: "Attribute Untyped Input",
-    mixins: [attribute],
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
         value: this.getValue(),
@@ -25,6 +25,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   // different versions of the input view
   exports.text = _.rf({
     displayName: "Attribute Text",
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return input(_.extend({}, this.props, {type: "text"}));
     }
@@ -32,7 +33,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
 
   exports.number = _.rf({
     displayName: "Attribute Number",
-    mixins: [attribute],
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return input(_.extend({}, this.props, {type: "number"}));
     }
@@ -40,6 +41,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
 
   exports.email = _.rf({
     displayName: "Attribute E-mail",
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return input(_.extend({}, this.props, {type: "email"}));
     }
@@ -47,6 +49,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
 
   exports.password = _.rf({
     displayName: "Attribute Password",
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return input(_.extend({}, this.props, {type: "password"}));
     }
@@ -54,7 +57,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
 
   exports.checkbox = _.rf({
     displayName: "Attribute Checkbox",
-    mixins: [attribute],
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
         type: "checkbox",
@@ -67,7 +70,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
 
   exports.textarea = _.rf({
     displayName: "Attribute Textarea",
-    mixins: [attribute],
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return React.DOM.textarea(_.extend({}, this.props, {
         value: this.getValue(),
@@ -82,7 +85,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   // renders an anchor with a dynamic href
   exports.anchor = _.rf({
     displayName: "Attribute Anchor",
-    mixins: [attribute],
+    mixins: [attribute, React.addons.PureRenderMixin],
     propTypes: {
       href: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func])
     },
@@ -105,7 +108,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   // renders an attribute as an icon
   exports.icon = _.rf({
     displayName: "Attribute Icon",
-    mixins: [attribute],
+    mixins: [attribute, React.addons.PureRenderMixin],
     render: function () {
       return icon({
         name: this.getValue()
@@ -118,7 +121,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   _.each(staticViews, function (type) {
     exports[type] = _.rf({
       displayName: "Static Attribute " + type,
-      mixins: [attribute],
+      mixins: [attribute, React.addons.PureRenderMixin],
       render: function () {
         return React.DOM[type](_.extend({}, this.props), this.getValue());
       }

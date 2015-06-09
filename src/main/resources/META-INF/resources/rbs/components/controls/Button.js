@@ -9,38 +9,39 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
       caption: React.PropTypes.string,
       size: React.PropTypes.oneOf(["xs", "sm", "lg"]),
       type: React.PropTypes.string,
-      ajaxButton: React.PropTypes.bool
+      ajaxButton: React.PropTypes.bool,
+      // milliseconds after clicking that the onclick event can again be triggered
+      clickDelay: React.PropTypes.number
     },
 
     getDefaultProps: function () {
       return {
         ajaxButton: false,
-        type: "default"
+        type: "default",
+        clickDelay: 200
       };
     },
 
     getInitialState: function () {
       return {
-        loading: false
+        loading: false,
+        lastClick: 0
       };
     },
 
     componentDidMount: function () {
-      // prevent double-clicks
-      this.beforeOnClick = _.debounce(this.beforeOnClick, 500, true);
-
       if (this.props.ajaxButton) {
-        this.toLoading = _.bind(this.setLoading, this, true);
-        $(document).ajaxStart(this.toLoading);
-        this.fromLoading = _.bind(this.setLoading, this, false);
-        $(document).ajaxStop(this.fromLoading);
+        this._toLoading = _.bind(this.setLoading, this, true);
+        $(document).ajaxStart(this._toLoading);
+        this._fromLoading = _.bind(this.setLoading, this, false);
+        $(document).ajaxStop(this._fromLoading);
       }
     },
 
     componentWillUnmount: function () {
       if (this.props.ajaxButton) {
-        $(document).off("ajaxStart", this.toLoading);
-        $(document).off("ajaxStop", this.fromLoading);
+        $(document).off("ajaxStart", this._toLoading);
+        $(document).off("ajaxStop", this._fromLoading);
       }
     },
 
@@ -69,9 +70,20 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
       return null;
     },
 
+    getNow: function () {
+      return (new Date()).getTime();
+    },
+
     beforeOnClick: function (e) {
       e.preventDefault();
+      var now = this.getNow();
+      if (now - this.state.lastClick <= this.props.clickDelay) {
+        return;
+      }
       if (typeof this.props.onClick === "function") {
+        this.setState({
+          lastClick: now
+        });
         this.props.onClick.call(this, e);
       }
     },
@@ -92,11 +104,19 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
     render: function () {
       var caption = this.getCaption();
       var icon = this.getIcon();
+      var children = [icon, caption];
+      if (this.props.children) {
+        if (_.isArray(this.props.children)) {
+          children = children.concat(this.props.children);
+        } else {
+          children.push(this.props.children);
+        }
+      }
 
       return React.DOM.button(_.extend({}, this.props, {
         onClick: this.beforeOnClick,
         className: this.getClassNames()
-      }), [icon, caption]);
+      }), children);
     }
   });
 

@@ -51,7 +51,6 @@ define(["react", "underscore", "../mixins/Events"],
           className: classes.join(" "),
           onClick: _.bind(this.handlePageClick, this, pageObject.page)
         }, React.DOM.a({
-          href: "#",
           dangerouslySetInnerHTML: {__html: pageObject.text}
         }));
       },
