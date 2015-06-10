@@ -48,11 +48,13 @@
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
         </dependency>
+
         <!-- backbone -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>backbonejs</artifactId>
             <version>${backbone.version}</version>
+            <!-- get the latest underscore version separately -->
             <exclusions>
                 <exclusion>
                     <artifactId>org.webjars</artifactId>
@@ -60,35 +62,40 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- latest underscore version -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>underscorejs</artifactId>
+            <version>${underscore.version}</version>
+        </dependency>
+
         <!-- jquery -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>${jquery.version}</version>
         </dependency>
+
         <!-- jquery-ui -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery-ui</artifactId>
             <version>${jquery.version}</version>
         </dependency>
+
         <!-- requirejs -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>requirejs</artifactId>
             <version>${requirejs.version}</version>
         </dependency>
+
         <!-- react -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>react</artifactId>
             <version>${react.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>underscorejs</artifactId>
-            <version>${underscore.version}</version>
         </dependency>
 
     </dependencies>

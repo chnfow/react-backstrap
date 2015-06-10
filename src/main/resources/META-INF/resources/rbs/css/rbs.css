@@ -1,10 +1,6 @@
 @import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap.min.css');
 @import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap-theme.min.css');
 
-.navbar.navbar-inverse .navbar-toggle {
-    color: ivory;
-}
-
 /* apply font smoothing everywhere */
 body {
     -webkit-font-smoothing: antialiased;
@@ -19,38 +15,67 @@ body {
 }
 
 /*
-modal opening and closing animations
+baseline modal css to make it display without the help of bootstrap's js
 */
 .modal {
-    display: block !important;
+    display: block;
 }
 
-.modal-backdrop {
+.popup-backdrop {
+    z-index: 1039;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
-    opacity: 0.2;
+    opacity: 0.3;
+    background-color: black;
 }
 
-.modal-transition-enter {
+/* these are transitions for the modal dialog */
+.modal-dialog {
+    opacity: 1;
+    margin-top: 0;
+}
+.modal-dialog-transition-enter {
     opacity: 0.01;
     margin-top: -40px;
-    transition: opacity 0.3s ease-in-out, margin-top 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out, margin-top 0.3s ease-in-out !important;
 }
 
-.modal-transition-enter.modal-transition-enter-active {
+.modal-dialog-transition-enter.modal-dialog-transition-enter-active {
     margin-top: 0;
     opacity: 1;
 }
 
-.modal-transition-leave {
+.modal-dialog-transition-leave {
     opacity: 1;
     margin-top: 0;
     transition: opacity 0.3s ease-in, margin-top 0.3s ease-in-out;
 }
 
-.modal-transition-leave.modal-transition-leave-active {
+.modal-dialog-transition-leave.modal-dialog-transition-leave-active {
     margin-top: -40px;
-    opacity: 0;
+    opacity: 0.01;
+}
+
+/* and these are transitions for the modal backdrop */
+.popup-backdrop-transition-enter {
+    opacity: 0.01;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.popup-backdrop-transition-enter.popup-backdrop-transition-enter-active {
+    opacity: 0.3;
+}
+
+.popup-backdrop-transition-leave {
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in;
+}
+
+.popup-backdrop-transition-leave.popup-backdrop-transition-leave-active {
+    opacity: 0.01;
 }
 
 /*
@@ -75,7 +100,7 @@ dropdown animations
 }
 
 /*
- select
+ select control styling
 */
 /* the container returned by the fancy select */
 .fancy-select-container {
@@ -106,6 +131,13 @@ dropdown animations
     display: block;
 }
 
+.fancy-select-search-focus-on-select {
+    width: 0;
+    position: absolute;
+    height: 0;
+    opacity: 0;
+}
+
 /* a container for a single result in a select dropdown */
 .fancy-select-search-result {
     padding: 0.8em;
@@ -126,11 +158,11 @@ dropdown animations
 /* this class wraps each of the selected options in a multiple select */
 .fancy-select-multiple-choice {
     display: inline-block;
-    padding: 2px 5px;
-    margin: 2px;
-    text-shadow: 0 1px 0 rgba(0, 51, 83, 0.3);
-    background-color: #1b9dec;
-    color: white;
+    border-radius:0.3em;
+    padding: 0.5em;
+    margin: 0.18em;
+    text-shadow: 0 0.1em 0 rgba(0, 51, 83, 0.3);
+    background-color: lightgray;
 }
 
 /* this is the element that wraps the typing area and the selected options */

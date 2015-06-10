@@ -86,7 +86,7 @@ define(["react", "underscore", "../mixins/Collection"],
       render: function () {
         var i = 0;
         // take the models and turn them into model components, then wrap each one in a search result div
-        var results = _.map(this.getModels(this.state.results), function (oneResultComponent) {
+        var results = _.map(this.getModels(), function (oneResultComponent) {
           var myIndex = i++;
           var optionClass = "fancy-select-search-result";
           if (myIndex === this.state.hilite) {
@@ -96,7 +96,7 @@ define(["react", "underscore", "../mixins/Collection"],
             className: optionClass,
             ref: "result-" + myIndex,
             model: oneResultComponent.props.model,
-            key: "model-" + oneResultComponent.props.model.cid,
+            key: "model-result-" + oneResultComponent.props.model.cid,
             onMouseOver: _.bind(this.setHilite, this, myIndex),
             onMouseDown: _.bind(this.handleSelect, this, oneResultComponent.props.model)
           }, oneResultComponent);
@@ -105,8 +105,7 @@ define(["react", "underscore", "../mixins/Collection"],
         // put all the results in an absolutely positioned div under the search box
         return React.DOM.div(_.extend({}, this.props, {
           className: "fancy-select-search-results " + (this.props.className || ""),
-          ref: "results",
-          key: "results"
+          ref: "results"
         }), results);
       }
     });

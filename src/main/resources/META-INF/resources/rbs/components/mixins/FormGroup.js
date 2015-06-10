@@ -14,14 +14,20 @@ define(["react", "underscore"], function (React, _) {
       }
       // make sure the field has an ID
       var fieldId = component.props.id || _.randomString(5);
-      var newComponent = React.cloneElement(component, {className: newClass, id: fieldId});
+      var newComponent = React.cloneElement(component, {key: "component", className: newClass, id: fieldId});
 
       formGroupChildren.push(newComponent);
       // if the component has a label, point it at the new component
       if (newComponent.props.label) {
-        formGroupChildren.unshift(React.DOM.label({htmlFor: newComponent.props.id}, newComponent.props.label));
+        formGroupChildren.unshift(React.DOM.label({
+          key: "label",
+          htmlFor: newComponent.props.id
+        }, newComponent.props.label));
       }
-      return React.DOM.div({className: "form-group"}, formGroupChildren);
+      return React.DOM.div({
+        key: component.props.key,
+        className: "form-group"
+      }, formGroupChildren);
     }
   });
 });

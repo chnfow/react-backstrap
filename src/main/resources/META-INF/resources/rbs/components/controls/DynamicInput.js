@@ -102,6 +102,7 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
       return React.DOM.div({
         style: widthCalculatorStyle,
         ref: ref,
+        key: ref,
         dangerouslySetInnerHTML: { __html: this.getText(text) }
       });
     },
@@ -123,6 +124,7 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
       children.push(
         React.DOM.input(_.extend({}, this.props, {
           ref: "input",
+          key: "input",
           style: inputStyling
         }))
       );

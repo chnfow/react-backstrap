@@ -22,6 +22,8 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
           if (typeof val.get === "function") {
             val = val.get(pc);
           } else {
+            // an added benefit of this get, is that if the pc we're trying to get is not defined
+            // and the parent is an array, then we assume the user meant to get an attribute on the objects of the array
             if (pcs.length === 0 && _.isArray(val) && typeof val[pc] === "undefined") {
               return _.pluck(val, pc);
             }
@@ -76,14 +78,14 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
         ptr[pcs.shift()] = val;
 
         // set toSet back into the parent using oldSet, silently
-        oldSet.call(this, firstPc, toSet, _.extend({}, options, { silent: true }));
+        oldSet.call(this, firstPc, toSet, _.extend({}, options, {silent: true}));
         // then trigger the change to the attribute
         this.trigger("change:" + key, this, val, options);
         return this;
       },
 
       parse: function (response, options) {
-        return response ? JSOG.parse(JSOG.stringify(response)) : response;
+        return _.isObject(response) ? JSOG.decode(response) : response;
       }
     });
   })(Backbone.Model);
@@ -116,7 +118,8 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
       },
 
       size: function () {
-        return (!isNaN(parseInt(this.totalRecords))) ? parseInt(this.totalRecords) : 0;
+        return (!isNaN(parseInt(this.totalRecords))) ?
+          parseInt(this.totalRecords) : oldCollection.prototype.size.apply(this, arguments);
       },
 
       getPageNo: function () {
@@ -161,8 +164,7 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
       parse: function (response, options) {
         var responseHeaderCount = options && options.xhr && options.xhr.getResponseHeader ? options.xhr.getResponseHeader(this.totalRecordsParam) : 0;
         this.totalRecords = Math.max(response.length, parseInt(responseHeaderCount));
-        // convert the JSON into a cyclic object graph
-        return JSOG.parse(JSOG.stringify(response));
+        return _.isObject(response) ? JSOG.decode(response) : response;
       },
 
       fetch: function (options) {

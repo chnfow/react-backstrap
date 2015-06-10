@@ -1,5 +1,5 @@
-define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collection/SelectResults"],
-  function (React, _, $, Backbone, selectInput, selectResults) {
+define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./SelectInput", "../collection/SelectResults"],
+  function (React, _, $, Backbone, events, selectInput, selectResults) {
 
     "use strict";
 
@@ -16,9 +16,13 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
 
     return _.rf({
       displayName: "Attribute Select",
+      mixins:[events],
 
       propTypes: {
         valueAttribute: React.PropTypes.string,
+        // whether when dealing with a multi-select field, should an array of values be set e.g. [value, value]
+        // or an array of objects [{valueAttribute: value}, {valueAttribute:value}]
+        valueObjects: React.PropTypes.bool,
         searchOn: React.PropTypes.oneOfType([
           React.PropTypes.string,
           React.PropTypes.arrayOf(React.PropTypes.string),
@@ -28,8 +32,15 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
         breakOn: React.PropTypes.string
       },
 
+      componentDidMount: function () {
+        this.updateFilteredCollection = _.debounce(_.bind(this.updateFilteredCollection, this), 10);
+        this.listenTo(this.props.collection, "add remove reset", this.updateFilteredCollection);
+      },
+
       getDefaultProps: function () {
         return {
+          valueAttribute: "id",
+          valueObjects: true,
           searchOn: "name",
           breakOn: " ",
           caseInsensitive: true
@@ -39,22 +50,26 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
       getInitialState: function () {
         return {
           searchText: "",
-          filteredCollection: new Backbone.Collection()
+          filteredCollection: new Backbone.Collection(),
+          open: false
         };
       },
 
-      doSearch: function (e) {
-        var q = e.target.value;
+      handleChange: function (e) {
+        this.doSearch(e.target.value);
+      },
+
+      doSearch: function (q) {
         this.updateFilteredCollection(q);
         this.setState({
           searchText: q
         });
       },
 
-      // this returns an array of models for which the getSearchValues function returns a value that includes the
-      // search parameter q
+      // update this.state.filteredCollection to contain a filtered result set based on
+      // the current model value and the search function
       updateFilteredCollection: function (q) {
-        var selectedVals = this.getValue();
+        var selectedVals = this.props.model.get(this.props.attribute);
         // get an array of current values
         if (typeof selectedVals === "undefined" || selectedVals === null) {
           selectedVals = [];
@@ -65,9 +80,7 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
         }
 
         var svf = this.getSearchValueFunction();
-        if (this.props.caseInsensitive) {
-          q = q.toUpperCase();
-        }
+        var matcher = this.getMatcherFunction(q);
 
         this.state.filteredCollection.set(this.props.collection.filter(function (oneModel) {
           // val is already selected
@@ -83,12 +96,12 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
             if (typeof oneValue !== "string" || oneValue.length === 0) {
               return false;
             }
-            return oneValue.indexOf(q) !== -1;
+            return matcher(oneValue);
           });
         }, this));
       },
 
-      // for performance reasons, get a function to use to collect search values from a model
+      // get the function (model) that will be used to extract values to check against the query string
       getSearchValueFunction: function () {
         var toReturn;
         var caseInsensitive = this.props.caseInsensitive;
@@ -122,85 +135,86 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
         return toReturn;
       },
 
+      getMatcherFunction: function (q) {
+        if (this.props.caseInsensitive) {
+          q = q.toUpperCase();
+        }
+        var matcher = function (oneValue) {
+          return oneValue.indexOf(q) !== -1;
+        };
+        if (this.props.breakOn) {
+          q = _.uniq(q.split(this.props.breakOn));
+          // we need to use different logic for matching
+          matcher = function (oneValue) {
+            return _.all(q, function (oneQ) {
+              return oneValue.indexOf(oneQ) !== -1;
+            });
+          };
+        }
+        return matcher;
+      },
+
       handleKeydown: function (e) {
         switch (e.keyCode) {
           //handle key navigation of the result list
           case KEY_DOWN:
             e.preventDefault();
-            this.setHilite(this.state.hilite + 1);
+            this.refs.results.next();
             break;
           case KEY_UP:
             e.preventDefault();
-            this.setHilite(this.state.hilite - 1);
+            this.refs.results.previous();
             break;
           case KEY_PAGE_UP:
             e.preventDefault();
-            this.setHilite(this.state.hilite - 10);
+            this.refs.results.pageUp();
             break;
           case KEY_PAGE_DOWN:
             e.preventDefault();
-            this.setHilite(this.state.hilite + 10);
+            this.refs.results.pageDown();
             break;
           case KEY_END:
             e.preventDefault();
-            this.setHilite(this.state.results.length - 1);
+            this.refs.results.end();
             break;
           case KEY_HOME:
             e.preventDefault();
-            this.setHilite(0);
+            this.refs.results.home();
             break;
           case KEY_ESCAPE:
-            this.closeResults();
+            this.setOpen(false);
             break;
           // handle key selection of a result
           case KEY_ENTER:
-            this.handleSelect(this.state.hilite, e);
+            this.handleSelect(this.refs.results.getHilitedModel());
             break;
         }
       },
 
-      openResults: function () {
-        this.updateFilteredCollection("");
-        this.setState({
-          open: true,
-          searchText: ""
-        });
-      },
-
-      closeResults: function () {
-        this.setState({
-          open: false,
-          searchText: ""
-        });
-      },
-
-      handleSelect: function (resultIndex, e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var selectedModel = this.state.results[resultIndex];
-        // should never happen
+      handleSelect: function (selectedModel) {
         if (!selectedModel) {
           return;
         }
+
         var modelVal = selectedModel.get(this.props.valueAttribute);
         if (!this.props.multiple) {
           this.props.model.set(this.props.attribute, modelVal);
+          this.refs.toFocus.getDOMNode().focus();
         } else {
-          var currentValue = this.getValue();
-          var newValue = _.clone(newValue);
+          var currentValue = this.props.model.get(this.props.attribute);
+          var newValue;
           if (_.isArray(currentValue)) {
-            newValue = _.clone(currentValue);
-            var length = currentValue.length;
-            newValue.splice(Math.max(0, length - this.state.cursorPosition), 0, modelVal);
+            newValue = currentValue.concat([modelVal]);
           } else {
             newValue = [modelVal];
           }
           this.props.model.set(this.props.attribute, newValue);
+          this.doSearch("");
         }
-        if (!this.props.multiple || this.props.closeOnSelect) {
-          this.closeResults();
-        }
-        var newResults = this.getResults("");
+      },
+
+      handleRemove: function (model, value) {
+        this.updateFilteredCollection(this.state.searchText);
       },
 
       // handle a click of the select field
@@ -210,11 +224,51 @@ define(["react", "underscore", "jquery", "backbone", "./SelectInput", "../collec
         this.refs.search.focus();
       },
 
+      setOpen: function (value) {
+        this.setState({ open: value, searchText: "" }, function () {
+          if (this.state.open) {
+            this.updateFilteredCollection(this.state.searchText);
+          }
+        });
+      },
+
       render: function () {
         var children = [];
 
-        children.push(selectInput(_.extend({}, this.props, {value: this.state.searchText})));
-        children.push(selectResults(_.extend({}, this.props, {collection: this.state.filteredCollection})));
+        children.push(
+          selectInput(_.extend({}, this.props, {
+            key: "input",
+            value: this.state.searchText,
+            onChange: this.handleChange,
+            onFocus: _.bind(this.setOpen, this, true),
+            onBlur: _.bind(this.setOpen, this, false),
+            onKeyDown: this.handleKeydown,
+            onRemove: this.handleRemove
+          }))
+        );
+
+        var className;
+        if (this.state.open) {
+          className = "fancy-select-search-results-open";
+        }
+        children.push(
+          selectResults(_.extend({}, this.props, {
+            key: "results",
+            ref: "results",
+            collection: this.state.filteredCollection,
+            onSelect: this.handleSelect,
+            className: className
+          }))
+        );
+
+        children.push(
+          React.DOM.div({
+            key: "toFocus",
+            ref: "toFocus",
+            className: "fancy-select-search-focus-on-select",
+            tabIndex: -1
+          })
+        );
 
         return React.DOM.div({
           className: "fancy-select-container",

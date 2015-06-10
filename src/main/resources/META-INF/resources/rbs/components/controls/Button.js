@@ -53,21 +53,25 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
 
     getIcon: function () {
       if (this.props.icon) {
-        return icon({name: this.props.icon});
+        return icon({key: "icon", name: this.props.icon});
       }
       return null;
     },
 
     getCaption: function () {
+      var text = null;
       if (this.state.loading) {
         if (this.props.loadingCaption) {
-          return this.props.loadingCaption;
+          text = this.props.loadingCaption;
         }
       }
       if (this.props.caption) {
-        return this.props.caption;
+        text = this.props.caption;
       }
-      return null;
+      if (text === null) {
+        return null;
+      }
+      return React.DOM.span({ key: "caption" }, text);
     },
 
     getNow: function () {

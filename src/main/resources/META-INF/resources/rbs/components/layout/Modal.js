@@ -1,7 +1,5 @@
-define(["react", "underscore"], function (React, _) {
+define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (React, _, TTG) {
   "use strict";
-
-  var RCSST = React.createFactory(React.addons.CSSTransitionGroup);
 
   // renders an icon with the name property
   return _.rf({
@@ -9,13 +7,13 @@ define(["react", "underscore"], function (React, _) {
     propTypes: {
       open: React.PropTypes.bool.isRequired,
       onClose: React.PropTypes.func,
-      size: React.PropTypes.oneOf(["lg", "sm", "md"]),
+      size: React.PropTypes.oneOf(["lg", "sm"]),
       backdrop: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool])
     },
 
     getDefaultProps: function () {
       return {
-        size: "md",
+        size: null,
         backdrop: "static",
         onClose: _.noop
       };
@@ -35,31 +33,44 @@ define(["react", "underscore"], function (React, _) {
 
     render: function () {
       var children = [];
+
+      var dialog = null;
+      var backdrop = null;
       if (this.props.open) {
-        var modalSize = (this.props.size !== "md") ? ("modal-" + this.props.size) : "";
-
-        var dialog = React.DOM.div({
-          key: "dialog",
-          className: "modal-dialog " + modalSize
-        }, [
+        var modalSizeClass = (this.props.size !== null) ? ("modal-" + this.props.size) : "";
+        dialog = React.DOM.div({className: "modal"},
           React.DOM.div({
-            className: "modal-content"
-          }, this.props.children)
-        ]);
+              className: "modal-dialog " + modalSizeClass
+            },
+            React.DOM.div({
+              key: "content",
+              className: "modal-content"
+            }, this.props.children)
+          )
+        );
 
-        var backdrop = null;
         if (this.props.backdrop !== false) {
           backdrop = React.DOM.div({
-            key: "backdrop",
-            className: "modal-backdrop",
+            className: "popup-backdrop",
             onClick: this.closeOnClick
           });
         }
-
-        children.push(React.DOM.div({className: "modal"}, [backdrop, dialog]));
       }
 
-      return RCSST({transitionName: "modal-transition"}, children);
+      return React.DOM.div({}, [
+        TTG({
+          transitionName: "modal-dialog-transition",
+          enterTimeout: "300",
+          leaveTimeout: "300",
+          key: "dialog"
+        }, dialog),
+        TTG({
+          transitionName: "popup-backdrop-transition",
+          enterTimeout: "300",
+          leaveTimeout: "300",
+          key: "backdrop"
+        }, backdrop)
+      ]);
     }
   });
 });

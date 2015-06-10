@@ -24,7 +24,8 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
         multiple: React.PropTypes.bool,
         onKeyDown: React.PropTypes.func,
         onFocus: React.PropTypes.func,
-        onBlur: React.PropTypes.func
+        onBlur: React.PropTypes.func,
+        onRemove: React.PropTypes.func
       },
 
       getDefaultProps: function () {
@@ -63,14 +64,6 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
         return this.props.collection.findWhere(findObj);
       },
 
-
-      getDisplayItem: function (className, model) {
-        return React.DOM.span({
-          className: className,
-          key: model.cid
-        }, this.props.modelComponent({model: model}));
-      },
-
       handleKeyDown: function (e) {
         switch (e.keyCode) {
           case KEY_LEFT:
@@ -103,6 +96,18 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
         }
       },
 
+      setCursorPosition: function (cp) {
+        var val = this.getValue();
+        if (!_.isArray(val)) {
+          cp = 0;
+        } else {
+          cp = Math.max(0, Math.min(val.length, cp));
+        }
+        this.setState({
+          cursorPosition: cp
+        });
+      },
+
       removeSelectedItemAt: function (countFromLast) {
         if (typeof countFromLast !== "number" || !this.props.multiple) {
           this.props.model.unset(this.props.attribute);
@@ -117,10 +122,14 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
           return;
         }
         var newValue = _.clone(currentValue);
-        newValue.splice(realIndex, 1);
+        var removing = newValue.splice(realIndex, 1);
         this.props.model.set(this.props.attribute, newValue);
         this.setState({
           cursorPosition: countFromLast - 1
+        }, function () {
+          if (this.props.onRemove) {
+            this.props.onRemove(this.findModelByValue(removing), removing);
+          }
         });
       },
 
@@ -130,15 +139,19 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
           this.props.onFocus(e);
         }
       },
+
       handleBlur: function (e) {
         this.setState({open: false});
         if (this.props.onBlur) {
           this.props.onBlur(e);
         }
       },
+
       handleClick: function (e) {
+        e.preventDefault();
         this.refs.search.focus();
       },
+
       handleChange: function (e) {
         this.setState({
           cursorPosition: 0
@@ -146,6 +159,14 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
         if (this.props.onChange) {
           this.props.onChange(e);
         }
+      },
+
+
+      getDisplayItem: function (className, model) {
+        return React.DOM.span({
+          className: className,
+          key: "result-cid-" + model.cid
+        }, this.props.modelComponent({model: model}));
       },
 
       render: function () {
@@ -161,7 +182,9 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
           }
         } else {
           if (_.isArray(currentValue)) {
+            // items not found in the collection are not displayed
             var selectedModels = _.filter(_.map(currentValue, this.findModelByValue, this), Boolean);
+            // map them into views
             selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "fancy-select-multiple-choice"));
           }
         }
@@ -197,6 +220,7 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
 
         // show a caret to indicate whether the input is open
         insideInput.push(React.DOM.span({
+          key: "caret",
           className: "caret"
         }));
 
@@ -207,7 +231,6 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
 
         var fakeInputProps = _.omit(_.extend({}, this.props, {
           ref: "fakeInput",
-          key: "fakeInput",
           onMouseDown: this.handleClick,
           className: "fancy-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder");

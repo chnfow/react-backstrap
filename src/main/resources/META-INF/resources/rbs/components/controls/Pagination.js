@@ -48,6 +48,7 @@ define(["react", "underscore", "../mixins/Events"],
           classes.push("disabled");
         }
         return React.DOM.li({
+          key: "page-" + pageObject.page,
           className: classes.join(" "),
           onClick: _.bind(this.handlePageClick, this, pageObject.page)
         }, React.DOM.a({
