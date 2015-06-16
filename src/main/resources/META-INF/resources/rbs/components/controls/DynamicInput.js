@@ -39,6 +39,12 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
       this.updateWidth();
     },
 
+
+    componentDidUpdate: function () {
+      this.copyStylesToCalculators();
+      this.updateWidth();
+    },
+
     copyStyle: function (nodeA, nodeB) {
       var styleOfNodeA = this.getStyle(nodeA);
       _.extend(nodeB.style, _.pick(styleOfNodeA, widthStyles));
@@ -53,10 +59,6 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
 
     isVisible: function () {
       return (this.isMounted() && $(React.findDOMNode(this)).is(":visible"));
-    },
-
-    componentDidUpdate: function () {
-      this.updateWidth();
     },
 
     copyStylesToCalculators: function () {
