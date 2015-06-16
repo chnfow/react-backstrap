@@ -77,13 +77,6 @@
             <version>${jquery.version}</version>
         </dependency>
 
-        <!-- jquery-ui -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery-ui</artifactId>
-            <version>${jquery.version}</version>
-        </dependency>
-
         <!-- requirejs -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -98,6 +91,12 @@
             <version>${react.version}</version>
         </dependency>
 
+        <!-- jquery cookie plugin -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-cookie</artifactId>
+            <version>1.4.1-1</version>
+        </dependency>
     </dependencies>
 
 </project>

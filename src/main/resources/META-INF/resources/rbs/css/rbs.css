@@ -145,7 +145,7 @@ so they're removed from the DOM when they're not
     opacity: 0;
 }
 
-/* fancy fade in/out by sliding down and up respectively named fade-in-down */
+/* fade in/out by sliding down and up respectively named fade-in-down */
 @-webkit-keyframes fadeInDown {
     0% {
         opacity: 0;
@@ -224,6 +224,87 @@ so they're removed from the DOM when they're not
     animation-fill-mode: both;
     -webkit-animation-name: fadeOutUp;
     animation-name: fadeOutUp;
+}
+
+/* a much smaller version of the above for full screen elements*/
+@-webkit-keyframes fadeInDownSmall {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
+        transform: translate3d(0, -1%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInDownSmall {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
+        transform: translate3d(0, -1%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@-webkit-keyframes fadeOutUpSmall {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
+        transform: translate3d(0, -1%, 0);
+    }
+}
+
+@keyframes fadeOutUpSmall {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
+        transform: translate3d(0, -1%, 0);
+    }
+}
+
+.fade-in-down-small-enter {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -1%, 0);
+    transform: translate3d(0, -1%, 0);
+}
+
+.fade-in-down-small-enter.fade-in-down-small-enter-active {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: fadeInDownSmall;
+    animation-name: fadeInDownSmall;
+}
+
+.fade-in-down-small-leave {
+    opacity: 1;
+}
+
+.fade-in-down-small-leave.fade-in-down-small-leave-active {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: fadeOutUpSmall;
+    animation-name: fadeOutUpSmall;
 }
 
 /* flip in and out on the x axis, named flip-in-x */
