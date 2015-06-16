@@ -1,5 +1,10 @@
+/**
+ * We are not using bootstrap's modals because it's styling is too mixed in with the rest of the css
+ */
 define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (React, _, TTG) {
   "use strict";
+
+  var RCSST = React.createFactory(React.addons.CSSTransitionGroup);
 
   // renders an icon with the name property
   return _.rf({
@@ -26,50 +31,49 @@ define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (
       this.close();
     },
 
-    // it's up to the owner to actually set the open property to false since properties are immutable
+    // it's up to the owner to implement onClose since they trigger the open
     close: function () {
       this.props.onClose();
     },
 
     render: function () {
-      var children = [];
-
-      var dialog = null;
-      var backdrop = null;
+      var modal = null;
+      var backdrop;
       if (this.props.open) {
-        var modalSizeClass = (this.props.size !== null) ? ("modal-" + this.props.size) : "";
-        dialog = React.DOM.div({className: "modal"},
+        var modalSizeClass = (this.props.size !== null) ? (" modal-" + this.props.size) : "";
+        var dialog = React.DOM.div({
+            className: "modal-dialog" + modalSizeClass
+          },
           React.DOM.div({
-              className: "modal-dialog " + modalSizeClass
-            },
-            React.DOM.div({
-              key: "content",
-              className: "modal-content"
-            }, this.props.children)
-          )
+            className: "modal-content"
+          }, this.props.children)
         );
-
+        modal = React.DOM.div({
+          className: "modal"
+        }, dialog);
         if (this.props.backdrop !== false) {
           backdrop = React.DOM.div({
-            className: "popup-backdrop",
+            className: "Modal-backdrop",
             onClick: this.closeOnClick
           });
         }
       }
 
       return React.DOM.div({}, [
-        TTG({
-          transitionName: "modal-dialog-transition",
-          enterTimeout: "300",
-          leaveTimeout: "300",
-          key: "dialog"
-        }, dialog),
-        TTG({
-          transitionName: "popup-backdrop-transition",
-          enterTimeout: "300",
-          leaveTimeout: "300",
-          key: "backdrop"
-        }, backdrop)
+        RCSST({
+          key: "backdrop",
+          component: "div",
+          transitionName: "fade",
+          enterTimeout: 500,
+          leaveTimeout: 500
+        }, backdrop),
+        RCSST({
+          key: "modal",
+          component: "div",
+          transitionName: "fade-in-down",
+          enterTimeout: 500,
+          leaveTimeout: 500
+        }, modal)
       ]);
     }
   });

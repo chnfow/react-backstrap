@@ -13,11 +13,10 @@
  * This is adapted from Facebook's CSSTransitionGroup which is in the React
  * addons and under the Apache 2.0 License.
  */
-define(["react", "underscore"], function (React, _) {
+define(["react", "underscore", "raf"], function (React, _) {
   "use strict";
   var ReactTransitionGroup = React.createFactory(React.addons.TransitionGroup);
 
-  var TICK = 17;
   /**
    * EVENT_NAME_MAP is used to determine which event fired when a
    * transition/animation ends, based on the style property used to
@@ -146,9 +145,7 @@ define(["react", "underscore"], function (React, _) {
         }
       }
 
-      addClass(node, className);
-
-      // Need to do this to actually trigger a transition.
+      this.queueClass(className);
       this.queueClass(activeClassName);
     },
 
@@ -156,18 +153,16 @@ define(["react", "underscore"], function (React, _) {
       this.classNameQueue.push(className);
 
       if (!this.timeout) {
-        this.timeout = setTimeout(this.flushClassNameQueue, TICK);
+        this.timeout = window.requestAnimationFrame(this.flushClassNameQueue);
       }
     },
 
     flushClassNameQueue: function () {
-      if (this.isMounted()) {
-        this.classNameQueue.forEach(function (name) {
-          addClass(this.getDOMNode(), name);
-        }.bind(this));
+      if (this.isMounted() && this.classNameQueue.length > 0) {
+        var nextClass = this.classNameQueue.shift();
+        addClass(this.getDOMNode(), nextClass);
+        window.requestAnimationFrame(this.flushClassNameQueue);
       }
-      this.classNameQueue.length = 0;
-      this.timeout = null;
     },
 
     componentWillMount: function () {
@@ -176,7 +171,7 @@ define(["react", "underscore"], function (React, _) {
 
     componentWillUnmount: function () {
       if (this.timeout) {
-        clearTimeout(this.timeout);
+        window.cancelAnimationFrame(this.timeout);
       }
       if (this.animationTimeout) {
         clearTimeout(this.animationTimeout);

@@ -14,90 +14,46 @@ body {
     margin-left: 0.4em;
 }
 
-/*
-baseline modal css to make it display without the help of bootstrap's js
+/**
+Modals display always. We use transition groups to manage whether they're visible,
+so they're removed from the DOM when they're not
 */
 .modal {
     display: block;
+    overflow-y: auto;
+    opacity: 1;
 }
 
-.popup-backdrop {
-    z-index: 1039;
+.Modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
     top: 0;
     left: 0;
-    height: 100%;
     width: 100%;
-    opacity: 0.3;
-    background-color: black;
-}
-
-/* these are transitions for the modal dialog */
-.modal-dialog {
-    opacity: 1;
-    margin-top: 0;
-}
-.modal-dialog-transition-enter {
-    opacity: 0.01;
-    margin-top: -40px;
-    transition: opacity 0.3s ease-in-out, margin-top 0.3s ease-in-out !important;
-}
-
-.modal-dialog-transition-enter.modal-dialog-transition-enter-active {
-    margin-top: 0;
-    opacity: 1;
-}
-
-.modal-dialog-transition-leave {
-    opacity: 1;
-    margin-top: 0;
-    transition: opacity 0.3s ease-in, margin-top 0.3s ease-in-out;
-}
-
-.modal-dialog-transition-leave.modal-dialog-transition-leave-active {
-    margin-top: -40px;
-    opacity: 0.01;
-}
-
-/* and these are transitions for the modal backdrop */
-.popup-backdrop-transition-enter {
-    opacity: 0.01;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.popup-backdrop-transition-enter.popup-backdrop-transition-enter-active {
-    opacity: 0.3;
-}
-
-.popup-backdrop-transition-leave {
-    opacity: 0.3;
-    transition: opacity 0.3s ease-in;
-}
-
-.popup-backdrop-transition-leave.popup-backdrop-transition-leave-active {
-    opacity: 0.01;
+    height: 100%;
+    z-index: 1040;
 }
 
 /*
 dropdown animations
 */
-.dropdown-menu-transition-enter {
-    opacity: 0.01;
-    transition: opacity 0.3s ease-in-out;
-}
+/*.dropdown-menu-transition-enter {*/
+/*opacity: 0.01;*/
+/*transition: opacity 0.3s ease-in-out;*/
+/*}*/
 
-.dropdown-menu-transition-enter.dropdown-menu-transition-enter-active {
-    opacity: 1;
-}
+/*.dropdown-menu-transition-enter.dropdown-menu-transition-enter-active {*/
+/*opacity: 1;*/
+/*}*/
 
-.dropdown-menu-transition-leave {
-    opacity: 1;
-    transition: opacity 0.3s;
-}
+/*.dropdown-menu-transition-leave {*/
+/*opacity: 1;*/
+/*transition: opacity 0.3s;*/
+/*}*/
 
-.dropdown-menu-transition-leave.dropdown-menu-transition-leave-active {
-    opacity: 0;
-}
+/*.dropdown-menu-transition-leave.dropdown-menu-transition-leave-active {*/
+/*opacity: 0;*/
+/*}*/
 
 /*
  select control styling
@@ -158,7 +114,7 @@ dropdown animations
 /* this class wraps each of the selected options in a multiple select */
 .fancy-select-multiple-choice {
     display: inline-block;
-    border-radius:0.3em;
+    border-radius: 0.3em;
     padding: 0.5em;
     margin: 0.18em;
     text-shadow: 0 0.1em 0 rgba(0, 51, 83, 0.3);
@@ -183,4 +139,103 @@ dropdown animations
     top: 50%;
     margin-top: -2px;
     right: 8px;
+}
+
+/* GENERAL CSS TRANSITIONS FOR USE ANYWHERE */
+/* inspired by animate.css */
+/* general fade in and fade out, lasts 0.5s */
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    transition: opacity 0.5s ease-out;
+    opacity: 1;
+}
+
+.fade-leave {
+    opacity: 1;
+}
+
+.fade-leave-active {
+    transition: opacity 0.5s ease-out;
+    opacity: 0;
+}
+
+/* fancy fade in/out by sliding down and up respectively */
+@-webkit-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@-webkit-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+}
+
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+}
+
+.fade-in-down-enter {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+}
+.fade-in-down-enter.fade-in-down-enter-active {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+}
+.fade-in-down-leave {
+    opacity: 1;
+}
+.fade-in-down-leave.fade-in-down-leave-active {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: fadeOutUp;
+    animation-name: fadeOutUp;
 }
