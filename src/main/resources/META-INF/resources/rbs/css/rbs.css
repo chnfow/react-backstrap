@@ -97,11 +97,10 @@ so they're removed from the DOM when they're not
 /* this class wraps each of the selected options in a multiple select */
 .fancy-select-multiple-choice {
     display: inline-block;
-    border-radius: 0.3em;
-    padding: 0.5em;
+    border-radius: 0.2em;
+    padding: 0.2em 0.3em;
     margin: 0.18em;
-    text-shadow: 0 0.1em 0 rgba(0, 51, 83, 0.3);
-    background-color: lightgray;
+    background-color: aliceblue;
 }
 
 /* this is the element that wraps the typing area and the selected options */
