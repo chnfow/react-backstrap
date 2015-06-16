@@ -34,27 +34,10 @@ so they're removed from the DOM when they're not
     z-index: 1040;
 }
 
-/*
-dropdown animations
-*/
-/*.dropdown-menu-transition-enter {*/
-/*opacity: 0.01;*/
-/*transition: opacity 0.3s ease-in-out;*/
-/*}*/
-
-/*.dropdown-menu-transition-enter.dropdown-menu-transition-enter-active {*/
-/*opacity: 1;*/
-/*}*/
-
-/*.dropdown-menu-transition-leave {*/
-/*opacity: 1;*/
-/*transition: opacity 0.3s;*/
-/*}*/
-
-/*.dropdown-menu-transition-leave.dropdown-menu-transition-leave-active {*/
-/*opacity: 0;*/
-/*}*/
-
+/* dropdown menus display always, using transition groups to manage whether they're visible */
+.dropdown-menu {
+    display: block;
+}
 /*
  select control styling
 */
@@ -142,7 +125,8 @@ dropdown animations
 }
 
 /* GENERAL CSS TRANSITIONS FOR USE ANYWHERE */
-/* inspired by animate.css */
+/* largely taken from Daniel Eden's animate.css */
+/* https://daneden.github.io/animate.css */
 /* general fade in and fade out, lasts 0.5s */
 .fade-enter {
     opacity: 0;
@@ -162,7 +146,7 @@ dropdown animations
     opacity: 0;
 }
 
-/* fancy fade in/out by sliding down and up respectively */
+/* fancy fade in/out by sliding down and up respectively named fade-in-down */
 @-webkit-keyframes fadeInDown {
     0% {
         opacity: 0;
@@ -220,6 +204,7 @@ dropdown animations
     -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
 }
+
 .fade-in-down-enter.fade-in-down-enter-active {
     -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
@@ -228,9 +213,11 @@ dropdown animations
     -webkit-animation-name: fadeInDown;
     animation-name: fadeInDown;
 }
+
 .fade-in-down-leave {
     opacity: 1;
 }
+
 .fade-in-down-leave.fade-in-down-leave-active {
     -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
@@ -238,4 +225,143 @@ dropdown animations
     animation-fill-mode: both;
     -webkit-animation-name: fadeOutUp;
     animation-name: fadeOutUp;
+}
+
+/* flip in and out on the x axis, named flip-in-x */
+@-webkit-keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+    }
+}
+
+@keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+    }
+}
+
+@-webkit-keyframes flipOutX {
+    0% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+        opacity: 1;
+    }
+
+    30% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        opacity: 1;
+    }
+
+    100% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        opacity: 0;
+    }
+}
+
+@keyframes flipOutX {
+    0% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+        opacity: 1;
+    }
+
+    30% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        opacity: 1;
+    }
+
+    100% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        opacity: 0;
+    }
+}
+
+.flip-in-x-enter {
+    opacity: 0;
+}
+
+.flip-in-x-enter.flip-in-x-enter-active {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInX;
+    animation-name: flipInX;
+    opacity: 1;
+}
+
+.flip-in-x-leave {
+    opacity: 1;
+}
+
+.flip-in-x-leave.flip-in-x-leave-active {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: flipOutX;
+    animation-name: flipOutX;
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    opacity: 0;
 }

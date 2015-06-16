@@ -4,8 +4,6 @@
 define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (React, _, TTG) {
   "use strict";
 
-  var RCSST = React.createFactory(React.addons.CSSTransitionGroup);
-
   // renders an icon with the name property
   return _.rf({
     displayName: "Modal",
@@ -60,14 +58,14 @@ define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (
       }
 
       return React.DOM.div({}, [
-        RCSST({
+        TTG({
           key: "backdrop",
           component: "div",
           transitionName: "fade",
           enterTimeout: 500,
           leaveTimeout: 500
         }, backdrop),
-        RCSST({
+        TTG({
           key: "modal",
           component: "div",
           transitionName: "fade-in-down",

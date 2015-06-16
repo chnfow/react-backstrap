@@ -137,11 +137,9 @@ define(["react", "underscore", "raf"], function (React, _) {
         endListener();
       } else {
         if (animationType === "enter") {
-          this.animationTimeout = setTimeout(endListener,
-            this.props.enterTimeout);
+          this.animationTimeout = setTimeout(endListener, this.props.enterTimeout);
         } else if (animationType === "leave") {
-          this.animationTimeout = setTimeout(endListener,
-            this.props.leaveTimeout);
+          this.animationTimeout = setTimeout(endListener, this.props.leaveTimeout);
         }
       }
 
@@ -158,10 +156,11 @@ define(["react", "underscore", "raf"], function (React, _) {
     },
 
     flushClassNameQueue: function () {
-      if (this.isMounted() && this.classNameQueue.length > 0) {
+      this.timeout = null;
+      if (this.classNameQueue.length > 0) {
         var nextClass = this.classNameQueue.shift();
         addClass(this.getDOMNode(), nextClass);
-        window.requestAnimationFrame(this.flushClassNameQueue);
+        this.timeout = window.requestAnimationFrame(this.flushClassNameQueue);
       }
     },
 
