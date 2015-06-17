@@ -10,7 +10,7 @@ define(["react", "underscore", "../mixins/Collection"], function (React, _, coll
     mixins: [collection],
 
     propTypes: {
-      component: React.oneOfType([
+      component: React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.func
       ])
