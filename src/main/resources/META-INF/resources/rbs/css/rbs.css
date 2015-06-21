@@ -8,11 +8,17 @@ body {
 }
 
 /*
- There should be spacing between text in a button and the icon
+ Anything that comes after a glyphicon should have some space
 */
-.btn > .glyphicon + * {
+.glyphicon + * {
     margin-left: 0.4em;
 }
+
+/* inverse navbars should have white text in the buttons */
+.navbar-inverse button.navbar-toggle {
+    color: white;
+}
+
 
 /**
 Modals display always. We use transition groups to manage whether they're visible,
