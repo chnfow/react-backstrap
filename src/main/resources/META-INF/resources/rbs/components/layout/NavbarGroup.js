@@ -5,18 +5,20 @@ define(["react", "underscore"], function (React, _) {
   "use strict";
 
   return _.rf({
+    displayName: "Navbar Group",
+
     propTypes: {
-      left: React.PropTypes.bool
+      right: React.PropTypes.bool
     },
 
     getDefaultProps: function () {
       return {
-        left: false
+        right: false
       };
     },
 
     render: function () {
-      var className = "nav navbar-nav" + (!this.props.left ? " navbar-right" : "");
+      var className = "nav navbar-nav" + (this.props.right ? " navbar-right" : "");
       if (typeof this.props.className === "string") {
         className += " " + this.props.className;
       }

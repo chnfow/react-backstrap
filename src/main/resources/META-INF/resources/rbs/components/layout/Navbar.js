@@ -6,6 +6,7 @@ define(["react", "underscore", "./Icon"],
     "use strict";
 
     return _.rf({
+      displayName: "Navbar",
 
       propTypes: {
         brand: React.PropTypes.node.isRequired
@@ -34,22 +35,23 @@ define(["react", "underscore", "./Icon"],
       render: function () {
         var navbarHeader = React.DOM.div({
           className: "navbar-header",
-          key: "header"
+          key: "navbar-header"
         }, [
           React.DOM.button({
+            key: "navbar-toggle-collapsed",
             className: "navbar-toggle" + (this.state.collapsed ? " collapsed" : ""),
             onClick: _.bind(this.toggleCollapsed, this)
           }, icon({name: "menu-hamburger"})),
           React.DOM.a({
-            className: "navbar-brand",
             key: "brand",
+            className: "navbar-brand",
             href: "//" + window.location.host
           }, this.props.brand)
         ]);
 
         var navbarLinks = React.DOM.div({
           className: "navbar-collapse collapse" + (this.state.collapsed ? "" : " in"),
-          key: "links"
+          key: "navbar-links"
         }, [
           this.props.children
         ]);

@@ -1,8 +1,10 @@
 define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransitionGroup"],
   function (React, _, Button, TTG) {
     "use strict";
+
     return _.rf({
-      displayName: "Dropdown/dropup Menu",
+      displayName: "Dropdown Button",
+
       propTypes: {
         dropup: React.PropTypes.bool
       },
