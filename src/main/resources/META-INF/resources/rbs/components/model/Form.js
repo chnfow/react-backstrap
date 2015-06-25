@@ -6,7 +6,9 @@ define(["react", "jquery", "../mixins/Model", "../mixins/FormGroup", "underscore
 
   return _.rf({
     displayName: "Model Form",
+
     mixins: [model, formGroup],
+
     render: function () {
       var children = _.map(this.getAttributes(), this.makeFormGroup);
 

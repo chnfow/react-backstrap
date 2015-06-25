@@ -17,7 +17,7 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
 
       // this function takes an array of model attributes and returns the resulting children from the description
       getAttributes: function () {
-        return _.without(_.map(this.props.attributes, function (oneAttribute) {
+        return _.map(this.props.attributes, function (oneAttribute) {
           var comp = oneAttribute.component;
           var viewType;
           if (typeof comp === "string") {
@@ -27,13 +27,14 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
             viewType = comp;
           }
           if (!viewType) {
-            console.error("Valid component not passed for model attribute", oneAttribute);
+            console.error("Valid component factory not passed for model attribute", oneAttribute);
             return null;
           }
           return viewType(_.extend({}, oneAttribute, {
+            key: oneAttribute.key || ("attribute-" + oneAttribute.attribute),
             model: this.props.model
           }));
-        }, this), null);
+        }, this);
       }
 
     });

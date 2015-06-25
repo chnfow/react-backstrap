@@ -4,28 +4,55 @@
 define(["react", "underscore"], function (React, _) {
   "use strict";
   return React.createMixin({
+
+    //propTypes: {
+    //  disableWhenLoading: React.PropTypes.bool
+    //},
+    //
+    //getDefaultProps: function () {
+    //
+    //},
+    //
+    //componentDidMount: function () {
+    //
+    //},
+    //
+    //componentWillUnmount: function () {
+    //
+    //},
+    //
+    //getInitialState: function () {
+    //  return {
+    //    _formLoading: false
+    //  };
+    //},
+
     makeFormGroup: function (component) {
       var formGroupChildren = [];
       // add the form-control class
       var oldClass = component.props.className;
-      var newClass = "form-control ";
+      var newClass = "form-control";
       if (typeof oldClass === "string") {
-        newClass += oldClass;
+        newClass += " " + oldClass;
       }
       // make sure the field has an ID
       var fieldId = component.props.id || _.randomString(5);
-      var newComponent = React.cloneElement(component, {key: "component", className: newClass, id: fieldId});
+      var newComponent = React.cloneElement(component, {
+        key: "attribute-component",
+        className: newClass,
+        id: fieldId
+      });
 
       formGroupChildren.push(newComponent);
       // if the component has a label, point it at the new component
       if (newComponent.props.label) {
         formGroupChildren.unshift(React.DOM.label({
-          key: "label",
+          key: "attribute-label",
           htmlFor: newComponent.props.id
         }, newComponent.props.label));
       }
       return React.DOM.div({
-        key: component.props.key,
+        key: component.key,
         className: "form-group"
       }, formGroupChildren);
     }

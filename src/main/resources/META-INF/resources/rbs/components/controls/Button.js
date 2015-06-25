@@ -9,7 +9,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
       caption: React.PropTypes.string,
       size: React.PropTypes.oneOf(["xs", "sm", "lg"]),
       type: React.PropTypes.string,
-      ajaxButton: React.PropTypes.bool,
+      ajax: React.PropTypes.bool,
       submit: React.PropTypes.bool,
       // milliseconds after clicking that the onclick event can again be triggered
       clickDelay: React.PropTypes.number
@@ -17,7 +17,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
 
     getDefaultProps: function () {
       return {
-        ajaxButton: false,
+        ajax: false,
         type: "default",
         submit: false,
         clickDelay: 200
@@ -32,7 +32,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
     },
 
     componentDidMount: function () {
-      if (this.props.ajaxButton) {
+      if (this.props.ajax) {
         this._toLoading = _.bind(this.setLoading, this, true);
         $(document).ajaxStart(this._toLoading);
         this._fromLoading = _.bind(this.setLoading, this, false);

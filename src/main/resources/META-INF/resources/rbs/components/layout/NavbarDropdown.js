@@ -35,8 +35,8 @@ define(["react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup"],
           className: "dropdown-toggle",
           onClick: _.bind(this.toggleOpen, this)
         }, [
-          icon({name: this.props.icon}),
-          this.props.text,
+          icon({name: this.props.icon, key: "toggle-icon"}),
+          React.DOM.span({key: "navbar-dropdown-text-label"}, this.props.text),
           React.DOM.span({key: "caret", className: "caret"})
         ]);
 
