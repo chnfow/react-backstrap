@@ -11,7 +11,8 @@ define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (
       open: React.PropTypes.bool.isRequired,
       onClose: React.PropTypes.func,
       size: React.PropTypes.oneOf(["lg", "sm"]),
-      backdrop: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool])
+      backdrop: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool]),
+      title: React.PropTypes.string.isRequired
     },
 
     getDefaultProps: function () {
@@ -39,12 +40,21 @@ define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (
       var backdrop;
       if (this.props.open) {
         var modalSizeClass = (this.props.size !== null) ? (" modal-" + this.props.size) : "";
+        var contentChildren = [
+          React.DOM.div({
+            key: "modal-header",
+            className: "modal-header"
+          }, React.DOM.h4({className: "modal-title"}, this.props.title))
+        ];
+        if (this.props.children) {
+          contentChildren = _.addToArray(contentChildren, this.props.children);
+        }
         var dialog = React.DOM.div({
             className: "modal-dialog" + modalSizeClass
           },
           React.DOM.div({
             className: "modal-content"
-          }, this.props.children)
+          }, contentChildren)
         );
         modal = React.DOM.div({
           className: "modal"

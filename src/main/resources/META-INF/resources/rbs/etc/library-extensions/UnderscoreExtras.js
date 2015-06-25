@@ -94,6 +94,28 @@ define(["original-underscore", "react"], function (_, React) {
     return toReturn.join(splitter);
   };
 
+  util.addToArray = function () {
+    var origArray = arguments[0];
+    if (!_.isArray(origArray)) {
+      if (origArray !== null && typeof origArray !== "undefined") {
+        origArray = [origArray];
+      } else {
+        origArray = [];
+      }
+    }
+    for (var i = 1; i < arguments.length; i++) {
+      var toAdd = arguments[i];
+      if (_.isArray(toAdd)) {
+        origArray = origArray.concat(toAdd);
+      } else {
+        if (toAdd !== null && typeof toAdd !== "undefined") {
+          origArray = _.union(origArray, [toAdd]);
+        }
+      }
+    }
+    return origArray;
+  };
+
   util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);

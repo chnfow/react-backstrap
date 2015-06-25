@@ -10,6 +10,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
       size: React.PropTypes.oneOf(["xs", "sm", "lg"]),
       type: React.PropTypes.string,
       ajaxButton: React.PropTypes.bool,
+      submit: React.PropTypes.bool,
       // milliseconds after clicking that the onclick event can again be triggered
       clickDelay: React.PropTypes.number
     },
@@ -18,6 +19,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
       return {
         ajaxButton: false,
         type: "default",
+        submit: false,
         clickDelay: 200
       };
     },
@@ -119,7 +121,8 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
 
       return React.DOM.button(_.extend({}, this.props, {
         onClick: this.beforeOnClick,
-        className: this.getClassNames()
+        className: this.getClassNames(),
+        type: (this.props.submit) ? "submit" : "button"
       }), children);
     }
   });

@@ -20,6 +20,12 @@ define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"], functi
       if (typeof this.props.onSubmit === "function") {
         this.props.onSubmit(e);
       }
+    },
+
+    submit: function () {
+      if (this.isMounted()) {
+        React.findDOMNode(this).submit();
+      }
     }
   });
 });
