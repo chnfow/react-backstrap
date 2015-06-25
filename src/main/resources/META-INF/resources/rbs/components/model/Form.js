@@ -1,7 +1,7 @@
 /**
  * Represent a model in a <form></form>
  */
-define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"], function (React, model, formGroup, _) {
+define(["react", "jquery", "../mixins/Model", "../mixins/FormGroup", "underscore"], function (React, $, model, formGroup, _) {
   "use strict";
 
   return _.rf({
@@ -24,7 +24,10 @@ define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"], functi
 
     submit: function () {
       if (this.isMounted()) {
-        React.findDOMNode(this).submit();
+        var submitBtn = $("<input />").attr("type", "submit");
+        $(React.findDOMNode(this)).append(submitBtn);
+        submitBtn.click();
+        submitBtn.remove();
       }
     }
   });

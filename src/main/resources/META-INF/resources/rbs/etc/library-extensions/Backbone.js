@@ -79,7 +79,8 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
 
         // set toSet back into the parent using oldSet, silently
         oldSet.call(this, firstPc, toSet, _.extend({}, options, {silent: true}));
-        // then trigger the change to the attribute
+        // then trigger the change to the attribute and the model
+        this.trigger("change", this, options);
         this.trigger("change:" + key, this, val, options);
         return this;
       },
