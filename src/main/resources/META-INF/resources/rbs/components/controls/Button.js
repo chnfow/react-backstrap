@@ -81,7 +81,9 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
     },
 
     beforeOnClick: function (e) {
-      e.preventDefault();
+      if (this.props.submit === false) {
+        e.preventDefault();
+      }
       var now = this.getNow();
       if (now - this.state.lastClick <= this.props.clickDelay) {
         return;

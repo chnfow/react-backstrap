@@ -119,7 +119,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   });
 
   //create views that just render the property as a child
-  var staticViews = ["span", "div", "h1", "h2", "h3", "h4", "h5", "em", "i", "p"];
+  var staticViews = ["span", "div", "h1", "h2", "h3", "h4", "h5", "em", "i", "p", "strong"];
   _.each(staticViews, function (type) {
     exports[type] = _.rf({
       displayName: "Static Attribute " + type,
