@@ -1,11 +1,12 @@
 /**
  * React Component
  */
-define(["react", "underscore", "./Model"], function (React, _, model) {
+define(["react", "underscore", "./Model", "../mixins/Events"], function (React, _, model, events) {
   "use strict";
 
   return _.rf({
-    componentDidUpdate: function () {
+    mixins: [events],
+    componentDidMount: function () {
       this.listenTo(this.props.model, "change:level", this.update);
     },
 
