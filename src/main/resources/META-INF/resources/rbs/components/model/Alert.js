@@ -5,7 +5,10 @@ define(["react", "underscore", "./Model", "../mixins/Events"], function (React, 
   "use strict";
 
   return _.rf({
+    displayName: "Model Alert",
+
     mixins: [events],
+
     componentDidMount: function () {
       this.listenTo(this.props.model, "change:level", this.update);
     },
@@ -24,14 +27,17 @@ define(["react", "underscore", "./Model", "../mixins/Events"], function (React, 
         role: "alert",
         attributes: [
           {
+            key: "icon",
             attribute: "icon",
             component: "icon"
           },
           {
+            key: "strong",
             attribute: "strong",
             component: "strong"
           },
           {
+            key: "message",
             attribute: "message",
             component: "span"
           }

@@ -5,6 +5,7 @@ define(["react", "underscore", "backbone", "../model/Alert"], function (React, _
   "use strict";
 
   return _.rf({
+    displayName: "Layout Alert",
 
     propTypes: {
       level: React.PropTypes.oneOf(["success", "info", "danger", "warning"]).isRequired,
