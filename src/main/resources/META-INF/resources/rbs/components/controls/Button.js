@@ -124,6 +124,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
       return React.DOM.button(_.extend({}, this.props, {
         onClick: this.beforeOnClick,
         className: this.getClassNames(),
+        disabled: this.props.disabled || this.state.loading,
         type: (this.props.submit) ? "submit" : "button"
       }), children);
     }
