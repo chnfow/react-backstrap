@@ -1,5 +1,5 @@
-define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransitionGroup"],
-  function (React, _, Button, TTG) {
+define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside"],
+  function (React, _, Button, TTG, onClickOutside) {
     "use strict";
 
     return _.rf({
@@ -8,6 +8,8 @@ define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransit
       propTypes: {
         dropup: React.PropTypes.bool
       },
+
+      mixins: [React.addons.PureRenderMixin, onClickOutside],
 
       getInitialState: function () {
         return {
@@ -24,6 +26,12 @@ define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransit
       toggleOpen: function () {
         this.setState({
           open: !this.state.open
+        });
+      },
+
+      onClickOutside: function () {
+        this.setState({
+          open: false
         });
       },
 

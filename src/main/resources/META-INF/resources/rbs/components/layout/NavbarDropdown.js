@@ -1,12 +1,14 @@
 /**
  * React Component
  */
-define(["react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup"],
-  function (React, _, icon, TTG) {
+define(["react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside"],
+  function (React, _, icon, TTG, onClickOutside) {
     "use strict";
 
     return _.rf({
       displayName: "Navbar Dropdown",
+
+      mixins: [React.addons.PureRenderMixin, onClickOutside],
 
       propTypes: {
         text: React.PropTypes.node.isRequired,
@@ -17,6 +19,12 @@ define(["react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup"],
         return {
           open: false
         };
+      },
+
+      onClickOutside: function () {
+        this.setState({
+          open: false
+        });
       },
 
       toggleOpen: function (e) {
