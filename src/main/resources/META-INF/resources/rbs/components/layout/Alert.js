@@ -8,7 +8,7 @@ define(["react", "underscore", "backbone", "../model/Alert"], function (React, _
     displayName: "Layout Alert",
 
     propTypes: {
-      level: React.PropTypes.oneOf(["success", "info", "danger", "warning"]).isRequired,
+      level: React.PropTypes.oneOf(["success", "info", "danger", "warning"]),
       strong: React.PropTypes.node.isRequired,
       message: React.PropTypes.node.isRequired,
       icon: React.PropTypes.string
