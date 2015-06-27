@@ -116,6 +116,15 @@ define(["original-underscore", "react"], function (_, React) {
     return origArray;
   };
 
+  util.debug = function () {
+    if (window.debug === true) {
+      window.console.log.apply(window.console, arguments);
+    }
+    if (typeof window.debug === "function") {
+      window.debug.apply(window, arguments);
+    }
+  };
+
   util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);
