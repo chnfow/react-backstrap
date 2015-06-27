@@ -4,49 +4,56 @@
  * These upgrades can be transparent if the client application is using the components provided in this module, since
  * those modules should be updated alongside the version upgrades
  */
-define({
-  baseUrl: "",
+define([], function () {
+  "use strict";
 
-  paths: {
-    "backbone": "rbs/etc/library-extensions/Backbone",
-    "original-backbone": "webjars/backbonejs/1.2.1/backbone-min",
-    "jquery": "rbs/etc/library-extensions/jQueryExtensions",
-    "original-jquery": "webjars/jquery/1.11.3/jquery.min",
-    "jquery-cookie": "webjars/jquery-cookie/1.4.1-1/jquery.cookie",
-    "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
-    "original-underscore": "webjars/underscorejs/1.8.3/underscore-min",
-    "fb": "//connect.facebook.net/en_US/sdk",
-    "jsog": "rbs/vendor/jsog/JSOG",
-    "react": "webjars/react/0.13.3/react-with-addons",//.min",
-    "raf": "rbs/vendor/polyfill/rAF",
-    "ga": "//www.google-analytics.com/analytics"
-  },
+  var DBG = window.debug;
+  var condDotMin = (DBG) ? ".min" : "";
+  var condDashMin = (DBG) ? "-min" : "";
+  return {
+    baseUrl: "",
 
-  shim: {
-    "fb": {
-      exports: "FB"
+    paths: {
+      "backbone": "rbs/etc/library-extensions/Backbone",
+      "original-backbone": "webjars/backbonejs/1.2.1/backbone" + condDashMin,
+      "jquery": "rbs/etc/library-extensions/jQueryExtensions",
+      "original-jquery": "webjars/jquery/1.11.3/jquery" + condDotMin,
+      "jquery-cookie": "webjars/jquery-cookie/1.4.1-1/jquery.cookie",
+      "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
+      "original-underscore": "webjars/underscorejs/1.8.3/underscore" + condDashMin,
+      "fb": "//connect.facebook.net/en_US/sdk",
+      "jsog": "rbs/vendor/jsog/JSOG",
+      "react": "webjars/react/0.13.3/react-with-addons" + condDotMin,
+      "raf": "rbs/vendor/polyfill/rAF",
+      "ga": "//www.google-analytics.com/analytics"
     },
-    "jsog": {
-      exports: "JSOG"
-    },
-    "original-backbone": {
-      deps: ["jquery", "original-underscore"]
-    },
-    "original-underscore": {
-      exports: "_"
-    },
-    "bootstrap": {
-      deps: ["jquery"]
-    },
-    "ga": {
-      exports: "ga"
-    },
-    "original-jquery": {
-      exports: "$"
-    },
-    "jquery-cookie": {
-      deps: ["original-jquery"],
-      exports: "$"
+
+    shim: {
+      "fb": {
+        exports: "FB"
+      },
+      "jsog": {
+        exports: "JSOG"
+      },
+      "original-backbone": {
+        deps: ["jquery", "original-underscore"]
+      },
+      "original-underscore": {
+        exports: "_"
+      },
+      "bootstrap": {
+        deps: ["jquery"]
+      },
+      "ga": {
+        exports: "ga"
+      },
+      "original-jquery": {
+        exports: "$"
+      },
+      "jquery-cookie": {
+        deps: ["original-jquery"],
+        exports: "$"
+      }
     }
-  }
+  };
 });
