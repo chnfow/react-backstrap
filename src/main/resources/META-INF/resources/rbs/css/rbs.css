@@ -7,6 +7,11 @@ body {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
 
+/* correct spacing within alerts */
+.alert > * + * {
+    margin-left: 0.3em;
+}
+
 /*
  Anything that comes after a glyphicon should have some space
 */
@@ -85,7 +90,7 @@ so they're removed from the DOM when they're not
 
 /* a container for a single result in a select dropdown */
 .fancy-select-search-result {
-    padding: 0.8em;
+    padding: 0.4em;
     cursor: pointer;
 }
 

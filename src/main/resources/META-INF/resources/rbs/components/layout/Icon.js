@@ -24,6 +24,9 @@ define(["react", "underscore"], function (React, _) {
       if (this.props.size) {
         classes.push("fa-" + this.props.size);
       }
+      if (this.props.animate) {
+        classes.push("fa-" + this.props.animate);
+      }
       if (this.props.fixedWidth) {
         classes.push("fa-fw");
       }

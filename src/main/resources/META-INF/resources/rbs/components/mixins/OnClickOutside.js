@@ -11,6 +11,9 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
     },
 
     _onClickOutside: function (e) {
+      if (!this.isMounted()) {
+        return;
+      }
       var thisNode = React.findDOMNode(this);
       var inside = thisNode === e.target || $.contains(thisNode, e.target);
       if (!inside && typeof this.onClickOutside === "function") {
