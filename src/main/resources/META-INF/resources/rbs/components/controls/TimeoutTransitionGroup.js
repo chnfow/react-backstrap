@@ -118,7 +118,7 @@ define(["react", "underscore", "raf"], function (React, _) {
     displayName: "TimeoutTransitionGroupChild",
 
     transition: function (animationType, finishCallback) {
-      var node = this.getDOMNode();
+      var node = React.findDOMNode(this);
       var className = this.props.name + '-' + animationType;
       var activeClassName = className + '-active';
 
@@ -159,7 +159,7 @@ define(["react", "underscore", "raf"], function (React, _) {
       this.timeout = null;
       if (this.classNameQueue.length > 0) {
         var nextClass = this.classNameQueue.shift();
-        addClass(this.getDOMNode(), nextClass);
+        addClass(React.findDOMNode(this), nextClass);
         this.timeout = window.requestAnimationFrame(this.flushClassNameQueue);
       }
     },

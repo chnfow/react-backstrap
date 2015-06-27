@@ -15,6 +15,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     mixins: attributeMixins,
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
+        key: "input",
         value: this.getValue(),
         onChange: this.saveData,
         name: this.props.attribute

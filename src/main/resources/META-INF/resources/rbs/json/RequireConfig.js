@@ -9,7 +9,7 @@ define({
 
   paths: {
     "backbone": "rbs/etc/library-extensions/Backbone",
-    "original-backbone": "webjars/backbonejs/1.1.2/backbone-min",
+    "original-backbone": "webjars/backbonejs/1.2.1/backbone-min",
     "jquery": "rbs/etc/library-extensions/jQueryExtensions",
     "original-jquery": "webjars/jquery/1.11.3/jquery.min",
     "jquery-cookie": "webjars/jquery-cookie/1.4.1-1/jquery.cookie",

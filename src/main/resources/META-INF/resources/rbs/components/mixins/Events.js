@@ -3,9 +3,9 @@ define(["react", "backbone", "underscore"], function (React, Backbone, _) {
   return React.createMixin({
     componentWillMount: function () {
       _.extend(this, Backbone.Events);
-      this.update = _.debounce(_.bind(function () {
+      this.update = _.bind(function () {
         this.forceUpdate();
-      }, this), 10);
+      }, this);
     },
 
     componentWillUnmount: function () {

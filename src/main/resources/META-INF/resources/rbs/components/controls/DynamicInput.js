@@ -24,7 +24,7 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
     },
 
     getInput: function () {
-      return this.refs.input.getDOMNode();
+      return React.findDOMNode(this.refs.input);
     },
 
     getInitialState: function () {
@@ -62,10 +62,10 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
     },
 
     copyStylesToCalculators: function () {
-      var input = this.refs.input.getDOMNode();
-      this.copyStyle(input, this.refs.valueCalculator.getDOMNode());
+      var input = React.findDOMNode(this.refs.input);
+      this.copyStyle(input, React.findDOMNode(this.refs.valueCalculator));
       if (this.props.placeholder) {
-        this.copyStyle(input, this.refs.placeholderCalculator.getDOMNode());
+        this.copyStyle(input, React.findDOMNode(this.refs.placeholderCalculator));
       }
     },
 
@@ -75,11 +75,11 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
         setTimeout(_.bind(this.updateWidth, this), this.props.inputWidthRetryDelay);
         return;
       }
-      var newWidth = this.refs.valueCalculator.getDOMNode().offsetWidth + 2;
+      var newWidth = React.findDOMNode(this.refs.valueCalculator).offsetWidth + 2;
       if (this.props.placeholder) {
-        newWidth = Math.max(newWidth, this.refs.placeholderCalculator.getDOMNode().offsetWidth + 2);
+        newWidth = Math.max(newWidth, React.findDOMNode(this.refs.placeholderCalculator).offsetWidth + 2);
       }
-      var container = this.refs.container.getDOMNode();
+      var container = React.findDOMNode(this.refs.container);
       if (container.parentNode) {
         var parentStyle = this.getStyle(container.parentNode);
         newWidth = Math.min(newWidth, container.parentNode.clientWidth - (parseFloat(parentStyle.paddingLeft) + parseFloat(parentStyle.paddingRight)));
@@ -93,11 +93,11 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
     },
 
     focus: function () {
-      this.refs.input.getDOMNode().focus();
+      React.findDOMNode(this.refs.input).focus();
     },
 
     blur: function () {
-      this.refs.input.getDOMNode().blur();
+      React.findDOMNode(this.refs.input).blur();
     },
 
     getCalculator: function (text, ref) {

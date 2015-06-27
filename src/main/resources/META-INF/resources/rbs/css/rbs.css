@@ -1,5 +1,5 @@
 @import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap.min.css');
-@import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap-theme.min.css');
+@import url('../../webjars/font-awesome/4.3.0/css/font-awesome.min.css');
 
 /* apply font smoothing everywhere */
 body {
@@ -10,7 +10,7 @@ body {
 /*
  Anything that comes after a glyphicon should have some space
 */
-.glyphicon + * {
+.fa + * {
     margin-left: 0.4em;
 }
 

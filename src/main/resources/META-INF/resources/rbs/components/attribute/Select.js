@@ -16,7 +16,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
 
     return _.rf({
       displayName: "Attribute Select",
-      mixins:[events],
+      mixins: [events],
 
       propTypes: {
         valueAttribute: React.PropTypes.string,
@@ -116,7 +116,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
               if (caseInsensitive && typeof val === "string") {
                 val = val.toUpperCase();
               }
-              return val;
+              return [val];
             };
             break;
           case "object":
@@ -199,7 +199,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
         var modelVal = selectedModel.get(this.props.valueAttribute);
         if (!this.props.multiple) {
           this.props.model.set(this.props.attribute, modelVal);
-          this.refs.toFocus.getDOMNode().focus();
+          React.findDOMNode(this.refs.toFocus).focus();
         } else {
           var currentValue = this.props.model.get(this.props.attribute);
           var newValue;
@@ -225,7 +225,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
       },
 
       setOpen: function (value) {
-        this.setState({ open: value, searchText: "" }, function () {
+        this.setState({open: value, searchText: ""}, function () {
           if (this.state.open) {
             this.updateFilteredCollection(this.state.searchText);
           }

@@ -33,7 +33,7 @@
     </developers>
 
     <properties>
-        <backbone.version>1.1.2-4</backbone.version>
+        <backbone.version>1.2.1</backbone.version>
         <bootstrap.version>3.3.2-1</bootstrap.version>
         <jquery.version>1.11.3</jquery.version>
         <requirejs.version>2.1.16</requirejs.version>
@@ -97,6 +97,14 @@
             <artifactId>jquery-cookie</artifactId>
             <version>1.4.1-1</version>
         </dependency>
+
+        <!-- font-awesome beats glyphicons -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>4.3.0-2</version>
+        </dependency>
+
     </dependencies>
 
 </project>

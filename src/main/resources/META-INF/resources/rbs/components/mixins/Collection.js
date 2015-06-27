@@ -10,7 +10,7 @@ define(["react", "./Events", "underscore"], function (React, events, _) {
     },
 
     componentWillMount: function () {
-      this.listenTo(this.props.collection, "add remove reset sort sync", this.update);
+      this.listenTo(this.props.collection, "update reset sort sync", this.update);
     },
 
     // gets the components for either the passed collection/array or the collection property
