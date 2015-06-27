@@ -45,7 +45,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     displayName: "Attribute E-mail",
     mixins: attributeMixins,
     render: function () {
-      return input(_.extend({}, this.props, {type: "email"}));
+      return input(_.extend({}, this.props, {type: "text"}));
     }
   });
 
