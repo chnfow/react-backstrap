@@ -1,19 +1,33 @@
 /**
- * React Component
+ * Draws an icon that spins to indicate an element is loading, and optionally a backdrop over the element to prevent
+ * user interaction until the element is done loading all the data
  */
 define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (React, _, events, icon) {
   "use strict";
 
   return _.rf({
     mixins: [events],
+
     propTypes: {
       watch: React.PropTypes.oneOfType([
         React.PropTypes.arrayOf(React.PropTypes.object),
         React.PropTypes.object
-      ]).isRequired
+      ]).isRequired,
+      icon: React.PropTypes.string,
+      animate: React.PropTypes.string,
+      size: React.PropTypes.string,
+      backdrop: React.PropTypes.bool,
+      hideWhileLoading: React.PropTypes.bool
     },
 
     getDefaultProps: function () {
+      return {
+        icon: "refresh",
+        animate: "spin",
+        size: "3x",
+        backdrop: false,
+        hideWhileLoading: true
+      };
     },
 
 
@@ -54,14 +68,16 @@ define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (
       var loadingIndicator = null;
       var loadingBackdrop = null;
       if (this.state.loading > 0) {
-        loadingBackdrop = React.DOM.div({
-          key: "loading-indicator-backdrop",
-          className: "loading-indicator-backdrop"
-        });
+        if (this.props.backdrop) {
+          loadingBackdrop = React.DOM.div({
+            key: "loading-indicator-backdrop",
+            className: "loading-indicator-backdrop"
+          });
+        }
         loadingIndicator = React.DOM.div({
           key: "loading-indicator",
           className: "loading-indicator"
-        }, icon({name: "cog"}));
+        }, icon({name: this.props.icon, size: this.props.size, animate: this.props.animate}));
       }
 
       var className = "loading-indicator-container";
@@ -69,9 +85,10 @@ define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (
         className += " " + this.props.className;
       }
 
+      var toAdd = (this.props.hideWhileLoading && this.state.loading > 0) ? [] : this.props.children;
       return React.DOM.div(_.extend({}, this.props, {
         className: className
-      }), _.flatten([this.props.children, loadingBackdrop, loadingIndicator]));
+      }), _.addToArray(toAdd, [loadingBackdrop, loadingIndicator]));
     }
   });
 });
