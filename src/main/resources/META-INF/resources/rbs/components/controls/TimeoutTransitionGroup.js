@@ -123,8 +123,10 @@ define(["react", "underscore", "raf"], function (React, _) {
       var activeClassName = className + '-active';
 
       var endListener = function () {
-        removeClass(node, className);
-        removeClass(node, activeClassName);
+        if (animationType === "enter") {
+          removeClass(node, className);
+          removeClass(node, activeClassName);
+        }
 
         // Usually this optional callback is used for informing an owner of
         // a leave animation and telling it to remove the child.
@@ -143,7 +145,8 @@ define(["react", "underscore", "raf"], function (React, _) {
         }
       }
 
-      this.queueClass(className);
+      addClass(React.findDOMNode(this), className);
+
       this.queueClass(activeClassName);
     },
 

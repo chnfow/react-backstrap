@@ -25,7 +25,7 @@ define(["react", "underscore", "./TimeoutTransitionGroup"], function (React, _, 
       }
 
       // we are getting new children, clear the timeout
-      var timeAdjustment = this.props.leaveTimeout * 0.1;
+      var timeAdjustment = 0;
       // if the last action was an entrance, then we need to add time for the enter transition to complete before
       // starting a new transition
       if (this.state.lastEnterTime) {
@@ -34,7 +34,7 @@ define(["react", "underscore", "./TimeoutTransitionGroup"], function (React, _, 
       // if the last action was leaving, we need to remove time since we can just immediately transition to the next
       // active children
       if (this.state.lastLeaveTime) {
-        timeAdjustment -= Math.max(0, this.props.leaveTimeout - ((new Date()).getTime() - this.state.lastLeaveTime)) / 2;
+        timeAdjustment -= Math.max(0, this.props.leaveTimeout - ((new Date()).getTime() - this.state.lastLeaveTime));
       }
 
       // clear the existing timeout
