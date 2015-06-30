@@ -4,7 +4,9 @@ define(["react", "backbone", "underscore"], function (React, Backbone, _) {
     componentWillMount: function () {
       _.extend(this, Backbone.Events);
       this.update = _.bind(function () {
-        this.forceUpdate();
+        if (this.isMounted()) {
+          this.forceUpdate();
+        }
       }, this);
     },
 

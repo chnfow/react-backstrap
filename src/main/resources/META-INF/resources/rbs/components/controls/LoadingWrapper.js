@@ -53,6 +53,9 @@ define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (
     },
 
     _setLoading: function (loading) {
+      if (!this.isMounted()) {
+        return;
+      }
       if (loading) {
         this.setState({
           loading: this.state.loading + 1
