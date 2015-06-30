@@ -48,9 +48,11 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
     },
 
     setLoading: function (bool) {
-      this.setState({
-        loading: bool
-      });
+      if (this.isMounted()) {
+        this.setState({
+          loading: bool
+        });
+      }
     },
 
     getIcon: function () {
