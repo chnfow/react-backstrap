@@ -1,9 +1,20 @@
 /**
  * React Component
  */
-define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Collection"],
-  function (React, _, Backbone, events, alert, collection) {
+define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Collection",
+    "../controls/TimeoutTransitionGroup"],
+  function (React, _, Backbone, events, alert, collection, TTG) {
     "use strict";
+
+    var alertTTG = _.rf({
+      displayName: "Alert TTG",
+      render: function () {
+        return TTG(_.extend({
+          leaveTimeout: 500,
+          enterTimeout: 500
+        }, this.props), this.props.children);
+      }
+    });
 
     return _.rf({
       mixins: [events, React.addons.PureRenderMixin],
@@ -87,6 +98,7 @@ define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert",
         return collection(_.extend({}, this.props, {
           modelComponent: alert,
           collection: this.state.errors
+          //component: alertTTG
         }));
       }
     });

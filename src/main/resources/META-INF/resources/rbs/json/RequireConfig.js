@@ -8,8 +8,8 @@ define([], function () {
   "use strict";
 
   var DBG = window.debug;
-  var condDotMin = (DBG) ? ".min" : "";
-  var condDashMin = (DBG) ? "-min" : "";
+  var condDotMin = (!DBG) ? ".min" : "";
+  var condDashMin = (!DBG) ? "-min" : "";
   return {
     baseUrl: "",
 

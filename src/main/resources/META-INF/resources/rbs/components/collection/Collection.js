@@ -34,7 +34,7 @@ define(["react", "underscore", "../mixins/Collection"], function (React, _, coll
       if (typeof this.props.component === "function") {
         containerType = this.props.component;
       }
-      return containerType(_.extend({}, this.props), this.getModels());
+      return containerType(_.omit(_.extend({}, this.props), "component"), this.getModels());
     }
   });
 

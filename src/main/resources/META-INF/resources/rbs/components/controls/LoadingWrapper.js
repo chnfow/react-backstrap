@@ -26,7 +26,7 @@ define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (
         animate: "spin",
         size: "3x",
         backdrop: false,
-        hideWhileLoading: true
+        hideWhileLoading: false
       };
     },
 
