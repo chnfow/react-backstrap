@@ -72,7 +72,7 @@ define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert",
         this.state.errors.set(this.setDefaults(errors));
       },
 
-      showSuccess: function () {
+      showSuccess: function (model_or_collection, resp, options) {
         if (!this.props.showSuccess) {
           this.clearErrors();
           return;
