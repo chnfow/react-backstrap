@@ -15,7 +15,6 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     mixins: attributeMixins,
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
-        key: "input",
         value: this.getValue(),
         onChange: this.saveData,
         name: this.props.attribute
@@ -64,7 +63,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
         type: "checkbox",
-        value: Boolean(this.getValue()),
+        checked: Boolean(this.getValue()),
         onChange: this.saveData,
         name: this.props.attribute
       }));

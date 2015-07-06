@@ -1,9 +1,10 @@
-define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select"],
-  function (React, _, events, $, attributes, select) {
+define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/Date"],
+  function (React, _, events, $, attributes, select, date) {
     "use strict";
 
     var attributeComponentMap = _.extend(_.clone(attributes), {
-      select: select
+      select: select,
+      date: date
     });
 
     return React.createMixin({

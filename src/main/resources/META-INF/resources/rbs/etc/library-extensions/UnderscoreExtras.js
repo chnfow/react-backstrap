@@ -125,6 +125,13 @@ define(["original-underscore", "react"], function (_, React) {
     }
   };
 
+
+  util.supportInput = function (type) {
+    var i = document.createElement("input");
+    i.setAttribute("type", type);
+    return i.type !== "text";
+  };
+
   util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);
