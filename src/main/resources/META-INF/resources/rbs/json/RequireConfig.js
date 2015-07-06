@@ -25,6 +25,7 @@ define([], function () {
       "jsog": "rbs/vendor/jsog/JSOG",
       "react": "webjars/react/0.13.3/react-with-addons" + condDotMin,
       "raf": "rbs/vendor/polyfill/rAF",
+      "moment": "webjars/momentjs/2.10.3/min/moment-with-locales" + condDotMin,
       "ga": "//www.google-analytics.com/analytics"
     },
 

@@ -1,7 +1,7 @@
 /**
  * jQuery extensions
  */
-define(["original-jquery"], function ($) {
+define(["original-jquery", "moment"], function ($, moment) {
   "use strict";
   /**
    * This function extracts data from a jquery element's inputs, including the selected input, and does some processing to certain types of data
@@ -27,6 +27,14 @@ define(["original-jquery"], function ($) {
             return;
           }
           val = jqEl.val();
+        } else if (type === "date") {
+          val = jqEl.val();
+          var mval = moment.utc(val, ["YYYY-MM-DD", "MM/DD/YYYY", "MM/DD/YY"]);
+          if (mval.isValid()) {
+            val = mval.format("YYYY-MM-DD");
+          } else {
+            val = null;
+          }
         } else {
           val = jqEl.val();
         }

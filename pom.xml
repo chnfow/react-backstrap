@@ -49,6 +49,13 @@
             <version>${bootstrap.version}</version>
         </dependency>
 
+        <!-- moment -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>momentjs</artifactId>
+            <version>2.10.3</version>
+        </dependency>
+
         <!-- backbone -->
         <dependency>
             <groupId>org.webjars</groupId>
