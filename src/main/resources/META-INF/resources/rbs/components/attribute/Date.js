@@ -15,12 +15,28 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
       mixins: [ attribute ],
 
+      propTypes: {
+        multiplierDelay: React.PropTypes.number,
+        max: React.PropTypes.instanceOf(Date),
+        min: React.PropTypes.instanceOf(Date),
+        maxMultiplier: React.PropTypes.number
+      },
+
+      getDefaultProps: function () {
+        return {
+          multiplierDelay: 250,
+          maxMultiplier: 32
+        };
+      },
+
       getInitialState: function () {
         var d = new Date();
         return {
           open: false,
           currentMonth: d.getMonth(),
-          currentYear: d.getFullYear()
+          currentYear: d.getFullYear(),
+          multiplier: 1,
+          resetTimer: null
         };
       },
 
@@ -80,7 +96,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
       moveMonth: function (byValue, e) {
         this.doNothing(e);
-        var month = this.state.currentMonth + byValue;
+        var month = this.state.currentMonth + (byValue * Math.min(this.state.multiplier, this.props.maxMultiplier));
         var year = this.state.currentYear;
         if (month < 0) {
           while (month < 0) {
@@ -97,8 +113,32 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         if (this.isMounted()) {
           this.setState({
             currentMonth: month,
-            currentYear: year
+            currentYear: year,
+            multiplier: this.state.multiplier * 2
           });
+          this.restartMultiplier();
+        }
+      },
+
+      restartMultiplier: function () {
+        if (this.state.resetTimer !== null) {
+          clearTimeout(this.state.resetTimer);
+        }
+        this.setState({
+          resetTimer: setTimeout(_.bind(function () {
+            if (this.isMounted()) {
+              this.setState({
+                multiplier: 1,
+                resetTimer: null
+              });
+            }
+          }, this), this.props.multiplierDelay)
+        });
+      },
+
+      componentWillUnmount: function () {
+        if (this.state.resetTimer) {
+          clearTimeout(this.state.resetTimer);
         }
       },
 
