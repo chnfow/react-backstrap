@@ -39,9 +39,9 @@ define(["react", "underscore"], function (React, _) {
       if (this.props.className) {
         classes.push(this.props.className);
       }
-      return React.DOM.i({
+      return React.DOM.i(_.extend({}, this.props, {
         className: classes.join(" ")
-      });
+      }));
     }
   });
 });

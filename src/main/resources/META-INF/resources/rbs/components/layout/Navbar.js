@@ -26,6 +26,18 @@ define(["react", "underscore", "./Icon"],
         };
       },
 
+      collapse: function () {
+        this.setState({
+          collapsed: false
+        });
+      },
+
+      open: function () {
+        this.setState({
+          collapsed: true
+        });
+      },
+
       toggleCollapsed: function () {
         this.setState({
           collapsed: !this.state.collapsed

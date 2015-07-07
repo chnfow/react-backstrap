@@ -132,6 +132,12 @@ define(["original-underscore", "react"], function (_, React) {
     return i.type !== "text";
   };
 
+  util.numDays = function (month, year) {
+    var monthStart = new Date(year, month, 1);
+    var monthEnd = new Date(year, month + 1, 1);
+    return Math.round((monthEnd - monthStart) / (1000 * 60 * 60 * 24));
+  };
+
   util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);

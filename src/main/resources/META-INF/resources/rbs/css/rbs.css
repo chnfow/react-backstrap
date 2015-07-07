@@ -169,6 +169,62 @@ so they're removed from the DOM when they're not
     right: 8px;
 }
 
+/** datepicker stuff */
+.datepicker-container {
+    position: relative;
+}
+
+.datepicker-calendar {
+    position: absolute;
+    width: 220px;
+    background-color: white;
+    padding: 0.5em;
+    z-index: 1000;
+}
+
+.datepicker-header {
+    position: relative;
+}
+
+.datepicker-header-label {
+    position: absolute;
+    top: 0;
+    width: 72px;
+    left: 50%;
+    margin-left: -36px;
+    text-align: center;
+}
+
+.datepicker-header-days span {
+    width: 14.29%;
+    text-align: center;
+    display: inline-block;
+}
+.datepicker-calendar-body span {
+    width: 14.29%;
+    height: 1.1em;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+.concurrent-month-day {
+    opacity: 0.5;
+}
+
+.datepicker-header-prev {
+    width: 50%;
+    display: inline-block;
+    text-align: left;
+    cursor: pointer;
+}
+
+.datepicker-header-next {
+    width: 50%;
+    display: inline-block;
+    text-align: right;
+    cursor: pointer;
+}
+
 /* GENERAL CSS TRANSITIONS FOR USE ANYWHERE */
 /* largely taken from Daniel Eden's animate.css */
 /* https://daneden.github.io/animate.css */

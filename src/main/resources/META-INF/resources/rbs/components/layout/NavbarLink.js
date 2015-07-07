@@ -39,7 +39,8 @@ define(["react", "underscore", "rbs/components/layout/Icon"], function (React, _
         }
       }
       return React.DOM.li({
-        className: className
+        className: className,
+        onClick: this.props.onClick
       }, React.DOM.a({href: this.props.href}, children));
     }
   });
