@@ -125,6 +125,16 @@ define(["original-underscore", "react"], function (_, React) {
     }
   };
 
+  // returns the internal path of a link if it's internal to the site, otherwise false
+  util.internalLink = function (link) {
+    if (typeof link !== "string") {
+      return false;
+    }
+    if (link.indexOf("//") !== -1) {
+      return false;
+    }
+    return link;
+  };
 
   util.supportInput = function (type) {
     var i = document.createElement("input");

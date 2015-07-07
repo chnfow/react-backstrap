@@ -50,25 +50,6 @@ define(["original-jquery", "moment"], function ($, moment) {
 
 
   /**
-   * Internal link selector
-   */
-  $.expr[':'].internal = function (el) {
-    var jqEl = $(el);
-    var href = jqEl.attr("href");
-    if (typeof href !== "string") {
-      return false;
-    }
-    if (href.indexOf(window.location.origin) === 0) {
-      return true;
-    }
-    if (href.indexOf("//") >= 0) {
-      return false;
-    }
-    return true;
-  };
-
-
-  /**
    * Focusable/tabbable selector from jQuery-UI
    */
   function focusable(element, isTabIndexNotNaN) {

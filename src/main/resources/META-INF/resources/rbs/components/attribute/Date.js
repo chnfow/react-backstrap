@@ -17,15 +17,17 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
       propTypes: {
         multiplierDelay: React.PropTypes.number,
-        max: React.PropTypes.instanceOf(Date),
         min: React.PropTypes.instanceOf(Date),
+        max: React.PropTypes.instanceOf(Date),
         maxMultiplier: React.PropTypes.number
       },
 
       getDefaultProps: function () {
         return {
-          multiplierDelay: 250,
-          maxMultiplier: 32
+          multiplierDelay: 200,
+          maxMultiplier: 32,
+          min: new Date(1900, 1, 1),
+          max: new Date(2200, 1, 1)
         };
       },
 
@@ -42,8 +44,27 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
       openDatePicker: function () {
         if (this.isMounted() && !this.props.disabled) {
+          var selectedValue = false;
+          var selectedYear = null;
+          var selectedMonth = null;
+          if (this.props.model.has(this.props.attribute)) {
+            var currentDate = moment.utc(this.props.model.get(this.props.attribute), "YYYY-MM-DD");
+            if (currentDate.isValid()) {
+              selectedMonth = currentDate.month();
+              selectedYear = currentDate.year();
+              selectedValue = true;
+            }
+          }
+          if (!selectedValue) {
+            var now = new Date();
+            selectedYear = now.getFullYear();
+            selectedMonth = now.getMonth();
+          }
+
           this.setState({
-            open: true
+            open: true,
+            currentMonth: selectedMonth,
+            currentYear: selectedYear
           });
         }
       },
@@ -261,6 +282,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           React.DOM.input(_.extend({}, this.props, {
             key: "input",
             type: "text",
+            readOnly: true,
             value: currentValue,
             name: this.props.attribute,
             onChange: this.doNothing,

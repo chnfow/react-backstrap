@@ -11,6 +11,10 @@ body {
 .alert > * + * {
     margin-left: 0.3em;
 }
+/* no resizing of textarea in forms */
+textarea.form-control {
+    resize: none;
+}
 
 /*
 form-group checkboxes
@@ -180,6 +184,14 @@ so they're removed from the DOM when they're not
     background-color: white;
     padding: 0.5em;
     z-index: 1000;
+    -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+}
+
+.datepicker-container input.form-control[readOnly] {
+    cursor: initial;
+    background-color: #fff;
 }
 
 .datepicker-header {
