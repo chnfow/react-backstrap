@@ -16,8 +16,7 @@ define([], function () {
     paths: {
       "backbone": "rbs/etc/library-extensions/Backbone",
       "original-backbone": "webjars/backbonejs/1.2.1/backbone" + condDashMin,
-      "jquery": "rbs/etc/library-extensions/jQueryExtensions",
-      "original-jquery": "webjars/jquery/1.11.3/jquery" + condDotMin,
+      "jquery": "webjars/jquery/1.11.3/jquery" + condDotMin,
       "jquery-cookie": "webjars/jquery-cookie/1.4.1-1/jquery.cookie",
       "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
       "original-underscore": "webjars/underscorejs/1.8.3/underscore" + condDashMin,
@@ -48,11 +47,8 @@ define([], function () {
       "ga": {
         exports: "ga"
       },
-      "original-jquery": {
-        exports: "$"
-      },
       "jquery-cookie": {
-        deps: ["original-jquery"],
+        deps: ["jquery"],
         exports: "$"
       }
     }

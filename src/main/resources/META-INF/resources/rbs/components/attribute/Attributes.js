@@ -13,11 +13,19 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   var input = _.rf({
     displayName: "Attribute Untyped Input",
     mixins: attributeMixins,
+
+    handleChange: function (e) {
+      var val = e.target.value;
+      this.saveData(val);
+      if (typeof this.props.onChange === "function") {
+        this.props.onChange.apply(this, arguments);
+      }
+    },
+
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
         value: this.getValue(),
-        onChange: this.saveData,
-        name: this.props.attribute
+        onChange: this.handleChange
       }));
     }
   });
@@ -60,12 +68,20 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   exports.checkbox = _.rf({
     displayName: "Attribute Checkbox",
     mixins: attributeMixins,
+
+    handleChange: function (e) {
+      var val = e.target.checked;
+      this.saveData(Boolean(val));
+      if (typeof this.props.onChange === "function") {
+        this.props.onChange.apply(this, arguments);
+      }
+    },
+
     render: function () {
       return React.DOM.input(_.extend({}, this.props, {
         type: "checkbox",
         checked: Boolean(this.getValue()),
-        onChange: this.saveData,
-        name: this.props.attribute
+        onChange: this.handleChange
       }));
     }
   });
@@ -73,11 +89,19 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   exports.textarea = _.rf({
     displayName: "Attribute Textarea",
     mixins: attributeMixins,
+
+    handleChange: function (e) {
+      var val = e.target.value;
+      this.saveData(val);
+      if (typeof this.props.onChange === "function") {
+        this.props.onChange.apply(this, arguments);
+      }
+    },
+
     render: function () {
       return React.DOM.textarea(_.extend({}, this.props, {
         value: this.getValue(),
-        onChange: this.saveData,
-        name: this.props.attribute
+        onChange: this.handleChange
       }));
     }
   });

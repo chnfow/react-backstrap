@@ -282,7 +282,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           React.DOM.input(_.extend({}, this.props, {
             key: "input",
             type: "text",
-            readOnly: true,
+            readOnly: (!this.props.disabled),
             value: currentValue,
             name: this.props.attribute,
             onChange: this.doNothing,

@@ -19,8 +19,8 @@ define(["react", "underscore", "./Events", "jquery"], function (React, _, events
     },
 
     // save the data in the DOM node into the model
-    saveData: function () {
-      this.props.model.set($(React.findDOMNode(this)).formData());
+    saveData: function (data) {
+      this.props.model.set(this.props.attribute, data);
     },
 
     getValue: function () {
