@@ -392,7 +392,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
         // show clear button
         var clearButton = null;
-        if (currentValue !== null) {
+        if (currentValue !== null && !this.props.disabled && !this.props.readOnly) {
           clearButton = React.DOM.div({
             key: "clear",
             className: "datepicker-clear-button",
