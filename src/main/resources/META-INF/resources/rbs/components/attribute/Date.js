@@ -193,20 +193,12 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         while (firstDayOfMonth > 0) {
           var d = lastMonthDays - (--firstDayOfMonth);
           isActive = (lastYear === selectedYear && lastMonth === selectedMonth && d === selectedDay);
-          days.push(React.DOM.span({
-            key: "filler-" + firstDayOfMonth,
-            className: "concurrent-month-days" + ((isActive) ? " bg-info" : ""),
-            onClick: _.bind(this.setDate, this, lastYear, lastMonth, d)
-          }, d));
+          days.push(this.getDaySpan(lastYear, lastMonth, d, isActive));
         }
         var numDays = _.numDays(this.state.currentMonth, this.state.currentYear);
         for (var x = 1; x <= numDays; x++) {
           isActive = (this.state.currentYear === selectedYear && this.state.currentMonth === selectedMonth && x === selectedDay);
-          days.push(React.DOM.span({
-            key: "day-" + x,
-            className: (isActive ? "bg-info" : ""),
-            onMouseDown: _.bind(this.setDate, this, this.state.currentYear, this.state.currentMonth, x)
-          }, x));
+          days.push(this.getDaySpan(this.state.currentYear, this.state.currentMonth, x, isActive, true));
         }
 
         var remainingDays = (Math.ceil(days.length / 7) * 7) - days.length;
@@ -215,17 +207,40 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           remainingDays--;
           var nmd = nextMonthDay++;
           isActive = (nextYear === selectedYear && nextMonth === selectedMonth && nmd === selectedDay);
-          days.push(React.DOM.span({
-            key: "filler-next-" + nmd,
-            className: "concurrent-month-days" + ((isActive) ? " bg-info" : ""),
-            onClick: _.bind(this.setDate, this, nextYear, nextMonth, nmd)
-          }, nmd));
+          days.push(this.getDaySpan(nextYear, nextMonth, nmd, isActive));
         }
 
         return React.DOM.div({
           className: "datepicker-calendar-body",
           key: "calendarbody"
         }, days);
+      },
+
+      getDaySpan: function (year, month, day, active, currentMonth) {
+        var valid = this.validDate(year, month, day);
+        var classes = [];
+        if (!currentMonth) {
+          classes.push("concurrent-month-days");
+        }
+        if (active) {
+          classes.push("bg-info");
+        }
+        if (!valid) {
+          classes.push("invalid-day-option");
+        }
+        return React.DOM.span({
+          key: "calendar-day-" + year + "-" + month + "-" + day,
+          className: classes.join(" "),
+          onMouseDown: (valid) ? _.bind(this.setDate, this, year, month, day) : this.doNothing
+        }, day);
+      },
+
+      // returns whether the year/month/day falls within the min and max dates
+      validDate: function (year, month, day) {
+        var min = this.props.min.getTime();
+        var max = this.props.max.getTime();
+        var t = (new Date(year, month, day)).getTime();
+        return (t >= min && t <= max);
       },
 
       setDate: function (year, month, day) {

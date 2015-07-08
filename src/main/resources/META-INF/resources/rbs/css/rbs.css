@@ -232,6 +232,11 @@ so they're removed from the DOM when they're not
     cursor: pointer;
 }
 
+.datepicker-calendar-body span.invalid-day-option {
+    background-color: darkgray;
+    cursor: not-allowed;
+}
+
 .concurrent-month-days {
     opacity: 0.5;
 }
