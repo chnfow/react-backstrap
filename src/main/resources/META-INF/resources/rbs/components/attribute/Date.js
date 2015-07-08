@@ -407,7 +407,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
             key: "input",
             ref: "input",
             type: "text",
-            value: currentValue,
+            value: currentValue === null ? "" : currentValue,
             name: this.props.attribute,
             onBlur: this.closeDatePicker,
             onChange: this.doNothing,
