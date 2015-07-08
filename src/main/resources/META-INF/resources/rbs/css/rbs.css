@@ -11,6 +11,7 @@ body {
 .alert > * + * {
     margin-left: 0.3em;
 }
+
 /* no resizing of textarea in forms */
 textarea.form-control {
     resize: none;
@@ -187,6 +188,8 @@ so they're removed from the DOM when they're not
     -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    border-bottom-left-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
 }
 
 .datepicker-container input.form-control[readOnly] {
@@ -194,8 +197,16 @@ so they're removed from the DOM when they're not
     background-color: #fff;
 }
 
+.datepicker-clear-button {
+    position: absolute;
+    cursor: pointer;
+    top: 0.5em;
+    right: 0.5em;
+}
+
 .datepicker-header {
     position: relative;
+    border-bottom: 1px solid darkgray;
 }
 
 .datepicker-header-label {
