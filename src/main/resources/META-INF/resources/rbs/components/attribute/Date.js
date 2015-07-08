@@ -77,8 +77,11 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           if (!selectedValue) {
             var now = new Date();
             // if the current date is not in the range, then we should choose one that is smack dab in the middle
-            if (now.getTime() < this.props.min.getTime() || now.getTime() > this.props.max.getTime()) {
-              now = new Date((this.props.min.getTime() + this.props.max.getTime()) / 2);
+            if (now.getTime() < this.props.min.getTime()) {
+              now = new Date(this.props.min.getTime());
+            }
+            if (now.getTime() > this.props.max.getTime()) {
+              now = new Date(this.props.max.getTime());
             }
             selectedYear = now.getFullYear();
             selectedMonth = now.getMonth();
