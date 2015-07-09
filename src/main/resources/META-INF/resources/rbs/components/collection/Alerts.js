@@ -1,8 +1,8 @@
 /**
  * React Component
  */
-define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Collection",
-    "../controls/TimeoutTransitionGroup"],
+define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Collection",
+    "../controls/TimeoutTransitionGroup" ],
   function (React, _, Backbone, events, alert, collection, TTG) {
     "use strict";
 
@@ -17,12 +17,13 @@ define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert",
     });
 
     return _.rf({
-      mixins: [events, React.addons.PureRenderMixin],
+      mixins: [ events, React.addons.PureRenderMixin ],
 
       propTypes: {
         watch: React.PropTypes.object.isRequired,
         successMessage: React.PropTypes.string,
         parseErrors: React.PropTypes.func,
+        parseValidationErrors: React.PropTypes.func,
         showSuccess: React.PropTypes.bool
       },
 
@@ -46,8 +47,24 @@ define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert",
                 errors = json;
               } else {
                 if (typeof json === "object") {
-                  errors = [json];
+                  errors = [ json ];
                 }
+              }
+            }
+            return errors;
+          },
+
+          parseValidationErrors: function (model, error, options) {
+            var errors = [];
+            if (_.isArray(error)) {
+              errors = error;
+            } else {
+              if (typeof error === "object") {
+                errors = [ error ];
+              } else if (typeof error === "string") {
+                errors.push({
+                  message: error
+                });
               }
             }
             return errors;
@@ -65,6 +82,7 @@ define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert",
         this.listenTo(this.props.watch, "request", this.clearErrors);
         this.listenTo(this.props.watch, "sync", this.showSuccess);
         this.listenTo(this.props.watch, "error", this.showErrors);
+        this.listenTo(this.props.watch, "invalid", this.showValidationErrors);
       },
 
       showErrors: function (model_or_collection, resp, options) {
@@ -84,6 +102,11 @@ define(["react", "underscore", "backbone", "../mixins/Events", "../model/Alert",
           strong: "Success!",
           message: this.props.successMessage
         });
+      },
+
+      showValidationErrors: function (model, error, options) {
+        var errors = this.props.parseValidationErrors.apply(this, arguments);
+        this.state.errors.set(this.setDefaults(errors));
       },
 
       clearErrors: function () {
