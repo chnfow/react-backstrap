@@ -2,192 +2,193 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>react-backstrap</artifactId>
-    <groupId>com.leaguekit</groupId>
-    <packaging>jar</packaging>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>${project.groupId}:${project.artifactId}</name>
-    <description>JS Library for building Single Page Applications using Backbone, Bootstrap, and React</description>
+  <artifactId>react-backstrap</artifactId>
+  <groupId>com.leaguekit</groupId>
+  <packaging>jar</packaging>
+  <version>0.0.3-SNAPSHOT</version>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>JS Library for building Single Page Applications using Backbone, Bootstrap, and React</description>
+  <url>https://github.com/moodysalem/react-backstrap</url>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
     <url>https://github.com/moodysalem/react-backstrap</url>
+    <connection>scm:git:https://github.com/moodysalem/react-backstrap.git</connection>
+    <developerConnection>scm:git:https://github.com/moodysalem/react-backstrap.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+  <developers>
+    <developer>
+      <name>Moody Salem</name>
+      <email>moody.salem@gmail.com</email>
+      <organization>LeagueKit</organization>
+      <organizationUrl>https://leaguekit.com</organizationUrl>
+    </developer>
+  </developers>
 
-    <scm>
-        <url>https://github.com/moodysalem/react-backstrap</url>
-        <connection>scm:git:https://github.com/moodysalem/react-backstrap.git</connection>
-        <developerConnection>scm:git:https://github.com/moodysalem/react-backstrap.git</developerConnection>
-    </scm>
+  <properties>
+    <backbone.version>1.2.1</backbone.version>
+    <bootstrap.version>3.3.2-1</bootstrap.version>
+    <jquery.version>1.11.3</jquery.version>
+    <requirejs.version>2.1.16</requirejs.version>
+    <react.version>0.13.3</react.version>
+    <underscore.version>1.8.3</underscore.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
-    <developers>
-        <developer>
-            <name>Moody Salem</name>
-            <email>moody.salem@gmail.com</email>
-            <organization>LeagueKit</organization>
-            <organizationUrl>https://leaguekit.com</organizationUrl>
-        </developer>
-    </developers>
+  <dependencies>
+    <!-- bootstrap -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>${bootstrap.version}</version>
+    </dependency>
 
-    <properties>
-        <backbone.version>1.2.1</backbone.version>
-        <bootstrap.version>3.3.2-1</bootstrap.version>
-        <jquery.version>1.11.3</jquery.version>
-        <requirejs.version>2.1.16</requirejs.version>
-        <react.version>0.13.3</react.version>
-        <underscore.version>1.8.3</underscore.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <!-- moment -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>momentjs</artifactId>
+      <version>2.10.3</version>
+    </dependency>
 
-    <dependencies>
-        <!-- bootstrap -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>${bootstrap.version}</version>
-        </dependency>
+    <!-- backbone -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>backbonejs</artifactId>
+      <version>${backbone.version}</version>
+      <!-- get the latest underscore version separately -->
+      <exclusions>
+        <exclusion>
+          <artifactId>org.webjars</artifactId>
+          <groupId>underscorejs</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
-        <!-- moment -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>momentjs</artifactId>
-            <version>2.10.3</version>
-        </dependency>
+    <!-- latest underscore version -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>underscorejs</artifactId>
+      <version>${underscore.version}</version>
+    </dependency>
 
-        <!-- backbone -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>backbonejs</artifactId>
-            <version>${backbone.version}</version>
-            <!-- get the latest underscore version separately -->
-            <exclusions>
-                <exclusion>
-                    <artifactId>org.webjars</artifactId>
-                    <groupId>underscorejs</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+    <!-- jquery -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>${jquery.version}</version>
+    </dependency>
 
-        <!-- latest underscore version -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>underscorejs</artifactId>
-            <version>${underscore.version}</version>
-        </dependency>
+    <!-- requirejs -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>requirejs</artifactId>
+      <version>${requirejs.version}</version>
+    </dependency>
 
-        <!-- jquery -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>${jquery.version}</version>
-        </dependency>
+    <!-- react -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>react</artifactId>
+      <version>${react.version}</version>
+    </dependency>
 
-        <!-- requirejs -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>requirejs</artifactId>
-            <version>${requirejs.version}</version>
-        </dependency>
+    <!-- jquery cookie plugin -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery-cookie</artifactId>
+      <version>1.4.1-1</version>
+    </dependency>
 
-        <!-- react -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>react</artifactId>
-            <version>${react.version}</version>
-        </dependency>
+    <!-- font-awesome beats glyphicons -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>font-awesome</artifactId>
+      <version>4.3.0-2</version>
+    </dependency>
 
-        <!-- jquery cookie plugin -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery-cookie</artifactId>
-            <version>1.4.1-1</version>
-        </dependency>
+  </dependencies>
 
-        <!-- font-awesome beats glyphicons -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>font-awesome</artifactId>
-            <version>4.3.0-2</version>
-        </dependency>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 
-    </dependencies>
+  <build>
+    <plugins>
+      <!-- generate javadocs and source -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+      <!-- gpg sign the jars we built -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-    <build>
-        <plugins>
-            <!-- generate javadocs and source -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- gpg sign the jars we built -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- this deploys it to ossrh -->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.5</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+      <!-- this deploys it to ossrh -->
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.5</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
