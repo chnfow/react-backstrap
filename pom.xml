@@ -118,15 +118,16 @@
 
   </dependencies>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <profiles>
     <profile>
       <id>release</id>
-      <distributionManagement>
-        <snapshotRepository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-      </distributionManagement>
       <build>
         <plugins>
           <!-- generate javadocs and source -->
@@ -173,7 +174,7 @@
             </executions>
           </plugin>
 
-          <!-- Handles the release (nexus-staging:release) -->
+          <!-- Handles the release and deploy to the staging repo with a deploy execution (nexus-staging:release) -->
           <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
