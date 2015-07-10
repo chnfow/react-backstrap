@@ -91,7 +91,7 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
 
       // failed validation should return a promise
       save: function (attributes, options) {
-        var toReturn = oldModel.save.prototype.apply(this, arguments);
+        var toReturn = oldModel.prototype.save.apply(this, arguments);
         if (toReturn === false) {
           var def = $.Deferred();
           def.reject(this, false, options);
