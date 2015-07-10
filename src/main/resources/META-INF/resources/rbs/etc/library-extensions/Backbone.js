@@ -93,9 +93,9 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
       save: function (attributes, options) {
         var toReturn = oldModel.save.prototype.apply(this, arguments);
         if (toReturn === false) {
-          var promise = $.Deferred();
-          promise.reject(this, false, options);
-          return promise;
+          var def = $.Deferred();
+          def.reject(this, false, options);
+          return def.promise();
         }
         return toReturn;
       }
