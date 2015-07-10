@@ -87,6 +87,17 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
 
       parse: function (response, options) {
         return _.isObject(response) ? JSOG.decode(response) : response;
+      },
+
+      // failed validation should return a promise
+      save: function (attributes, options) {
+        var toReturn = oldModel.save.prototype.apply(this, arguments);
+        if (toReturn === false) {
+          var promise = $.Deferred();
+          promise.reject(this, false, options);
+          return promise;
+        }
+        return toReturn;
       }
     });
   })(Backbone.Model);
