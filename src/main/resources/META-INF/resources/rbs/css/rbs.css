@@ -1,5 +1,5 @@
-@import url('../../webjars/bootstrap/3.3.2-1/css/bootstrap.min.css');
-@import url('../../webjars/font-awesome/4.3.0/css/font-awesome.min.css');
+@import url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css');
+@import url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css');
 
 /* apply font smoothing everywhere */
 body {
