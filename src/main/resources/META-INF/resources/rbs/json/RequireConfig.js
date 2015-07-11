@@ -18,8 +18,6 @@ define([], function () {
       "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
       "jsog": "rbs/vendor/jsog/JSOG",
       "raf": "rbs/vendor/polyfill/rAF",
-      // couldn't find CDN that includes the data
-      "moment-tz": "rbs/vendor/moment-tz/moment-timezone-with-data" + dotMin,
       "fb": "//connect.facebook.net/en_US/sdk",
       "ga": "//www.google-analytics.com/analytics",
       "jquery-cookie": "//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie" + dotMin,
@@ -27,7 +25,8 @@ define([], function () {
       "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons" + dotMin,
       "original-backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone" + dashMin,
       "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery" + dotMin,
-      "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales" + dotMin
+      "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales" + dotMin,
+      "moment-tz": "//cdn.jsdelivr.net/momentjs.timezone/0.4.0/moment-timezone-with-data.min"
     },
 
     shim: {
