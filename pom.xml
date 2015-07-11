@@ -36,87 +36,8 @@
   </developers>
 
   <properties>
-    <backbone.version>1.2.1</backbone.version>
-    <bootstrap.version>3.3.2-1</bootstrap.version>
-    <jquery.version>1.11.3</jquery.version>
-    <requirejs.version>2.1.16</requirejs.version>
-    <react.version>0.13.3</react.version>
-    <underscore.version>1.8.3</underscore.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-  <dependencies>
-    <!-- bootstrap -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap</artifactId>
-      <version>${bootstrap.version}</version>
-    </dependency>
-
-    <!-- moment -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>momentjs</artifactId>
-      <version>2.10.3</version>
-    </dependency>
-
-    <!-- backbone -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>backbonejs</artifactId>
-      <version>${backbone.version}</version>
-      <!-- get the latest underscore version separately -->
-      <exclusions>
-        <exclusion>
-          <artifactId>org.webjars</artifactId>
-          <groupId>underscorejs</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- latest underscore version -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>underscorejs</artifactId>
-      <version>${underscore.version}</version>
-    </dependency>
-
-    <!-- jquery -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-      <version>${jquery.version}</version>
-    </dependency>
-
-    <!-- requirejs -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>requirejs</artifactId>
-      <version>${requirejs.version}</version>
-    </dependency>
-
-    <!-- react -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>react</artifactId>
-      <version>${react.version}</version>
-    </dependency>
-
-    <!-- jquery cookie plugin -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery-cookie</artifactId>
-      <version>1.4.1-1</version>
-    </dependency>
-
-    <!-- font-awesome beats glyphicons -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>font-awesome</artifactId>
-      <version>4.3.0-2</version>
-    </dependency>
-
-  </dependencies>
 
   <distributionManagement>
     <snapshotRepository>

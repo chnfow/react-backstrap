@@ -5,6 +5,10 @@ This repository is a group of React components and other libraries that I found 
 
 This repo is deployed to maven central repo as com.leaguekit.react-backstrap. Once you've included it, you can bootstrap your application by [requiring](requirejs.com) the RequireConfig provided by this module, and then configuring your require with it. Then, you can use any of the components included in the rbs/components directory to build your React application.
 
+#Demo
+
+You can see this library in action at the developer version of [LeagueKit](https://developer.leaguekit.com). There is not currently a demo site available. Of note are the datepicker and the select dropdowns.
+
 #Structure
 This package uses Backbone Models and Collections to communicate with the server.
 It uses React for the view layer. Views are broken into several different types:

@@ -8,24 +8,25 @@ define([], function () {
   "use strict";
 
   var DBG = window.debug;
-  var condDotMin = (!DBG) ? ".min" : "";
-  var condDashMin = (!DBG) ? "-min" : "";
+  var dotMin = (!DBG) ? ".min" : "";
+  var dashMin = (!DBG) ? "-min" : "";
   return {
     baseUrl: "",
 
     paths: {
       "backbone": "rbs/etc/library-extensions/Backbone",
-      "original-backbone": "webjars/backbonejs/1.2.1/backbone" + condDashMin,
-      "jquery": "webjars/jquery/1.11.3/jquery" + condDotMin,
-      "jquery-cookie": "webjars/jquery-cookie/1.4.1-1/jquery.cookie",
       "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
-      "original-underscore": "webjars/underscorejs/1.8.3/underscore" + condDashMin,
-      "fb": "//connect.facebook.net/en_US/sdk",
       "jsog": "rbs/vendor/jsog/JSOG",
-      "react": "webjars/react/0.13.3/react-with-addons" + condDotMin,
       "raf": "rbs/vendor/polyfill/rAF",
-      "moment": "webjars/momentjs/2.10.3/min/moment-with-locales" + condDotMin,
-      "ga": "//www.google-analytics.com/analytics"
+      "fb": "//connect.facebook.net/en_US/sdk",
+      "ga": "//www.google-analytics.com/analytics",
+      "jquery-cookie": "//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie" + dotMin,
+      "original-underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore" + dashMin,
+      "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons" + dotMin,
+      "original-backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone" + dashMin,
+      "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery" + dotMin,
+      "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales" + dotMin,
+      "moment-tz": "//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone" + dotMin
     },
 
     shim: {
@@ -36,20 +37,20 @@ define([], function () {
         exports: "JSOG"
       },
       "original-backbone": {
-        deps: ["jquery", "original-underscore"]
+        deps: [ "jquery", "original-underscore" ]
       },
       "original-underscore": {
         exports: "_"
-      },
-      "bootstrap": {
-        deps: ["jquery"]
       },
       "ga": {
         exports: "ga"
       },
       "jquery-cookie": {
-        deps: ["jquery"],
+        deps: [ "jquery" ],
         exports: "$"
+      },
+      "moment-tz": {
+        deps: [ "moment" ]
       }
     }
   };
