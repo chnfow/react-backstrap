@@ -8,12 +8,6 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
     var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     var DAYS = [ "Su", "Mo", "Tu", "We", "Tr", "Fr", "Sa" ];
-    var KEY_BACKSPACE = 8;
-    var KEY_UP = 38;
-    var KEY_DOWN = 40;
-
-    var KEY_ZERO = 48;
-    var KEY_NINE = 57;
 
     return _.rf({
       displayName: "Attribute DatePicker",
@@ -22,13 +16,19 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
       propTypes: {
         min: React.PropTypes.instanceOf(Date),
-        max: React.PropTypes.instanceOf(Date)
+        max: React.PropTypes.instanceOf(Date),
+        allowedFormats: React.PropTypes.arrayOf(React.PropTypes.string),
+        saveFormat: React.PropTypes.string,
+        displayFormat: React.PropTypes.string
       },
 
       getDefaultProps: function () {
         return {
           min: new Date(1900, 0, 1),
-          max: new Date(2200, 0, 1)
+          max: new Date(2200, 0, 1),
+          allowedFormats: [ "YYYY-MM-DD", "MM/DD/YYYY", "M/D/YY", "M/D/YYYY" ],
+          saveFormat: "YYYY-MM-DD",
+          displayFormat: "MM/DD/YYYY"
         };
       },
 
@@ -38,70 +38,65 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           open: false,
           currentMonth: d.getMonth(),
           currentYear: d.getFullYear(),
-          cursorPosition: null
+          // this value stores the value of the input while it's focused
+          transientValue: null
         };
       },
 
-      componentDidUpdate: function () {
-        if (this.state.cursorPosition !== null) {
-          var cp = this.state.cursorPosition;
-          this.setState({
-            cursorPosition: null
-          }, function () {
-            // move the cursor to cursorPosition
-            var input = React.findDOMNode(this.refs.input);
-            if (input.setSelectionRange) {
-              input.focus();
-              input.setSelectionRange(cp, cp);
-            } else if (input.createTextRange) {
-              var range = input.createTextRange();
-              range.collapse(true);
-              range.moveEnd('character', cp);
-              range.moveStart('character', cp);
-              range.select();
-            }
-          });
-        }
-      },
-
       openDatePicker: function () {
-        if (this.isMounted() && !this.props.disabled) {
-          var selectedValue = false;
-          var selectedYear = null;
-          var selectedMonth = null;
-          if (this.props.model.has(this.props.attribute)) {
-            var currentDate = moment.utc(this.props.model.get(this.props.attribute), "YYYY-MM-DD");
-            if (currentDate.isValid()) {
-              selectedMonth = currentDate.month();
-              selectedYear = currentDate.year();
-              selectedValue = true;
-            }
-          }
-          if (!selectedValue) {
-            var now = new Date();
-            // if the current date is not in the range, then we should choose one that is smack dab in the middle
-            if (now.getTime() < this.props.min.getTime()) {
-              now = new Date(this.props.min.getTime());
-            }
-            if (now.getTime() > this.props.max.getTime()) {
-              now = new Date(this.props.max.getTime());
-            }
-            selectedYear = now.getFullYear();
-            selectedMonth = now.getMonth();
-          }
-
-          this.setState({
-            open: true,
-            currentMonth: selectedMonth,
-            currentYear: selectedYear
-          });
+        if (!this.isMounted() || this.props.disabled) {
+          return;
         }
+        var selectedYear = null;
+        var selectedMonth = null;
+        var cv = this.getCurrentValueAsMoment();
+        if (cv !== null) {
+          selectedMonth = cv.month();
+          selectedYear = cv.year();
+        } else {
+          var now = new Date();
+          // set the selected year and month to be within the bounds of the range
+          if (now.getTime() < this.props.min.getTime()) {
+            now = new Date(this.props.min.getTime());
+          }
+          if (now.getTime() > this.props.max.getTime()) {
+            now = new Date(this.props.max.getTime());
+          }
+          selectedYear = now.getFullYear();
+          selectedMonth = now.getMonth();
+        }
+
+        var startValue = (cv !== null) ? cv.format(this.props.displayFormat) : "";
+
+        this.setState({
+          open: true,
+          currentMonth: selectedMonth,
+          currentYear: selectedYear,
+          transientValue: startValue
+        });
       },
 
       closeDatePicker: function () {
         if (this.isMounted()) {
+          var textValue = this.state.transientValue;
+          var valueMoment = moment.utc(textValue, this.props.allowedFormats, true);
+          if (valueMoment.isValid()) {
+            var min = moment.utc(this.props.min);
+            var max = moment.utc(this.props.max);
+            if (min.isAfter(valueMoment)) {
+              valueMoment = min;
+            }
+            if (max.isBefore(valueMoment)) {
+              valueMoment = max;
+            }
+            this.saveData(valueMoment.format(this.props.saveFormat));
+          } else {
+            this.clearData();
+          }
+          // set the date based on the transient value
           this.setState({
-            open: false
+            open: false,
+            transientValue: null
           });
         }
       },
@@ -138,6 +133,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         ]);
       },
 
+      // handle clicking the next and previous buttons
       moveMonth: function (byValue, e) {
         this.doNothing(e);
         var month = this.state.currentMonth + byValue;
@@ -168,13 +164,11 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         var selectedDay = null;
         var selectedYear = null;
         var selectedMonth = null;
-        if (this.props.model.has(this.props.attribute)) {
-          var currentDate = moment.utc(this.props.model.get(this.props.attribute), "YYYY-MM-DD");
-          if (currentDate.isValid()) {
-            selectedDay = currentDate.date();
-            selectedMonth = currentDate.month();
-            selectedYear = currentDate.year();
-          }
+        var currentDate = this.getCurrentValueAsMoment();
+        if (currentDate !== null) {
+          selectedDay = currentDate.date();
+          selectedMonth = currentDate.month();
+          selectedYear = currentDate.year();
         }
 
         // 0 is sunday, 6 is monday
@@ -258,12 +252,12 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           year = m.year();
           month = m.month();
         }
-        this.props.model.set(this.props.attribute, m.format("YYYY-MM-DD"));
+        this.saveData(m.format(this.props.saveFormat));
         if (this.isMounted()) {
           this.setState({
             currentYear: year,
             currentMonth: month,
-            cursorPosition: cp || this.getCursorPosition()
+            transientValue: m.format(this.props.displayFormat)
           });
         }
       },
@@ -273,100 +267,19 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         e.stopPropagation();
       },
 
-      handleKeyDown: function (e) {
-        // only react to up and down keys
-        switch (e.keyCode) {
-          case KEY_UP:
-            this.doNothing(e);
-            this.moveSelectionBy(1);
-            break;
-          case KEY_DOWN:
-            this.doNothing(e);
-            this.moveSelectionBy(-1);
-            break;
-          case KEY_BACKSPACE:
-            this.doNothing(e);
-            this.props.model.unset(this.props.attribute);
-            break;
-          default:
-            if (e.keyCode >= KEY_ZERO && e.keyCode <= KEY_NINE) {
-              this.doNothing(e);
-              this.setCharacterAtCursorPosition(+(String.fromCharCode(e.keyCode)));
-            }
-            break;
+      handleChange: function (e) {
+        if (this.isMounted()) {
+          this.setState({
+            transientValue: e.target.value
+          });
         }
-      },
-
-      setCharacterAtCursorPosition: function (num) {
-        var cv = this.getCurrentValueAsMoment();
-        if (cv === null) {
-          cv = moment(new Date((this.props.max.getTime() + this.props.min.getTime()) / 2));
-          this.setDate(cv.year(), (num === 1) ? 9 : ((num === 0) ? 0 : (num - 1)), cv.date(), (num === 1 || num === 0) ? 1 : 3);
-          return;
-        }
-
-        var cp = this.getCursorPosition();
-        var dateValue = cv.format("MM/DD/YYYY");
-        var pieces = dateValue.split("");
-
-        var year = cv.year();
-        var month = cv.month();
-        var date = cv.date();
-
-        var daysInMonth = _.numDays(month, year);
-
-        switch (cp) {
-          // cursor is on the first character
-          case 0:
-            if (num === 1 || num === 0) {
-              month = Math.min(+(num.toString() + pieces[ 1 ]) - 1, 11);
-              cp++;
-            } else {
-              month = num - 1;
-              cp = 3;
-            }
-            break;
-          case 1:
-            month = Math.min(+(pieces[ 0 ] + num.toString()) - 1, 11);
-            cp += 2;
-            break;
-          case 2:
-          case 3:
-            date = Math.max(1, Math.min((+(num.toString() + pieces[ 4 ])), daysInMonth));
-            cp = 4;
-            break;
-          case 4:
-            date = Math.max(1, Math.min((+(pieces[ 3 ] + num.toString())), daysInMonth));
-            cp = 6;
-            break;
-          case 6:
-            num = Math.max(Math.min(2, num), 1);
-            if (num === 2 || num === 1) {
-              year = +(num.toString() + pieces.slice(7, 10).join(""));
-            }
-            cp++;
-            break;
-          case 7:
-            year = +(pieces[ 6 ] + num.toString() + pieces.slice(8, 10).join(""));
-            cp++;
-            break;
-          case 8:
-            year = +(pieces.slice(6, 8).join("") + num.toString() + pieces.slice(9, 10).join(""));
-            cp++;
-            break;
-          case 9:
-            year = +(pieces.slice(6, 9).join("") + num.toString());
-            cp++;
-            break;
-        }
-        this.setDate(year, month, date, cp);
       },
 
       getCurrentValueAsMoment: function () {
         // get the current value as a moment
         var currentValue = this.getValue();
         if (typeof currentValue === "string" && currentValue.length > 0) {
-          currentValue = moment.utc(currentValue, "YYYY-MM-DD");
+          currentValue = moment.utc(currentValue, this.props.saveFormat, true);
           if (!currentValue.isValid()) {
             currentValue = null;
           }
@@ -376,75 +289,12 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         return currentValue;
       },
 
-      moveSelectionBy: function (num) {
-        var cv = this.getCurrentValueAsMoment();
-        if (cv === null) {
-          cv = moment();
-          this.setDate(cv.year(), cv.month(), cv.date());
-          return;
-        }
-        var year = cv.year();
-        var month = cv.month();
-        var day = cv.date();
-
-        var cursorPosition = this.getCursorPosition();
-        if (cursorPosition < 3) {
-          // move the month, may need to increment the year
-          month += num;
-          if (month < 0) {
-            year--;
-            month += 12;
-          }
-          if (month > 11) {
-            year++;
-            month -= 12;
-          }
-          day = Math.min(day, _.numDays(month, year));
-        } else if (cursorPosition < 6) {
-          day += num;
-          if (day > _.numDays(month, year)) {
-            month++;
-            day = 1;
-          }
-          if (day < 1) {
-            month--;
-            if (month < 0) {
-              month += 12;
-              year--;
-            }
-            day = _.numDays(month, year);
-          }
-          if (month > 11) {
-            month -= 12;
-            year++;
-          }
-        } else {
-          // move the year, month will always be valid but day may not be
-          year += num;
-          day = Math.min(day, _.numDays(month, year));
-        }
-        this.setDate(year, month, day);
-      },
-
-      getCursorPosition: function () {
-        if (!this.isMounted()) {
-          return 0;
-        }
-        var input = React.findDOMNode(this.refs.input);
-        if ('selectionStart' in input) {
-          // Standard-compliant browsers
-          return input.selectionStart;
-        } else if (document.selection) {
-          var sel = document.selection.createRange();
-          var selLen = document.selection.createRange().text.length;
-          sel.moveStart('character', -input.value.length);
-          return sel.text.length - selLen;
-        }
-      },
-
       clearValue: function (e) {
         this.doNothing(e);
-        this.props.model.unset(this.props.attribute);
+        this.clearData();
+        this.setState({
+          transientValue: null
+        });
       },
 
       render: function () {
@@ -461,11 +311,17 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         }
 
         var currentValue = this.getCurrentValueAsMoment();
-        currentValue = currentValue === null ? null : currentValue.format("MM/DD/YYYY");
+        currentValue = currentValue === null ? null : currentValue.format(this.props.displayFormat);
 
-        // show clear button
+        // the display value depends on whether the input is focused
+        var displayValue = this.state.transientValue;
+        if (displayValue === null) {
+          displayValue = currentValue === null ? "" : currentValue;
+        }
+
+        // show clear button if there's a value
         var clearButton = null;
-        if (currentValue !== null && !this.props.disabled && !this.props.readOnly) {
+        if ((displayValue && displayValue.length > 0) && !this.props.disabled && !this.props.readOnly) {
           clearButton = React.DOM.div({
             key: "clear",
             className: "datepicker-clear-button",
@@ -478,15 +334,12 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         }, [
           React.DOM.input(_.extend({}, this.props, {
             key: "input",
-            ref: "input",
             type: "text",
-            value: currentValue === null ? "" : currentValue,
-            name: this.props.attribute,
+            value: displayValue,
             onBlur: this.closeDatePicker,
-            onChange: this.doNothing,
+            onChange: this.handleChange,
             onFocus: this.openDatePicker,
-            onKeyDown: this.handleKeyDown,
-            placeholder: this.props.placeholder || "MM/DD/YYYY"
+            placeholder: this.props.placeholder || this.props.displayFormat
           })),
           datepicker,
           clearButton

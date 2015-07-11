@@ -23,6 +23,10 @@ define(["react", "underscore", "./Events", "jquery"], function (React, _, events
       this.props.model.set(this.props.attribute, data);
     },
 
+    clearData: function () {
+      this.props.model.unset(this.props.attribute);
+    },
+
     getValue: function () {
       return this.props.model.get(this.props.attribute);
     }
