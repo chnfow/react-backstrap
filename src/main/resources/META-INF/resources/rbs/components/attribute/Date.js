@@ -28,7 +28,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         return {
           min: new Date(1900, 0, 1),
           max: new Date(2200, 0, 1),
-          allowedFormats: [ "YYYY-MM-DD", "MM/DD/YYYY", "M/D/YY", "M/D/YYYY" ],
+          allowedFormats: [ "YYYY/MM/DD", "YYYY-MM-DD", "MM/DD/YYYY", "MM-DD-YYYY", "M/D/YY", "M-D-YY", "M/D/YYYY", "M-D-YYYY" ],
           saveFormat: "YYYY-MM-DD",
           displayFormat: "MM/DD/YYYY"
         };
