@@ -1,7 +1,7 @@
 /**
  * React Component renders a bootstrap navbar
  */
-define(["react", "underscore", "./Icon"],
+define([ "react", "underscore", "./Icon" ],
   function (React, _, icon) {
     "use strict";
 
@@ -53,7 +53,7 @@ define(["react", "underscore", "./Icon"],
             key: "navbar-toggle-collapsed",
             className: "navbar-toggle" + (this.state.collapsed ? " collapsed" : ""),
             onClick: _.bind(this.toggleCollapsed, this)
-          }, icon({name: "bars"})),
+          }, icon({ name: "bars" })),
           React.DOM.a({
             key: "brand",
             className: "navbar-brand",

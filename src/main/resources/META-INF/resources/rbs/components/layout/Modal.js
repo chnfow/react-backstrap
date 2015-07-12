@@ -1,7 +1,7 @@
 /**
  * We are not using bootstrap's modals because it's styling is too mixed in with the rest of the css
  */
-define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (React, _, TTG) {
+define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function (React, _, TTG) {
   "use strict";
 
   // renders an icon with the name property
@@ -10,8 +10,8 @@ define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (
     propTypes: {
       open: React.PropTypes.bool.isRequired,
       onClose: React.PropTypes.func,
-      size: React.PropTypes.oneOf(["lg", "sm"]),
-      backdrop: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool]),
+      size: React.PropTypes.oneOf([ "lg", "sm" ]),
+      backdrop: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.bool ]),
       title: React.PropTypes.string.isRequired
     },
 
@@ -44,7 +44,7 @@ define(["react", "underscore", "../controls/TimeoutTransitionGroup"], function (
           React.DOM.div({
             key: "modal-header",
             className: "modal-header"
-          }, React.DOM.h4({className: "modal-title"}, this.props.title))
+          }, React.DOM.h4({ className: "modal-title" }, this.props.title))
         ];
         if (this.props.children) {
           contentChildren = _.addToArray(contentChildren, this.props.children);

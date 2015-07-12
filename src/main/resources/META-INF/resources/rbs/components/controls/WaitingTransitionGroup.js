@@ -3,7 +3,7 @@
  * animation before setting new children so as not to displace the existing children. Perfect for wrapping full page
  * elements that should fully transition before being replaced by new elements
  */
-define(["react", "underscore", "./TimeoutTransitionGroup"], function (React, _, TTG) {
+define([ "react", "underscore", "./TimeoutTransitionGroup" ], function (React, _, TTG) {
   "use strict";
 
   return _.rf({

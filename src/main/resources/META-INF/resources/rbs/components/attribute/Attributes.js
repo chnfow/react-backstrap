@@ -2,12 +2,12 @@
  * All the attribute views that render a single attribute of a model in some way - since these are relatively simple
  * in that they just implement two way binding to a model's attribute, they are grouped in a single file
  */
-define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], function (React, attribute, icon, _) {
+define([ "react", "../mixins/Attribute", "../layout/Icon", "underscore" ], function (React, attribute, icon, _) {
   "use strict";
 
   var exports = {};
-  
-  var attributeMixins = [attribute, React.addons.PureRenderMixin];
+
+  var attributeMixins = [ attribute, React.addons.PureRenderMixin ];
 
   // generic input view
   var input = _.rf({
@@ -37,7 +37,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     displayName: "Attribute Text",
     mixins: attributeMixins,
     render: function () {
-      return input(_.extend({}, this.props, {type: "text"}));
+      return input(_.extend({}, this.props, { type: "text" }));
     }
   });
 
@@ -45,7 +45,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     displayName: "Attribute Number",
     mixins: attributeMixins,
     render: function () {
-      return input(_.extend({}, this.props, {type: "number"}));
+      return input(_.extend({}, this.props, { type: "number" }));
     }
   });
 
@@ -53,7 +53,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     displayName: "Attribute E-mail",
     mixins: attributeMixins,
     render: function () {
-      return input(_.extend({}, this.props, {type: "email"}));
+      return input(_.extend({}, this.props, { type: "email" }));
     }
   });
 
@@ -61,7 +61,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     displayName: "Attribute Password",
     mixins: attributeMixins,
     render: function () {
-      return input(_.extend({}, this.props, {type: "password"}));
+      return input(_.extend({}, this.props, { type: "password" }));
     }
   });
 
@@ -113,7 +113,7 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
     displayName: "Attribute Anchor",
     mixins: attributeMixins,
     propTypes: {
-      href: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func])
+      href: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.func ])
     },
     getLink: function () {
       if (typeof this.props.href === "string") {
@@ -143,13 +143,13 @@ define(["react", "../mixins/Attribute", "../layout/Icon", "underscore"], functio
   });
 
   //create views that just render the property as a child
-  var staticViews = ["span", "div", "h1", "h2", "h3", "h4", "h5", "em", "i", "p", "strong"];
+  var staticViews = [ "span", "div", "h1", "h2", "h3", "h4", "h5", "em", "i", "p", "strong" ];
   _.each(staticViews, function (type) {
-    exports[type] = _.rf({
+    exports[ type ] = _.rf({
       displayName: "Static Attribute " + type,
       mixins: attributeMixins,
       render: function () {
-        return React.DOM[type](_.extend({}, this.props), this.getValue());
+        return React.DOM[ type ](_.extend({}, this.props), this.getValue());
       }
     });
   });

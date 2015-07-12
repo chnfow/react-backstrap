@@ -1,4 +1,4 @@
-define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside"],
+define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
   function (React, _, Button, TTG, onClickOutside) {
     "use strict";
 
@@ -9,7 +9,7 @@ define(["react", "underscore", "../controls/Button", "../controls/TimeoutTransit
         dropup: React.PropTypes.bool
       },
 
-      mixins: [React.addons.PureRenderMixin, onClickOutside],
+      mixins: [ React.addons.PureRenderMixin, onClickOutside ],
 
       getInitialState: function () {
         return {

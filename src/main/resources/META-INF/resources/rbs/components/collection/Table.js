@@ -1,11 +1,7 @@
-define(["react", "underscore"], function (React, _) {
+define([ "react", "underscore" ], function (React, _) {
   "use strict";
 
-  var tableHeader = _.rf({
+  var tableHeader = _.rf({});
 
-  });
-
-  return _.rf({
-
-  });
+  return _.rf({});
 });

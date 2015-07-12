@@ -9,6 +9,8 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
     var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     var DAYS = [ "Su", "Mo", "Tu", "We", "Tr", "Fr", "Sa" ];
 
+    var KEY_ENTER = 13;
+
     return _.rf({
       displayName: "Attribute DatePicker",
 
@@ -76,23 +78,36 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         });
       },
 
+      parseTransientValueToMoment: function () {
+        var textValue = this.state.transientValue;
+        var valueMoment = moment.utc(textValue, this.props.allowedFormats, true);
+        if (valueMoment.isValid()) {
+          var min = moment.utc(this.props.min);
+          var max = moment.utc(this.props.max);
+          if (min.isAfter(valueMoment)) {
+            valueMoment = min;
+          }
+          if (max.isBefore(valueMoment)) {
+            valueMoment = max;
+          }
+          return valueMoment;
+        } else {
+          return null;
+        }
+      },
+
+      saveTransientValue: function () {
+        var val = this.parseTransientValueToMoment();
+        if (val !== null) {
+          this.saveData(val.format(this.props.saveFormat));
+        } else {
+          this.clearData();
+        }
+      },
+
       closeDatePicker: function () {
         if (this.isMounted()) {
-          var textValue = this.state.transientValue;
-          var valueMoment = moment.utc(textValue, this.props.allowedFormats, true);
-          if (valueMoment.isValid()) {
-            var min = moment.utc(this.props.min);
-            var max = moment.utc(this.props.max);
-            if (min.isAfter(valueMoment)) {
-              valueMoment = min;
-            }
-            if (max.isBefore(valueMoment)) {
-              valueMoment = max;
-            }
-            this.saveData(valueMoment.format(this.props.saveFormat));
-          } else {
-            this.clearData();
-          }
+          this.saveTransientValue();
           // set the date based on the transient value
           this.setState({
             open: false,
@@ -275,6 +290,21 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
         }
       },
 
+      handleKeyDown: function (e) {
+        if (e.keyCode === KEY_ENTER) {
+          this.doNothing(e);
+          var val = this.parseTransientValueToMoment();
+          if (val !== null && this.isMounted()) {
+            this.saveData(val.format(this.props.saveFormat));
+            this.setState({
+              transientValue: val.format(this.props.displayFormat),
+              currentMonth: val.month(),
+              currentYear: val.year()
+            });
+          }
+        }
+      },
+
       getCurrentValueAsMoment: function () {
         // get the current value as a moment
         var currentValue = this.getValue();
@@ -338,6 +368,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
             value: displayValue,
             onBlur: this.closeDatePicker,
             onChange: this.handleChange,
+            onKeyDown: this.handleKeyDown,
             onFocus: this.openDatePicker,
             placeholder: this.props.placeholder || this.props.displayFormat
           })),

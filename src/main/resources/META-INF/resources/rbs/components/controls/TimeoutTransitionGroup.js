@@ -13,7 +13,7 @@
  * This is adapted from Facebook's CSSTransitionGroup which is in the React
  * addons and under the Apache 2.0 License.
  */
-define(["react", "underscore", "raf"], function (React, _) {
+define([ "react", "underscore", "raf" ], function (React, _) {
   "use strict";
   var ReactTransitionGroup = React.createFactory(React.addons.TransitionGroup);
 
@@ -65,10 +65,10 @@ define(["react", "underscore", "raf"], function (React, _) {
 
     for (var baseEventName in EVENT_NAME_MAP) {
       if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
-        var baseEvents = EVENT_NAME_MAP[baseEventName];
+        var baseEvents = EVENT_NAME_MAP[ baseEventName ];
         for (var styleName in baseEvents) {
           if (styleName in style) {
-            endEvents.push(baseEvents[styleName]);
+            endEvents.push(baseEvents[ styleName ]);
             break;
           }
         }
@@ -228,7 +228,7 @@ define(["react", "underscore", "raf"], function (React, _) {
     },
 
     render: function () {
-      return ReactTransitionGroup(_.extend({}, this.props, {childFactory: this._wrapChild}));
+      return ReactTransitionGroup(_.extend({}, this.props, { childFactory: this._wrapChild }));
     }
   });
 

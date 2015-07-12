@@ -2,11 +2,11 @@
  * Draws an icon that spins to indicate an element is loading, and optionally a backdrop over the element to prevent
  * user interaction until the element is done loading all the data
  */
-define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (React, _, events, icon) {
+define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function (React, _, events, icon) {
   "use strict";
 
   return _.rf({
-    mixins: [events],
+    mixins: [ events ],
 
     propTypes: {
       watch: React.PropTypes.oneOfType([
@@ -80,7 +80,7 @@ define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (
         loadingIndicator = React.DOM.div({
           key: "loading-indicator",
           className: "loading-indicator"
-        }, icon({name: this.props.icon, size: this.props.size, animate: this.props.animate}));
+        }, icon({ name: this.props.icon, size: this.props.size, animate: this.props.animate }));
       }
 
       var className = "loading-indicator-container";
@@ -91,7 +91,7 @@ define(["react", "underscore", "../mixins/Events", "../layout/Icon"], function (
       var toAdd = (this.props.hideWhileLoading && this.state.loading > 0) ? [] : this.props.children;
       return React.DOM.div(_.extend({}, this.props, {
         className: className
-      }), _.addToArray(toAdd, [loadingBackdrop, loadingIndicator]));
+      }), _.addToArray(toAdd, [ loadingBackdrop, loadingIndicator ]));
     }
   });
 });

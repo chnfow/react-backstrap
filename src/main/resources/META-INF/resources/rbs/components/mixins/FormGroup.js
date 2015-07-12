@@ -1,7 +1,7 @@
 /**
  * A mixin that provides a function for creating a form group to wrap an input
  */
-define(["react", "underscore"], function (React, _) {
+define([ "react", "underscore" ], function (React, _) {
   "use strict";
   return React.createMixin({
 

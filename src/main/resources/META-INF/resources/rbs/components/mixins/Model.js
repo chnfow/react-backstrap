@@ -1,4 +1,4 @@
-define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/Date"],
+define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/Date" ],
   function (React, _, events, $, attributes, select, date) {
     "use strict";
 
@@ -9,7 +9,7 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
 
     return React.createMixin({
 
-      mixins: [events],
+      mixins: [ events ],
 
       propTypes: {
         model: React.PropTypes.object.isRequired,
@@ -22,7 +22,7 @@ define(["react", "underscore", "./Events", "jquery", "../attribute/Attributes", 
           var comp = oneAttribute.component;
           var viewType;
           if (typeof comp === "string") {
-            viewType = attributeComponentMap[comp.toLowerCase()];
+            viewType = attributeComponentMap[ comp.toLowerCase() ];
           }
           if (typeof comp === "function") {
             viewType = comp;

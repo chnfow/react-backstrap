@@ -1,4 +1,4 @@
-define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"],
+define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput" ],
   function (React, _, attribute, dynamicInput) {
     "use strict";
 
@@ -13,7 +13,7 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
     // and allows the user to move the cursor and delete values from the model
     return _.rf({
       displayName: "Fake Select Input",
-      mixins: [attribute, React.addons.PureRenderMixin],
+      mixins: [ attribute, React.addons.PureRenderMixin ],
 
       propTypes: {
         modelComponent: React.PropTypes.func.isRequired,
@@ -45,7 +45,7 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
 
       componentWillReceiveProps: function (nextProps) {
         if (nextProps.value.length > 0) {
-          this.setState({cursorPosition: 0});
+          this.setState({ cursorPosition: 0 });
         }
       },
 
@@ -60,7 +60,7 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
           return this.props.collection.get(value);
         }
         var findObj = {};
-        findObj[this.props.valueAttribute] = value;
+        findObj[ this.props.valueAttribute ] = value;
         return this.props.collection.findWhere(findObj);
       },
 
@@ -134,14 +134,14 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
       },
 
       handleFocus: function (e) {
-        this.setState({open: true});
+        this.setState({ open: true });
         if (this.props.onFocus) {
           this.props.onFocus(e);
         }
       },
 
       handleBlur: function (e) {
-        this.setState({open: false});
+        this.setState({ open: false });
         if (this.props.onBlur) {
           this.props.onBlur(e);
         }
@@ -166,7 +166,7 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
         return React.DOM.span({
           className: className,
           key: "result-cid-" + model.cid
-        }, this.props.modelComponent({model: model}));
+        }, this.props.modelComponent({ model: model }));
       },
 
       render: function () {
@@ -177,7 +177,7 @@ define(["react", "underscore", "../mixins/Attribute", "../controls/DynamicInput"
           if (this.props.value.length === 0) {
             var model = this.findModelByValue(currentValue);
             if (model) {
-              selectedItems = [this.getDisplayItem("fancy-select-single-choice", model)];
+              selectedItems = [ this.getDisplayItem("fancy-select-single-choice", model) ];
             }
           }
         } else {

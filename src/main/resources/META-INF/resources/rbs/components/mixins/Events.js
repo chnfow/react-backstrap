@@ -1,4 +1,4 @@
-define(["react", "backbone", "underscore"], function (React, Backbone, _) {
+define([ "react", "backbone", "underscore" ], function (React, Backbone, _) {
   "use strict";
   return React.createMixin({
     componentWillMount: function () {

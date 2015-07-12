@@ -20,29 +20,29 @@ define([], function () {
     var doEncode, idOf, sofar;
     sofar = {};
     idOf = function (obj) {
-      if (!obj[JSOG_OBJECT_ID]) {
-        obj[JSOG_OBJECT_ID] = "" + (nextId++);
+      if (!obj[ JSOG_OBJECT_ID ]) {
+        obj[ JSOG_OBJECT_ID ] = "" + (nextId++);
       }
-      return obj[JSOG_OBJECT_ID];
+      return obj[ JSOG_OBJECT_ID ];
     };
     doEncode = function (original) {
       var encodeArray, encodeObject;
       encodeObject = function (original) {
         var id, key, result, value;
         id = idOf(original);
-        if (sofar[id]) {
+        if (sofar[ id ]) {
           return {
             '@ref': id
           };
         }
-        result = sofar[id] = {
+        result = sofar[ id ] = {
           '@id': id
         };
         for (key in original) {
           if (original.hasOwnProperty(key)) {
-            value = original[key];
+            value = original[ key ];
             if (key !== JSOG_OBJECT_ID) {
-              result[key] = doEncode(value);
+              result[ key ] = doEncode(value);
             }
           }
         }
@@ -54,7 +54,7 @@ define([], function () {
           var i, len, results;
           results = [];
           for (i = 0, len = original.length; i < len; i++) {
-            val = original[i];
+            val = original[ i ];
             results.push(doEncode(val));
           }
           return results;
@@ -82,26 +82,26 @@ define([], function () {
       var decodeArray, decodeObject;
       decodeObject = function (encoded) {
         var id, key, ref, result, value;
-        ref = encoded['@ref'];
+        ref = encoded[ '@ref' ];
         if (ref !== null && typeof ref !== "undefined") {
           ref = ref.toString();
         }
         if (ref !== null && typeof ref !== "undefined") {
-          return found[ref];
+          return found[ ref ];
         }
         result = {};
-        id = encoded['@id'];
+        id = encoded[ '@id' ];
         if (id !== null && typeof id !== "undefined") {
           id = id.toString();
         }
         if (id) {
-          found[id] = result;
+          found[ id ] = result;
         }
         for (key in encoded) {
           if (encoded.hasOwnProperty(key)) {
-            value = encoded[key];
+            value = encoded[ key ];
             if (key !== '@id') {
-              result[key] = doDecode(value);
+              result[ key ] = doDecode(value);
             }
           }
         }
@@ -113,7 +113,7 @@ define([], function () {
           var i, len, results;
           results = [];
           for (i = 0, len = encoded.length; i < len; i++) {
-            value = encoded[i];
+            value = encoded[ i ];
             results.push(doDecode(value));
           }
           return results;

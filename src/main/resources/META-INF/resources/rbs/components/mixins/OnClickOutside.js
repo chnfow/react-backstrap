@@ -1,7 +1,7 @@
 /**
  * React Component
  */
-define(["react", "underscore", "jquery"], function (React, _, $) {
+define([ "react", "underscore", "jquery" ], function (React, _, $) {
   "use strict";
 
   return React.createMixin({

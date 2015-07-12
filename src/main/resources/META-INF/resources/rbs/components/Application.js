@@ -1,7 +1,7 @@
 /**
  * Use this to wrap your application to provide loading indicators and transitions between screens
  */
-define(["react", "underscore"], function (React, _) {
+define([ "react", "underscore" ], function (React, _) {
   "use strict";
 
   var RCSST = React.addons.CSSTransitionGroup;

@@ -1,4 +1,4 @@
-define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, icon, $) {
+define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _, icon, $) {
   "use strict";
 
   return _.rf({
@@ -7,7 +7,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
     propTypes: {
       icon: React.PropTypes.string,
       caption: React.PropTypes.string,
-      size: React.PropTypes.oneOf(["xs", "sm", "lg"]),
+      size: React.PropTypes.oneOf([ "xs", "sm", "lg" ]),
       type: React.PropTypes.string,
       ajax: React.PropTypes.bool,
       submit: React.PropTypes.bool,
@@ -57,7 +57,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
 
     getIcon: function () {
       if (this.props.icon) {
-        return icon({key: "icon", name: this.props.icon});
+        return icon({ key: "icon", name: this.props.icon });
       }
       return null;
     },
@@ -114,7 +114,7 @@ define(["react", "underscore", "../layout/Icon", "jquery"], function (React, _, 
     render: function () {
       var caption = this.getCaption();
       var icon = this.getIcon();
-      var children = [icon, caption];
+      var children = [ icon, caption ];
       if (this.props.children) {
         if (_.isArray(this.props.children)) {
           children = children.concat(this.props.children);

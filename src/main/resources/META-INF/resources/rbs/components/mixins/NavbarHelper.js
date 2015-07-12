@@ -1,7 +1,7 @@
 /**
  * React Component
  */
-define(["react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon"],
+define([ "react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon" ],
   function (React, _, link, dropdown, icon) {
     "use strict";
 
@@ -29,7 +29,10 @@ define(["react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown
           return React.DOM.p({
             key: linkObject.text,
             className: "navbar-text"
-          }, [icon({key: "nav-icon", name: linkObject.icon}), React.DOM.span({key: "nav-text"}, linkObject.text)]);
+          }, [ icon({
+            key: "nav-icon",
+            name: linkObject.icon
+          }), React.DOM.span({ key: "nav-text" }, linkObject.text) ]);
         }
         if (isDropdown) {
           return dropdown({
@@ -39,7 +42,7 @@ define(["react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown
           }, this.buildLinks(linkObject.menu));
         }
         var href = linkObject.href;
-        if (href[0] !== "/") {
+        if (href[ 0 ] !== "/") {
           href = "/" + href;
         }
         return link({

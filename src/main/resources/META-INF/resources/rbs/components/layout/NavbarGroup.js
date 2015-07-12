@@ -1,7 +1,7 @@
 /**
  * React Component
  */
-define(["react", "underscore"], function (React, _) {
+define([ "react", "underscore" ], function (React, _) {
   "use strict";
 
   return _.rf({

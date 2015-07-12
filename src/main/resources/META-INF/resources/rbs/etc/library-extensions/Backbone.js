@@ -1,4 +1,4 @@
-define(["original-backbone", "jsog", "jquery", "original-underscore"], function (Backbone, JSOG, $, _) {
+define([ "original-backbone", "jsog", "jquery", "original-underscore" ], function (Backbone, JSOG, $, _) {
   "use strict";
 
   Backbone.Model = (function (oldModel) {
@@ -24,10 +24,10 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
           } else {
             // an added benefit of this get, is that if the pc we're trying to get is not defined
             // and the parent is an array, then we assume the user meant to get an attribute on the objects of the array
-            if (pcs.length === 0 && _.isArray(val) && typeof val[pc] === "undefined") {
+            if (pcs.length === 0 && _.isArray(val) && typeof val[ pc ] === "undefined") {
               return _.pluck(val, pc);
             }
-            val = val[pc];
+            val = val[ pc ];
           }
         }
         return val;
@@ -68,17 +68,17 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
         while (pcs.length > 1) {
           var nextPc = pcs.shift();
           // if it's not set, just put an empty object there
-          if (ptr[nextPc] === null || typeof ptr[nextPc] === "undefined") {
-            ptr[nextPc] = {};
+          if (ptr[ nextPc ] === null || typeof ptr[ nextPc ] === "undefined") {
+            ptr[ nextPc ] = {};
           }
           // move the ptr down a level
-          ptr = ptr[nextPc];
+          ptr = ptr[ nextPc ];
         }
 
-        ptr[pcs.shift()] = val;
+        ptr[ pcs.shift() ] = val;
 
         // set toSet back into the parent using oldSet, silently
-        oldSet.call(this, firstPc, toSet, _.extend({}, options, {silent: true}));
+        oldSet.call(this, firstPc, toSet, _.extend({}, options, { silent: true }));
         // then trigger the change to the attribute and the model
         this.trigger("change", this, options);
         this.trigger("change:" + key, this, val, options);
@@ -114,7 +114,7 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
       sorts: [],
       additionalParams: {},
 
-      options: ["pageNo", "pageSize", "additionalParams", "sorts"],
+      options: [ "pageNo", "pageSize", "additionalParams", "sorts" ],
 
       constructor: function (options) {
         if (options) {
@@ -187,7 +187,7 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
         } else {
           options.headers = this.getFetchHeaders();
         }
-        var paramString = [$.param(_.result(this, "additionalParams")), this.getSortParams()].join("&");
+        var paramString = [ $.param(_.result(this, "additionalParams")), this.getSortParams() ].join("&");
         if (options.data) {
           options.data = _.removeEmptyValues(options.data + "&" + paramString, "&");
         } else {
@@ -205,7 +205,7 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
       sort: function (attribute, desc) {
         var order = desc ? "D" : "A";
         var sort = "sort=" + order + "|" + attribute;
-        this.sorts = [sort].concat(this.sorts);
+        this.sorts = [ sort ].concat(this.sorts);
         this.fetch();
       },
 
@@ -215,8 +215,8 @@ define(["original-backbone", "jsog", "jquery", "original-underscore"], function 
 
       getFetchHeaders: function () {
         var toReturn = {};
-        toReturn[this.pageParam] = this.pageNo * this.pageSize;
-        toReturn[this.pageSizeParam] = this.pageSize;
+        toReturn[ this.pageParam ] = this.pageNo * this.pageSize;
+        toReturn[ this.pageSizeParam ] = this.pageSize;
         return toReturn;
       }
 

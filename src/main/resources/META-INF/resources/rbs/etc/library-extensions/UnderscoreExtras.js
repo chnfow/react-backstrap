@@ -1,4 +1,4 @@
-define(["original-underscore", "react"], function (_, React) {
+define([ "original-underscore", "react" ], function (_, React) {
   "use strict";
   var util = {};
 
@@ -31,7 +31,7 @@ define(["original-underscore", "react"], function (_, React) {
     if (string.length <= 0) {
       return string;
     }
-    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+    return string[ 0 ].toUpperCase() + string.slice(1).toLowerCase();
   };
 
   util.randomString = function (length, characters) {
@@ -50,19 +50,19 @@ define(["original-underscore", "react"], function (_, React) {
   util.path = function () {
     var toReturn = "";
     for (var i = 0, j = arguments.length; i < j; i++) {
-      var toAdd = arguments[i];
+      var toAdd = arguments[ i ];
       if (typeof toAdd === "number") {
         toAdd = toAdd.toString();
       }
       if (typeof toAdd !== "string" || toAdd.length === 0) {
-        console.error("invalid or empty argument passed to _.path", arguments[i]);
+        console.error("invalid or empty argument passed to _.path", arguments[ i ]);
       }
       if (toReturn.length === 0) {
         toReturn = toAdd;
         continue;
       }
-      var lastChar = toReturn[toReturn.length - 1];
-      var firstChar = toAdd[0];
+      var lastChar = toReturn[ toReturn.length - 1 ];
+      var firstChar = toAdd[ 0 ];
       if (lastChar === "/") {
         if (firstChar === "/") {
           toReturn += toAdd.slice(1);
@@ -95,21 +95,21 @@ define(["original-underscore", "react"], function (_, React) {
   };
 
   util.addToArray = function () {
-    var origArray = arguments[0];
+    var origArray = arguments[ 0 ];
     if (!_.isArray(origArray)) {
       if (origArray !== null && typeof origArray !== "undefined") {
-        origArray = [origArray];
+        origArray = [ origArray ];
       } else {
         origArray = [];
       }
     }
     for (var i = 1; i < arguments.length; i++) {
-      var toAdd = arguments[i];
+      var toAdd = arguments[ i ];
       if (_.isArray(toAdd)) {
         origArray = origArray.concat(toAdd);
       } else {
         if (toAdd !== null && typeof toAdd !== "undefined") {
-          origArray = _.union(origArray, [toAdd]);
+          origArray = _.union(origArray, [ toAdd ]);
         }
       }
     }

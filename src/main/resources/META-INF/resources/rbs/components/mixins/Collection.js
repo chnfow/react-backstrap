@@ -1,7 +1,7 @@
-define(["react", "./Events", "underscore"], function (React, events, _) {
+define([ "react", "./Events", "underscore" ], function (React, events, _) {
   "use strict";
   return React.createMixin({
-    mixins: [events],
+    mixins: [ events ],
 
     propTypes: {
       collection: React.PropTypes.object.isRequired,

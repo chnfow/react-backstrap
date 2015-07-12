@@ -1,15 +1,15 @@
 /**
  * Renders a bootstrap grid row of model attributes in form groups
  */
-define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"],
+define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore" ],
   function (React, model, formGroup, _) {
     "use strict";
     return _.rf({
       displayName: "Model Grid Row",
-      mixins: [model, formGroup],
+      mixins: [ model, formGroup ],
 
       propTypes: {
-        size: React.PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"])
+        size: React.PropTypes.oneOf([ "xs", "sm", "md", "lg", "xl" ])
       },
 
       getDefaultProps: function () {
@@ -22,11 +22,11 @@ define(["react", "../mixins/Model", "../mixins/FormGroup", "underscore"],
         var origChildren = this.getAttributes();
         var children = _.map(origChildren, function (oneChildComponent) {
           var columns = oneChildComponent.props.columns || Math.floor((12 / (origChildren.length)));
-          var colClass = ["col", this.props.size, columns].join("-");
-          return React.DOM.div({className: colClass}, oneChildComponent);
+          var colClass = [ "col", this.props.size, columns ].join("-");
+          return React.DOM.div({ className: colClass }, oneChildComponent);
         }, this);
 
-        return React.DOM.div(_.extend({}, this.props, {className: "row"}), children);
+        return React.DOM.div(_.extend({}, this.props, { className: "row" }), children);
       }
 
     });

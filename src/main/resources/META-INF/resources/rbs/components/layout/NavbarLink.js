@@ -1,7 +1,7 @@
 /**
  * React Component
  */
-define(["react", "underscore", "rbs/components/layout/Icon"], function (React, _, icon) {
+define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React, _, icon) {
   "use strict";
 
   return _.rf({
@@ -27,7 +27,7 @@ define(["react", "underscore", "rbs/components/layout/Icon"], function (React, _
       }
       // children of the anchor tag
       var children = [
-        icon({key: "link-icon", name: this.props.icon}),
+        icon({ key: "link-icon", name: this.props.icon }),
         this.props.text
       ];
       // add any children to the anchor tag
@@ -41,7 +41,7 @@ define(["react", "underscore", "rbs/components/layout/Icon"], function (React, _
       return React.DOM.li({
         className: className,
         onClick: this.props.onClick
-      }, React.DOM.a({href: this.props.href}, children));
+      }, React.DOM.a({ href: this.props.href }, children));
     }
   });
 });

@@ -1,17 +1,17 @@
-define(["react", "underscore", "../mixins/Events"],
+define([ "react", "underscore", "../mixins/Events" ],
   function (React, _, events) {
     "use strict";
 
     return _.rf({
       displayName: "Pagination",
 
-      mixins: [events],
+      mixins: [ events ],
 
       propTypes: {
         collection: React.PropTypes.object.isRequired,
         nextPage: React.PropTypes.string,
         previousPage: React.PropTypes.string,
-        size: React.PropTypes.oneOf(["sm", "lg"])
+        size: React.PropTypes.oneOf([ "sm", "lg" ])
       },
 
       componentDidMount: function () {
@@ -40,7 +40,7 @@ define(["react", "underscore", "../mixins/Events"],
       },
 
       getPage: function (pageObject) {
-        var classes = ["page-button"];
+        var classes = [ "page-button" ];
         if (pageObject.active) {
           classes.push("active");
         }
@@ -52,7 +52,7 @@ define(["react", "underscore", "../mixins/Events"],
           className: classes.join(" "),
           onClick: _.bind(this.handlePageClick, this, pageObject.page)
         }, React.DOM.a({
-          dangerouslySetInnerHTML: {__html: pageObject.text}
+          dangerouslySetInnerHTML: { __html: pageObject.text }
         }));
       },
 

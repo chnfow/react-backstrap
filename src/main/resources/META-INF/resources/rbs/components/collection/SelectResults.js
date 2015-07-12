@@ -1,4 +1,4 @@
-define(["react", "underscore", "../mixins/Collection"],
+define([ "react", "underscore", "../mixins/Collection" ],
   function (React, _, collection) {
     "use strict";
 
@@ -7,7 +7,7 @@ define(["react", "underscore", "../mixins/Collection"],
     return _.rf({
       displayName: "Select Results",
 
-      mixins: [collection, React.addons.PureRenderMixin],
+      mixins: [ collection, React.addons.PureRenderMixin ],
 
       propTypes: {
         onSelect: React.PropTypes.func.isRequired
@@ -54,7 +54,7 @@ define(["react", "underscore", "../mixins/Collection"],
 
       scrollHiliteIntoView: function () {
         var resultsNode = React.findDOMNode(this.refs.results);
-        var hilitedNode = React.findDOMNode(this.refs["result-" + this.state.hilite]);
+        var hilitedNode = React.findDOMNode(this.refs[ "result-" + this.state.hilite ]);
         var resultsTop = resultsNode.scrollTop;
         var hiliteTop = hilitedNode.offsetTop;
         if (resultsTop > hiliteTop) {
@@ -76,7 +76,7 @@ define(["react", "underscore", "../mixins/Collection"],
       },
 
       getHilitedModel: function () {
-        var hilited = this.refs["result-" + this.state.hilite];
+        var hilited = this.refs[ "result-" + this.state.hilite ];
         if (hilited) {
           return hilited.props.model;
         }

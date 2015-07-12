@@ -1,7 +1,7 @@
 /**
  * React Component that renders a question sign and a tooltip when hovered over
  */
-define(["react", "underscore", "./Icon"], function (React, _, icon) {
+define([ "react", "underscore", "./Icon" ], function (React, _, icon) {
   "use strict";
 
   return _.rf({

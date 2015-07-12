@@ -1,5 +1,5 @@
 // defines an input whose width is always the size of its content
-define(["react", "underscore", "jquery"], function (React, _, $) {
+define([ "react", "underscore", "jquery" ], function (React, _, $) {
   "use strict";
 
   var widthCalculatorStyle = {
@@ -8,7 +8,7 @@ define(["react", "underscore", "jquery"], function (React, _, $) {
     whiteSpace: "nowrap"
   };
 
-  var widthStyles = ["font", "fontStyle", "fontVariant", "fontWeight", "fontSize", "fontFamily", "boxSizing", "padding", "margin", "border"];
+  var widthStyles = [ "font", "fontStyle", "fontVariant", "fontWeight", "fontSize", "fontFamily", "boxSizing", "padding", "margin", "border" ];
 
   return _.rf({
 

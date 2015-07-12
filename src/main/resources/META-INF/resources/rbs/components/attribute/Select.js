@@ -1,4 +1,4 @@
-define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./SelectInput", "../collection/SelectResults"],
+define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./SelectInput", "../collection/SelectResults" ],
   function (React, _, $, Backbone, events, selectInput, selectResults) {
 
     "use strict";
@@ -16,7 +16,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
 
     return _.rf({
       displayName: "Attribute Select",
-      mixins: [events],
+      mixins: [ events ],
 
       propTypes: {
         valueAttribute: React.PropTypes.string,
@@ -75,7 +75,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
           selectedVals = [];
         } else {
           if (!_.isArray(selectedVals)) {
-            selectedVals = [selectedVals];
+            selectedVals = [ selectedVals ];
           }
         }
 
@@ -116,7 +116,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
               if (caseInsensitive && typeof val === "string") {
                 val = val.toUpperCase();
               }
-              return [val];
+              return [ val ];
             };
             break;
           case "object":
@@ -204,9 +204,9 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
           var currentValue = this.props.model.get(this.props.attribute);
           var newValue;
           if (_.isArray(currentValue)) {
-            newValue = currentValue.concat([modelVal]);
+            newValue = currentValue.concat([ modelVal ]);
           } else {
-            newValue = [modelVal];
+            newValue = [ modelVal ];
           }
           this.props.model.set(this.props.attribute, newValue);
           this.doSearch("");
@@ -225,7 +225,7 @@ define(["react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sele
       },
 
       setOpen: function (value) {
-        this.setState({open: value, searchText: ""}, function () {
+        this.setState({ open: value, searchText: "" }, function () {
           if (this.state.open) {
             this.updateFilteredCollection(this.state.searchText);
           }
