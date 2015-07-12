@@ -1,22 +1,26 @@
 /**
  * React Component renders a bootstrap navbar
  */
-define([ "react", "underscore", "./Icon" ],
-  function (React, _, icon) {
+define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events" ],
+  function (React, $, _, icon, Backbone, events) {
     "use strict";
 
     return _.rf({
       displayName: "Navbar",
 
+      mixins: [ events ],
+
       propTypes: {
-        brand: React.PropTypes.node.isRequired
+        brand: React.PropTypes.node.isRequired,
+        collapseOnNavigate: React.PropTypes.bool
       },
 
       getDefaultProps: function () {
         return {
           fullWidth: true,
           inverse: false,
-          static: true
+          static: true,
+          collapseOnNavigate: true
         };
       },
 
@@ -26,16 +30,26 @@ define([ "react", "underscore", "./Icon" ],
         };
       },
 
+      componentDidMount: function () {
+        if (this.props.collapseOnNavigate) {
+          this.listenTo(Backbone.history, "route", this.collapse);
+        }
+      },
+
       collapse: function () {
-        this.setState({
-          collapsed: false
-        });
+        if (this.isMounted()) {
+          this.setState({
+            collapsed: true
+          });
+        }
       },
 
       open: function () {
-        this.setState({
-          collapsed: true
-        });
+        if (this.isMounted()) {
+          this.setState({
+            collapsed: false
+          });
+        }
       },
 
       toggleCollapsed: function () {

@@ -1,19 +1,32 @@
 /**
  * React Component
  */
-define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
-  function (React, _, icon, TTG, onClickOutside) {
+define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside",
+    "../mixins/Events", "backbone" ],
+  function (React, $, _, icon, TTG, onClickOutside, events, Backbone) {
     "use strict";
 
     return _.rf({
       displayName: "Navbar Dropdown",
 
-      mixins: [ React.addons.PureRenderMixin, onClickOutside ],
+      mixins: [ React.addons.PureRenderMixin, onClickOutside, events ],
 
       propTypes: {
         text: React.PropTypes.node.isRequired,
         icon: React.PropTypes.string.isRequired,
-        open: React.PropTypes.bool
+        closeOnNavigate: React.PropTypes.bool
+      },
+
+      getDefaultProps: function () {
+        return {
+          closeOnNavigate: true
+        };
+      },
+
+      componentDidMount: function () {
+        if (this.props.closeOnNavigate) {
+          this.listenTo(Backbone.history, "route", this.close);
+        }
       },
 
       getInitialState: function () {
@@ -38,6 +51,22 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", 
         }
       },
 
+      close: function () {
+        if (this.isMounted()) {
+          this.setState({
+            open: false
+          });
+        }
+      },
+
+      open: function () {
+        if (this.isMounted()) {
+          this.setState({
+            open: true
+          });
+        }
+      },
+
       render: function () {
         // the first child is the actual toggle button
         var toggle = React.DOM.a({
@@ -52,10 +81,9 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", 
         ]);
 
         // if open is specified as a property, then use it to determine whether to show a menu
-        var open = (typeof this.props.open !== "undefined") ? (this.props.open === true) : (this.state.open === true);
         var menu = null;
         // if it's open, append the dropdown menu
-        if (open) {
+        if (this.state.open) {
           menu = React.DOM.ul({
             key: "dropdown-menu",
             className: "dropdown-menu"
