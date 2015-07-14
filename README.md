@@ -1,9 +1,9 @@
 # react-backstrap
 ![Travis Build Status](https://travis-ci.org/moodysalem/react-backstrap.svg?branch=master)
 
-This repository is a group of React components and other libraries that I found useful and packaged into a JAR that could be used in the same fashion as a [webjar](webjars.org).
+This repository is a group of React components and libraries useful for building single page applications. It builds to a webjar deployed to the central repository as com.leaguekit.react-backstrap, and is meant to be included as a POM dependency of a WAR. See [webjars.org](webjars.org) documentation for information about why this works.
 
-This repo is deployed to maven central repo as com.leaguekit.react-backstrap. Once you've included it, you can bootstrap your application by [requiring](requirejs.com) the RequireConfig provided by this module, and then configuring your require with it. Then, you can use any of the components included in the rbs/components directory to build your React application.
+Once you've included the dependency in your POM, you can bootstrap your application by [requiring](requirejs.com) the RequireConfig provided by this module, and then configuring your require with it. Note require is not included in this package, although all the included components depend on require.
 
 #Demo
 
@@ -21,16 +21,19 @@ It uses React for the view layer. Views are broken into several different types:
 * Controls - These views are meant to contain behavioral type code. For example, a loading wrapper can disable or hide children whenever the passed in collections or models are loading.
 
 
-#rbs/json/RequireConfig 
-This is the file that provides the require configuration that points to all the dependencies this project has and gives you easy access to those libraries. These are the libraries contained in RequireConfig (check the repo for the most up to date version)
-* "backbone" - A modified version of Backbone that does not contain the View layer and has some special logic for setting and getting nested attributes (use periods to indicate nesting levels, e.g. my.fake.attribute)
-* "original-backbone" - if for some reason you want to use the original version of Backbone with this library. Highly recommend against doing so, since the "backbone" dependency modifies the Backbone object in place rather than making a shallow copy.
-* "jquery" - $
-* "jquery-cookie" - a plugin for managing cookies
+#rbs/RequireConfig 
+This is the file that provides the require configuration that points to all the dependencies for this project and gives you easy access to those libraries. These are the libraries contained in RequireConfig (check the repo for the most up to date version)
+
+**Vendor libraries will always be lowercase and shortcuts to code in the JAR will always be title case to help separate vendor code from rbs code.**
+
+* "backbone" - A modified version of Backbone that does not contain the View object and has logic for setting and getting nested attributes (use periods to indicate nesting levels, e.g. my.fake.attribute) as well as logic for server side pagination of collections
+* "original-backbone" - Reference to the original backbone package. Do not use this.
+* "jquery" - [jQuery](https://jquery.com/)
+* "jquery-cookie" - [jQuery-cookie](https://github.com/carhartl/jquery-cookie) for managing cookie data
 * "underscore" - [Underscore](underscorejs.org)
-* "fb" - Facebook JavaScript SDK
-* "jsog" - A library for parsing jsog, modified from [here](https://github.com/jsog/jsog)
+* "fb" - [Facebook JavaScript SDK](https://developers.facebook.com/docs/javascript) Note this can be blocked and may not include all the functions when required (Facebook Login is blocked by ghostery for example)
+* "jsog" - [JSOG](https://github.com/jsog/jsog)
 * "react" - [React](https://facebook.github.io/react/)
-* "raf" - Request Animation Frame polyfill (result is set to window.requestAnimationFrame)
+* "raf" - Request Animation Frame polyfill (result is set to window.requestAnimationFrame). Modified from [here](https://gist.github.com/paulirish/1579671)
 * "moment" - [Momentjs](momentjs.com)
-* "ga" - google analytics
+* "ga" - [Google Analytics](https://developers.google.com/analytics/) Note this can be blocked and may be null when required.
