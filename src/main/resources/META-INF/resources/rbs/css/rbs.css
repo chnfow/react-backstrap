@@ -53,7 +53,7 @@ form-group checkboxes
 }
 
 /*
- Anything that comes after a glyphicon should have some space
+ Anything that comes before a glyphicon should have some space to the right of it
 */
 .fa + * {
     margin-left: 0.4em;
@@ -90,19 +90,16 @@ so they're removed from the DOM when they're not
 }
 
 /* Tooltips */
+
 .tip-container {
+    margin-left: 0.3em;
     display: inline-block;
     position: relative;
 }
 
-/* the icon for the tooltip */
-.tip-container > i {
-    margin-left: 0.3em;
-}
-
 /* the actual tip */
 .tip-container .tip {
-    min-width: 11em;
+    width: 11em;
     position: absolute;
     padding: 0.3em;
     box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, .2);
@@ -110,8 +107,18 @@ so they're removed from the DOM when they're not
     z-index: 1060;
     border-radius: 0.2em;
     background-color: white;
-    left: 100%;
-    margin-left: 0.45em;
+}
+
+.tip-container .arrow {
+    position: absolute;
+    z-index: 1060;
+    top: 50%;
+    width: 0;
+    height: 0;
+}
+
+/* this is true for left and right tips */
+.tip-container .tip-right .tip, .tip-container .tip-left .tip {
     top: 50%;
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
@@ -120,20 +127,85 @@ so they're removed from the DOM when they're not
     transform: translateY(-50%);
 }
 
-.arrow {
-    position: absolute;
-    top: 50%;
+.tip-container .tip-right .arrow, .tip-container .tip-left .arrow {
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+
+/* tip is off to the right */
+.tip-container .tip-right .tip {
     left: 100%;
-    width: 0;
-    height: 0;
+    margin-left: 0.45em;
+}
+
+.tip-container .tip-right .arrow {
+    left: 100%;
     border-top: 0.5em solid transparent;
     border-bottom: 0.5em solid transparent;
     border-right: 0.5em solid rgba(0, 0, 0, 0.2);
+}
+
+/* tip is off to the left */
+.tip-container .tip-left .tip {
+    right: 100%;
+    margin-right: 0.45em;
+}
+
+.tip-container .tip-left .arrow {
+    right: 100%;
+    border-top: 0.5em solid transparent;
+    border-bottom: 0.5em solid transparent;
+    border-left: 0.5em solid rgba(0, 0, 0, 0.2);
+}
+
+/* this is true for top and bottom tips */
+.tip-container .tip-top .tip, .tip-container .tip-bottom .tip {
+    margin-left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.tip-container .tip-top .arrow, .tip-container .tip-bottom .arrow {
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+/* for top tips */
+.tip-container .tip-top .tip {
+    bottom: 100%;
+    margin-bottom: 0.45em;
+}
+
+.tip-container .tip-top .arrow {
+    /*these don't work for some reason*/
+    display: none;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-top: 0.5em solid rgba(0, 0, 0, 0.2);
+    bottom: 100%;
+}
+
+/* for bottom tips */
+.tip-container .tip-bottom .tip {
+    top: 100%;
+    margin-top: 0.45em;
+}
+
+.tip-container .tip-bottom .arrow {
+    /*these don't work for some reason*/
+    display: none;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-bottom: 0.5em solid rgba(0, 0, 0, 0.2);
+    top: 100%;
 }
 
 /* Since these can be clicked, they should have a pointer */

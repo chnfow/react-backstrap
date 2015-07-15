@@ -9,12 +9,14 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,
+      placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ]),
       icon: React.PropTypes.string
     },
 
     getDefaultProps: function () {
       return {
-        icon: "question-circle"
+        icon: "question-circle",
+        placement: "top"
       };
     },
 
@@ -47,6 +49,7 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
       var info = null;
       if (this.state.open || this.state.toggled) {
         info = React.DOM.span({
+          className: "tip-" + this.props.placement,
           key: "tip"
         }, [
           React.DOM.div({ className: "tip", key: "t" }, this.props.tip),
