@@ -111,7 +111,7 @@ so they're removed from the DOM when they're not
     border-radius: 0.2em;
     background-color: white;
     left: 100%;
-    margin-left: 0.5em;
+    margin-left: 0.45em;
     top: 50%;
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
