@@ -16,7 +16,7 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
     getDefaultProps: function () {
       return {
         icon: "question-circle",
-        placement: "top"
+        placement: "right"
       };
     },
 

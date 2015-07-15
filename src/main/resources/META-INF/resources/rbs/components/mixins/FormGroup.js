@@ -49,7 +49,8 @@ define([ "react", "underscore", "../layout/Tip" ], function (React, _, tip) {
         if (newComponent.props.tip) {
           formGroupChildren.unshift(tip({
             key: "tip",
-            tip: newComponent.props.tip
+            tip: newComponent.props.tip,
+            placement: newComponent.props.placement
           }));
         }
         formGroupChildren.unshift(React.DOM.label({
