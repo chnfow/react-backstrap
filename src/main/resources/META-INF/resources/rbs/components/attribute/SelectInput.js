@@ -171,6 +171,7 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
 
       render: function () {
         var currentValue = this.getValue();
+
         // get all the views for the selected items
         var selectedItems = [];
         if (!this.props.multiple) {
@@ -195,6 +196,18 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
           placeholder = this.props.placeholder;
         }
 
+        var required = this.props.required;
+        if (required && currentValue !== null && typeof currentValue !== "undefined") {
+          if (this.props.multiple) {
+            // if it's multiple, one must be selected
+            if (_.isArray(currentValue) && currentValue.length > 0) {
+              required = false;
+            }
+          } else {
+            // otherwise it has a value so it's not required any longer
+            required = false;
+          }
+        }
         // create the typing area
         var typingArea = dynamicInput(_.extend({}, this.props, {
           // don't take the styling for the input since this is just where the cursor goes
@@ -205,7 +218,8 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
           onFocus: this.handleFocus,
           onBlur: this.handleBlur,
           onChange: this.handleChange,
-          placeholder: placeholder
+          placeholder: placeholder,
+          required: required
         }));
 
         // determine what will go into the final div that will look like the input

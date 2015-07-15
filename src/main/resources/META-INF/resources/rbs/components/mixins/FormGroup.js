@@ -1,7 +1,7 @@
 /**
  * A mixin that provides a function for creating a form group to wrap an input
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "underscore", "../layout/Tip" ], function (React, _, tip) {
   "use strict";
   return React.createMixin({
 
@@ -46,6 +46,12 @@ define([ "react", "underscore" ], function (React, _) {
       formGroupChildren.push(newComponent);
       // if the component has a label, point it at the new component
       if (newComponent.props.label) {
+        if (newComponent.props.tip) {
+          formGroupChildren.unshift(tip({
+            key: "tip",
+            tip: newComponent.props.tip
+          }));
+        }
         formGroupChildren.unshift(React.DOM.label({
           key: "attribute-label",
           htmlFor: newComponent.props.id

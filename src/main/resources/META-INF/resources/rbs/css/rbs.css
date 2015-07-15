@@ -89,6 +89,37 @@ so they're removed from the DOM when they're not
     display: block;
 }
 
+/* Tooltips */
+.tip-container {
+    display: inline-block;
+    position: relative;
+}
+
+/* the icon for the tooltip */
+.tip-container > i {
+    margin-left: 0.3em;
+}
+
+/* the actual tip */
+.tip-container .tip {
+    min-width: 11em;
+    position: absolute;
+    padding: 0.3em;
+    box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, .2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    z-index: 1060;
+    border-radius: 0.2em;
+    background-color: white;
+    left: 100%;
+    margin-left: 0.2em;
+    top: 0;
+}
+
+/* Since these can be clicked, they should have a pointer */
+.form-group > label[for] {
+    cursor: pointer;
+}
+
 /*
  select control styling
 */
@@ -253,10 +284,7 @@ so they're removed from the DOM when they're not
     cursor: pointer;
 }
 
-/* GENERAL CSS TRANSITIONS FOR USE ANYWHERE */
-/* largely taken from Daniel Eden's animate.css */
-/* https://daneden.github.io/animate.css */
-/* general fade in and fade out, lasts 0.5s */
+/* a fade transition for using with the timeout transition group */
 .fade-enter {
     opacity: 0;
 }
@@ -272,6 +300,25 @@ so they're removed from the DOM when they're not
 
 .fade-leave-active {
     transition: opacity 0.5s ease-out;
+    opacity: 0;
+}
+
+/* faster version of the classic fade */
+.fade-fast-enter {
+    opacity: 0;
+}
+
+.fade-fast-enter-active {
+    transition: opacity 0.25s ease-out;
+    opacity: 1;
+}
+
+.fade-fast-leave {
+    opacity: 1;
+}
+
+.fade-fast-leave-active {
+    transition: opacity 0.25s ease-out;
     opacity: 0;
 }
 

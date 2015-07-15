@@ -232,6 +232,11 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
         });
       },
 
+      hasValue: function () {
+        return (this.props.model.has(this.props.attribute) &&
+          (!this.props.multiple || this.props.model.get(this.props.attribute).length > 0));
+      },
+
       render: function () {
         var children = [];
 
