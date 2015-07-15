@@ -46,10 +46,12 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
     render: function () {
       var info = null;
       if (this.state.open || this.state.toggled) {
-        info = React.DOM.div({
-          key: "tip",
-          className: "tip"
-        }, this.props.tip);
+        info = React.DOM.span({
+          key: "tip"
+        }, [
+          React.DOM.div({ className: "tip", key: "t" }, this.props.tip),
+          React.DOM.span({ className: "arrow", key: "a" })
+        ]);
       }
 
       return React.DOM.span({
