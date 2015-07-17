@@ -1,6 +1,8 @@
+/**
+ * A searchable dropdown
+ */
 define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./SelectInput", "../collection/SelectResults" ],
   function (React, _, $, Backbone, events, selectInput, selectResults) {
-
     "use strict";
 
     var KEY_DOWN = 40;
@@ -19,10 +21,11 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
       mixins: [ events ],
 
       propTypes: {
+        // the currently selected value
+        value: React.PropTypes.any.isRequired,
+        // how to handle a change of the value
+        onChange: React.PropTypes.func.isRequired,
         valueAttribute: React.PropTypes.string,
-        // whether when dealing with a multi-select field, should an array of values be set e.g. [value, value]
-        // or an array of objects [{valueAttribute: value}, {valueAttribute:value}]
-        valueObjects: React.PropTypes.bool,
         searchOn: React.PropTypes.oneOfType([
           React.PropTypes.string,
           React.PropTypes.arrayOf(React.PropTypes.string),
@@ -33,14 +36,12 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
       },
 
       componentDidMount: function () {
-        this.updateFilteredCollection = _.debounce(_.bind(this.updateFilteredCollection, this), 10);
-        this.listenTo(this.props.collection, "add remove reset", this.updateFilteredCollection);
+        this.listenTo(this.props.collection, "update reset", this.updateFilteredCollection);
       },
 
       getDefaultProps: function () {
         return {
           valueAttribute: "id",
-          valueObjects: true,
           searchOn: "name",
           breakOn: " ",
           caseInsensitive: true
@@ -69,7 +70,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
       // update this.state.filteredCollection to contain a filtered result set based on
       // the current model value and the search function
       updateFilteredCollection: function (q) {
-        var selectedVals = this.props.model.get(this.props.attribute);
+        var selectedVals = this.props.value;
         // get an array of current values
         if (typeof selectedVals === "undefined" || selectedVals === null) {
           selectedVals = [];
@@ -198,17 +199,17 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
 
         var modelVal = selectedModel.get(this.props.valueAttribute);
         if (!this.props.multiple) {
-          this.props.model.set(this.props.attribute, modelVal);
+          this.props.onChange(modelVal);
           React.findDOMNode(this.refs.toFocus).focus();
         } else {
-          var currentValue = this.props.model.get(this.props.attribute);
+          var currentValue = this.props.value;
           var newValue;
           if (_.isArray(currentValue)) {
             newValue = currentValue.concat([ modelVal ]);
           } else {
             newValue = [ modelVal ];
           }
-          this.props.model.set(this.props.attribute, newValue);
+          this.props.onChange(newValue);
           this.doSearch("");
         }
       },
@@ -233,8 +234,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
       },
 
       hasValue: function () {
-        return (this.props.model.has(this.props.attribute) &&
-          (!this.props.multiple || this.props.model.get(this.props.attribute).length > 0));
+        return (typeof this.props.value !== "undefined" && this.props.value !== null && (!this.props.multiple || this.props.value.length > 0));
       },
 
       render: function () {

@@ -1,5 +1,8 @@
-define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput" ],
-  function (React, _, attribute, dynamicInput) {
+/**
+ * Renders the input piece of the select dropdown
+ */
+define([ "react", "underscore", "./DynamicInput" ],
+  function (React, _, dynamicInput) {
     "use strict";
 
     var KEY_BACKSPACE = 8;
@@ -7,13 +10,12 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
     var KEY_RIGHT = 39;
     var KEY_DELETE = 46;
 
-
     // this input just displays all the current model attribute values
     // (or just the one if it's a single value attribute)
     // and allows the user to move the cursor and delete values from the model
     return _.rf({
       displayName: "Fake Select Input",
-      mixins: [ attribute, React.addons.PureRenderMixin ],
+      mixins: [ React.addons.PureRenderMixin ],
 
       propTypes: {
         modelComponent: React.PropTypes.func.isRequired,
@@ -25,7 +27,8 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
         onKeyDown: React.PropTypes.func,
         onFocus: React.PropTypes.func,
         onBlur: React.PropTypes.func,
-        onRemove: React.PropTypes.func
+        onRemove: React.PropTypes.func,
+        onChange: React.PropTypes.func.isRequired
       },
 
       getDefaultProps: function () {
@@ -110,7 +113,7 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
 
       removeSelectedItemAt: function (countFromLast) {
         if (typeof countFromLast !== "number" || !this.props.multiple) {
-          this.props.model.unset(this.props.attribute);
+          this.props.onChange(null);
           return;
         }
         var currentValue = this.getValue();
@@ -123,7 +126,7 @@ define([ "react", "underscore", "../mixins/Attribute", "../controls/DynamicInput
         }
         var newValue = _.clone(currentValue);
         var removing = newValue.splice(realIndex, 1);
-        this.props.model.set(this.props.attribute, newValue);
+        this.props.onChange(newValue);
         this.setState({
           cursorPosition: countFromLast - 1
         }, function () {

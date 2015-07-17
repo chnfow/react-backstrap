@@ -1,4 +1,4 @@
-define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../attribute/Select", "../attribute/Date" ],
+define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../controls/Select", "../controls/DatePicker" ],
   function (React, _, events, $, attributes, select, date) {
     "use strict";
 
@@ -16,7 +16,14 @@ define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes",
         attributes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
       },
 
-      // this function takes an array of model attributes and returns the resulting children from the description
+      getInitialState: function () {
+        return {
+          model: null
+        };
+      },
+
+      // this helper function takes an array of model attributes and returns the resulting children from the description
+      // of each attribute
       getAttributes: function () {
         return _.map(this.props.attributes, function (oneAttribute) {
           var comp = oneAttribute.component;
@@ -36,6 +43,20 @@ define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes",
             model: this.props.model
           }));
         }, this);
+      },
+
+      // This function keeps the model JSON in sync with this.state.model
+      copyModelToState: function () {
+        if (this.isMounted()) {
+          var model = this.props.model.toJSON();
+          if (!_.isEqual(this.state.model, model)) {
+            this.setState({ model: model });
+          }
+        }
+      },
+
+      componentDidMount: function () {
+        this.listenTo(this.props.model, "change", this.copyModelToState);
       }
 
     });

@@ -1,3 +1,8 @@
+/**
+ * Returns a bootstrap button that prevents double clicks (with a clickDelay attribute that indicates the minimum amount
+ * of time that should pass before another onClick call.)
+ * Also can be disabled automatically when jquery $.ajax is used
+ */
 define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _, icon, $) {
   "use strict";
 
@@ -41,7 +46,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
     },
 
     componentWillUnmount: function () {
-      if (this.props.ajaxButton) {
+      if (this.props.ajax) {
         $(document).off("ajaxStart", this._toLoading);
         $(document).off("ajaxStop", this._fromLoading);
       }

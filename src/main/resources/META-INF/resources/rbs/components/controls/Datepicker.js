@@ -1,9 +1,9 @@
 /**
- * A highly controlled input that prevents the user from entering invalid dates and forces formatting of YYYY-MM-DD
- * on the attribute value.
+ * A controlled input that calls onChange(saveFormat formatted date) when a user selects a date, and takes
+ * value: saveFormat for the currently selected value
  */
-define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon" ],
-  function (React, _, attribute, moment, icon) {
+define([ "react", "underscore", "moment", "../layout/Icon" ],
+  function (React, _, moment, icon) {
     "use strict";
 
     var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
@@ -12,11 +12,13 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
     var KEY_ENTER = 13;
 
     return _.rf({
-      displayName: "Attribute DatePicker",
+      displayName: "Datepicker Input",
 
-      mixins: [ attribute, React.addons.PureRenderMixin ],
+      mixins: [ React.addons.PureRenderMixin ],
 
       propTypes: {
+        onChange: React.PropTypes.func.isRequired,
+        value: React.PropTypes.string,
         min: React.PropTypes.instanceOf(Date),
         max: React.PropTypes.instanceOf(Date),
         allowedFormats: React.PropTypes.arrayOf(React.PropTypes.string),
@@ -99,9 +101,9 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
       saveTransientValue: function () {
         var val = this.parseTransientValueToMoment();
         if (val !== null) {
-          this.saveData(val.format(this.props.saveFormat));
+          this.props.onChange(val.format(this.props.saveFormat));
         } else {
-          this.clearData();
+          this.props.onChange(null);
         }
       },
 
@@ -267,7 +269,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           year = m.year();
           month = m.month();
         }
-        this.saveData(m.format(this.props.saveFormat));
+        this.props.onChange(m.format(this.props.saveFormat));
         if (this.isMounted()) {
           this.setState({
             currentYear: year,
@@ -295,7 +297,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
           this.doNothing(e);
           var val = this.parseTransientValueToMoment();
           if (val !== null && this.isMounted()) {
-            this.saveData(val.format(this.props.saveFormat));
+            this.onChange(val.format(this.props.saveFormat));
             this.setState({
               transientValue: val.format(this.props.displayFormat),
               currentMonth: val.month(),
@@ -307,7 +309,7 @@ define([ "react", "underscore", "../mixins/Attribute", "moment", "../layout/Icon
 
       getCurrentValueAsMoment: function () {
         // get the current value as a moment
-        var currentValue = this.getValue();
+        var currentValue = this.props.value;
         if (typeof currentValue === "string" && currentValue.length > 0) {
           currentValue = moment.utc(currentValue, this.props.saveFormat, true);
           if (!currentValue.isValid()) {
