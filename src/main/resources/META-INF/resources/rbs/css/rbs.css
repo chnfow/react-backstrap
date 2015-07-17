@@ -92,6 +92,7 @@ so they're removed from the DOM when they're not
 /* Tooltips */
 
 .tip-container {
+    z-index: 1;
     margin-left: 0.3em;
     display: inline-block;
     position: relative;
@@ -178,6 +179,7 @@ so they're removed from the DOM when they're not
     -o-transform: translateX(-50%);
     transform: translateX(-50%);
 }
+
 /* for top tips */
 .tip-container .tip-top .tip {
     bottom: 100%;
