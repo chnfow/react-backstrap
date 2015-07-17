@@ -34,7 +34,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
           allowedFormats: [ "YYYY/MM/DD", "YYYY-MM-DD", "MM/DD/YYYY", "MM-DD-YYYY", "M/D/YY", "M-D-YY", "M/D/YYYY", "M-D-YYYY" ],
           saveFormat: "YYYY-MM-DD",
           displayFormat: "MM/DD/YYYY",
-          polyfillOnly: true
+          polyfillOnly: false
         };
       },
 
