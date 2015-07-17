@@ -2,9 +2,77 @@
  * Binds the model's JSON to this.state.model
  * Also provides a method for converting an array of attribute descriptions to an array of components
  */
-define([ "react", "underscore", "./Events" ],
-  function (React, _, events) {
+define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Select" ],
+  function (React, _, events, binder, datepicker, select) {
     "use strict";
+    var text = _.rf({
+      render: function () {
+        return React.DOM.input(_.extend({}, this.props, { type: "text" }));
+      }
+    });
+
+    var number = _.rf({
+      render: function () {
+        return React.DOM.input(_.extend({}, this.props, { type: "number" }));
+      }
+    });
+
+    var email = _.rf({
+      render: function () {
+        return React.DOM.input(_.extend({}, this.props, { type: "email" }));
+      }
+    });
+
+    var password = _.rf({
+      render: function () {
+        return React.DOM.input(_.extend({}, this.props, { type: "password" }));
+      }
+    });
+
+    var checkbox = _.rf({
+      transformChangeEvent: function (e) {
+        if (typeof this.props.onChange === "function") {
+          var checked = Boolean(e.target.checked);
+          this.props.onChange(checked);
+        }
+      },
+
+      render: function () {
+        return React.DOM.input(_.extend({}, this.props, { type: "password", onChange: this.transformChangeEvent }));
+      }
+    });
+
+    //var anchor = _.rf({
+    //  propTypes: {
+    //    href: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.func ])
+    //  },
+    //  getLink: function () {
+    //    if (typeof this.props.href === "string") {
+    //      return this.props.href;
+    //    }
+    //    if (typeof this.props.href === "function") {
+    //      return this.props.href();
+    //    }
+    //    return null;
+    //  },
+    //  render: function () {
+    //    return React.DOM.a(_.extend({}, this.props, {
+    //      href: this.getLink()
+    //    }), this.props.value);
+    //  }
+    //});
+
+
+    var attributeComponentMap = {
+      input: React.DOM.input,
+      textarea: React.DOM.textarea,
+      text: text,
+      number: number,
+      email: email,
+      password: password,
+      checkbox: checkbox,
+      date: datepicker
+    };
 
     return React.createMixin({
 
@@ -27,9 +95,6 @@ define([ "react", "underscore", "./Events" ],
 
       // this helper function takes an array of attribute descriptions and returns components for those children
       getAttributes: function (attributes) {
-        if (!_.isArray(attributes)) {
-          return [];
-        }
         return _.map(attributes, function (oneAttribute) {
           var comp = oneAttribute.component;
           var viewType;
@@ -39,12 +104,13 @@ define([ "react", "underscore", "./Events" ],
           if (typeof comp === "function") {
             viewType = comp;
           }
-          if (!viewType) {
+          if (typeof viewType !== "function") {
             _.debug("Valid component factory not passed for model attribute", oneAttribute);
             return null;
           }
-          return viewType(_.extend({}, oneAttribute, {
+          return binder(_.extend({}, oneAttribute, {
             key: oneAttribute.key || ("attribute-" + oneAttribute.attribute),
+            component: viewType,
             model: this.props.model
           }));
         }, this);

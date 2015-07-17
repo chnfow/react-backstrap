@@ -10,7 +10,7 @@ define([ "react", "underscore" ], function (React, _) {
     propTypes: {
       model: React.PropTypes.object.isRequired,
       component: React.PropTypes.func.isRequired,
-      attribute: React.PropTypes.string.isRequired
+      attribute: React.PropTypes.string
     },
 
     getValue: function () {
