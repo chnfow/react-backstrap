@@ -302,7 +302,6 @@ so they're removed from the DOM when they're not
 
 /** datepicker stuff */
 .datepicker-container {
-    display: inline-block;
     position: relative;
 }
 

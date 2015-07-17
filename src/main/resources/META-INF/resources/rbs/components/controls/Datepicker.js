@@ -362,9 +362,6 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
         }
 
         var className = "datepicker-container";
-        if (this.props.className) {
-          className += " " + this.props.className;
-        }
         return React.DOM.div({
           className: className
         }, [
