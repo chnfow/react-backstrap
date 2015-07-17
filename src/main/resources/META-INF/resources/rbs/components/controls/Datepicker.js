@@ -2,8 +2,8 @@
  * A controlled input that calls onChange(saveFormat formatted date) when a user selects a date, and takes
  * value: saveFormat for the currently selected value
  */
-define([ "react", "underscore", "moment", "../layout/Icon" ],
-  function (React, _, moment, icon) {
+define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
+  function (React, _, moment, icon, Modernizr) {
     "use strict";
 
     var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
@@ -23,7 +23,8 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
         max: React.PropTypes.instanceOf(Date),
         allowedFormats: React.PropTypes.arrayOf(React.PropTypes.string),
         saveFormat: React.PropTypes.string,
-        displayFormat: React.PropTypes.string
+        displayFormat: React.PropTypes.string,
+        polyfillOnly: React.PropTypes.bool
       },
 
       getDefaultProps: function () {
@@ -32,7 +33,8 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
           max: new Date(2200, 0, 1),
           allowedFormats: [ "YYYY/MM/DD", "YYYY-MM-DD", "MM/DD/YYYY", "MM-DD-YYYY", "M/D/YY", "M-D-YY", "M/D/YYYY", "M-D-YYYY" ],
           saveFormat: "YYYY-MM-DD",
-          displayFormat: "MM/DD/YYYY"
+          displayFormat: "MM/DD/YYYY",
+          polyfillOnly: true
         };
       },
 
@@ -330,6 +332,10 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
       },
 
       render: function () {
+        if (this.props.polyfillOnly && Modernizr.inputtypes.date) {
+          return React.DOM.input(_.extend({}, this.props, { type: "date" }));
+        }
+
         var datepicker = null;
         if (this.state.open) {
           datepicker = React.DOM.div({

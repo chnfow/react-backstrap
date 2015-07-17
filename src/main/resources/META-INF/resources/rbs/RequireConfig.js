@@ -22,6 +22,7 @@ define([], function () {
       "ga": "//www.google-analytics.com/analytics",
       "jquery-cookie": "//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie" + dotMin,
       "original-underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore" + dashMin,
+      "modernizr": "//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr" + dotMin,
       "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons" + dotMin,
       "original-backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone" + dashMin,
       "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery" + dotMin,
