@@ -1,5 +1,5 @@
 /**
- * React Component
+ * Calls this.onClickOutside if a click event occurs outside of the react component
  */
 define([ "react", "underscore", "jquery" ], function (React, _, $) {
   "use strict";

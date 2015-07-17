@@ -1,13 +1,11 @@
 /**
- * React Component
+ * Provides methods for converting an array of objects and produces the appropriate component structure for a navbar
+ * () indicates optional, object structure is {text, (icon), (href), (menu: [{text, (icon), (href)}, ...])}
  */
 define([ "react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon" ],
   function (React, _, link, dropdown, icon) {
     "use strict";
 
-    // provides a function that takes an object or array, and then produces the appropriate navbar dropdown
-    // and links;
-    // () is optional, object structure is {text, (icon), (href), (menu: [{text, (icon), (href)}, ...])}
     return React.createMixin({
 
       buildLinks: function (linkObjectOrArray) {

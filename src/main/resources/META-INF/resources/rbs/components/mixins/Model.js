@@ -1,11 +1,10 @@
-define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes", "../controls/Select", "../controls/DatePicker" ],
-  function (React, _, events, $, attributes, select, date) {
+/**
+ * Binds the model's JSON to this.state.model
+ * Also provides a method for converting an array of attribute descriptions to an array of components
+ */
+define([ "react", "underscore", "./Events" ],
+  function (React, _, events) {
     "use strict";
-
-    var attributeComponentMap = _.extend(_.clone(attributes), {
-      select: select,
-      date: date
-    });
 
     return React.createMixin({
 
@@ -13,19 +12,25 @@ define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes",
 
       propTypes: {
         model: React.PropTypes.object.isRequired,
-        attributes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+        attributes: React.PropTypes.arrayOf(React.PropTypes.object)
+      },
+
+      componentDidMount: function () {
+        this.listenTo(this.props.model, "sync change", this.copyModelToState);
       },
 
       getInitialState: function () {
         return {
-          model: null
+          model: this.props.model.toJSON()
         };
       },
 
-      // this helper function takes an array of model attributes and returns the resulting children from the description
-      // of each attribute
-      getAttributes: function () {
-        return _.map(this.props.attributes, function (oneAttribute) {
+      // this helper function takes an array of attribute descriptions and returns components for those children
+      getAttributes: function (attributes) {
+        if (!_.isArray(attributes)) {
+          return [];
+        }
+        return _.map(attributes, function (oneAttribute) {
           var comp = oneAttribute.component;
           var viewType;
           if (typeof comp === "string") {
@@ -35,7 +40,7 @@ define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes",
             viewType = comp;
           }
           if (!viewType) {
-            console.error("Valid component factory not passed for model attribute", oneAttribute);
+            _.debug("Valid component factory not passed for model attribute", oneAttribute);
             return null;
           }
           return viewType(_.extend({}, oneAttribute, {
@@ -53,10 +58,6 @@ define([ "react", "underscore", "./Events", "jquery", "../attribute/Attributes",
             this.setState({ model: model });
           }
         }
-      },
-
-      componentDidMount: function () {
-        this.listenTo(this.props.model, "change", this.copyModelToState);
       }
 
     });

@@ -1,3 +1,6 @@
+/**
+ * TODO - this whole component...
+ */
 define([ "react", "underscore" ], function (React, _) {
   "use strict";
 

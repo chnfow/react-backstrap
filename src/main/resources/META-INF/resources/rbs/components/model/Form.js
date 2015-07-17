@@ -10,7 +10,7 @@ define([ "react", "jquery", "../mixins/Model", "../mixins/FormGroup", "underscor
     mixins: [ model, formGroup ],
 
     render: function () {
-      var children = _.map(this.getAttributes(), this.makeFormGroup);
+      var children = _.map(this.getAttributes(this.props.attributes), this.makeFormGroup);
 
       return React.DOM.form(_.extend({}, this.props, {
         onSubmit: this.beforeSubmit

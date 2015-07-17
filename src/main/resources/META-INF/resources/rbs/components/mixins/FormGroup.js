@@ -1,32 +1,10 @@
 /**
- * A mixin that provides a function for creating a form group to wrap an input
+ * A mixin that provides a function for wrapping a component in a form group, including help text in a tip component
+ * if specified in that component's attributes
  */
 define([ "react", "underscore", "../layout/Tip" ], function (React, _, tip) {
   "use strict";
   return React.createMixin({
-
-    //propTypes: {
-    //  disableWhenLoading: React.PropTypes.bool
-    //},
-    //
-    //getDefaultProps: function () {
-    //
-    //},
-    //
-    //componentDidMount: function () {
-    //
-    //},
-    //
-    //componentWillUnmount: function () {
-    //
-    //},
-    //
-    //getInitialState: function () {
-    //  return {
-    //    _formLoading: false
-    //  };
-    //},
-
     makeFormGroup: function (component) {
       var formGroupChildren = [];
       // add the form-control class

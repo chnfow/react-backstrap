@@ -40,11 +40,11 @@ define([ "react", "underscore", "../mixins/Collection" ],
         this.setHilite(0);
       },
       end: function () {
-        this.setHilite(this.props.collection.size() - 1);
+        this.setHilite(this.state.collection.length - 1);
       },
 
       setHilite: function (newHilite) {
-        var max = this.props.collection.size() - 1;
+        var max = this.state.collection.length - 1;
         var min = 0;
         newHilite = Math.max(min, Math.min(max, newHilite));
         this.setState({
