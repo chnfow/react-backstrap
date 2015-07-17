@@ -302,6 +302,7 @@ so they're removed from the DOM when they're not
 
 /** datepicker stuff */
 .datepicker-container {
+    display: inline-block;
     position: relative;
 }
 
@@ -321,9 +322,10 @@ so they're removed from the DOM when they're not
 .datepicker-clear-button {
     position: absolute;
     cursor: pointer;
-    top: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
     right: 0.5em;
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 .datepicker-header {
