@@ -297,7 +297,7 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
           this.doNothing(e);
           var val = this.parseTransientValueToMoment();
           if (val !== null && this.isMounted()) {
-            this.onChange(val.format(this.props.saveFormat));
+            this.props.onChange(val.format(this.props.saveFormat));
             this.setState({
               transientValue: val.format(this.props.displayFormat),
               currentMonth: val.month(),
