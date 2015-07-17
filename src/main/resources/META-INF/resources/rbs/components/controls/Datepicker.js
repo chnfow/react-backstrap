@@ -323,7 +323,7 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
 
       clearValue: function (e) {
         this.doNothing(e);
-        this.clearData();
+        this.props.onChange(null);
         this.setState({
           transientValue: null
         });
