@@ -41,9 +41,16 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
 
         // if we do get a hash of attributes to set, just call the key, val version for each key to simplify the remaining code
         if (typeof key === "object") {
+          var triggerChange = false;
           _.each(key, function (value, attribute) {
+            if (!triggerChange && this.get(attribute) !== value) {
+              triggerChange = true;
+            }
             this.set(attribute, value, options);
           }, this);
+          if (triggerChange) {
+            this.trigger("change", this, options);
+          }
           return this;
         }
 
@@ -79,8 +86,6 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
 
         // set toSet back into the parent using oldSet, silently
         oldSet.call(this, firstPc, toSet, _.extend({}, options, { silent: true }));
-        // then trigger the change to the attribute and the model
-        this.trigger("change", this, options);
         this.trigger("change:" + key, this, val, options);
         return this;
       },

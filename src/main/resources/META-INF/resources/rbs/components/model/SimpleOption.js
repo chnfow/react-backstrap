@@ -1,7 +1,7 @@
 /**
  * React Component
  */
-define([ "react", "underscore", "./Model" ], function (React, _, model) {
+define([ "react", "underscore", "./Div" ], function (React, _, model) {
   "use strict";
 
   return _.rf({

@@ -1,36 +1,59 @@
 /**
- * Represent a model in a <form></form>
+ * Renders a model's attributes into a form
  */
-define([ "react", "jquery", "../mixins/Model", "../mixins/FormGroup", "underscore" ], function (React, $, model, formGroup, _) {
-  "use strict";
+define([ "react", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
+    function (React, _, model, formGroup) {
+        "use strict";
 
-  return _.rf({
-    displayName: "Model Form",
+        return _.rf({
+            displayName: "Model Form",
 
-    mixins: [ model, formGroup ],
+            mixins: [ model, formGroup ],
 
-    render: function () {
-      var children = _.map(this.getAttributes(this.props.attributes), this.makeFormGroup);
+            getInitialState: function () {
+                return {
+                    submitting: false
+                };
+            },
 
-      return React.DOM.form(_.extend({}, this.props, {
-        onSubmit: this.beforeSubmit
-      }), children);
-    },
+            render: function () {
+                var children = _.map(this.getAttributes(this.props.attributes), this.makeFormGroup);
 
-    beforeSubmit: function (e) {
-      e.preventDefault();
-      if (typeof this.props.onSubmit === "function") {
-        this.props.onSubmit(e);
-      }
-    },
+                if (this.state.submitting) {
+                    children.push(React.DOM.input({
+                        type: "submit",
+                        ref: "_tempSubmitBtn"
+                    }));
+                }
 
-    submit: function () {
-      if (this.isMounted()) {
-        var submitBtn = $("<input />").attr("type", "submit");
-        $(React.findDOMNode(this)).append(submitBtn);
-        submitBtn.click();
-        submitBtn.remove();
-      }
-    }
-  });
-});
+                return React.DOM.form(_.extend({}, this.props, {
+                    onSubmit: this.beforeSubmit
+                }), children);
+            },
+
+            beforeSubmit: function (e) {
+                e.preventDefault();
+                if (typeof this.props.onSubmit === "function") {
+                    this.props.onSubmit(e);
+                }
+            },
+
+            submit: function () {
+                if (this.isMounted()) {
+                    if (this.state.submitting = false) {
+                        this.setState({
+                            submitting: true
+                        }, function () {
+                            if (this.isMounted()) {
+                                var btn = React.findDOMNode(this.refs._tempSubmitBtn);
+                                btn.click();
+                                this.setState({
+                                    submitting: false
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
