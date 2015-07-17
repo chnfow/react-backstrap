@@ -52,22 +52,21 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
           className: "tip-" + this.props.placement,
           key: "tip"
         }, [
-          React.DOM.div({ className: "tip", key: "t" }, this.props.tip),
-          React.DOM.span({ className: "arrow", key: "a" })
+          React.DOM.span({ className: "arrow", key: "a" }),
+          React.DOM.div({ className: "tip", key: "t" }, this.props.tip)
         ]);
       }
 
       return React.DOM.span({
         className: "tip-container"
       }, [
-        icon(_.extend({
-          key: "icon",
-          name: this.props.icon
+        React.DOM.span(_.extend({
+          key: "content"
         }, this.props, {
           onMouseEnter: _.bind(this.setTipState, this, true),
           onMouseLeave: _.bind(this.setTipState, this, false),
           onMouseDown: _.bind(this.toggleTipState, this)
-        })),
+        }), this.props.children),
         TTG({
           key: "info",
           transitionName: "fade-fast",

@@ -90,9 +90,8 @@ so they're removed from the DOM when they're not
 }
 
 /* Tooltips */
-
 .tip-container {
-    z-index: 1;
+    z-index: 1060;
     margin-left: 0.3em;
     display: inline-block;
     position: relative;
@@ -105,14 +104,12 @@ so they're removed from the DOM when they're not
     padding: 0.3em;
     box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, .2);
     border: 1px solid rgba(0, 0, 0, 0.2);
-    z-index: 1060;
     border-radius: 0.2em;
     background-color: white;
 }
 
 .tip-container .arrow {
     position: absolute;
-    z-index: 1060;
     top: 50%;
     width: 0;
     height: 0;
