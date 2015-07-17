@@ -361,8 +361,12 @@ define([ "react", "underscore", "moment", "../layout/Icon" ],
           }, icon({ name: "remove" }));
         }
 
+        var className = "datepicker-container";
+        if (this.props.className) {
+          className += " " + className;
+        }
         return React.DOM.div({
-          className: "datepicker-container"
+          className: className
         }, [
           React.DOM.input(_.extend({}, this.props, {
             key: "input",
