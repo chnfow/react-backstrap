@@ -52,6 +52,9 @@ define([], function () {
       },
       "moment-tz": {
         deps: [ "moment" ]
+      },
+      "modernizr": {
+        exports: "Modernizr"
       }
     }
   };
