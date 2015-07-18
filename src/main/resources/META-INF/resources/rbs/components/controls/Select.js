@@ -213,8 +213,21 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
           this.doSearch("");
         }
       },
-
+      //called when an option is removed from a multi-select
       handleRemove: function (model, value) {
+        this.updateFilteredCollection(this.state.searchText);
+        if (!_.isArray(value)) {
+          this.props.onChange([]);
+        }
+        this.props.onChange(_.without(this.props.value, value));
+      },
+
+      handleClear: function () {
+        if (this.props.multiple) {
+          this.props.onChange([]);
+        } else {
+          this.props.onChange(null);
+        }
         this.updateFilteredCollection(this.state.searchText);
       },
 
@@ -249,7 +262,8 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
             onFocus: _.bind(this.setOpen, this, true),
             onBlur: _.bind(this.setOpen, this, false),
             onKeyDown: this.handleKeydown,
-            onRemove: this.handleRemove
+            onRemove: this.handleRemove,
+            onClear: this.handleClear
           }))
         );
 
@@ -281,8 +295,5 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
           ref: "container"
         }, children);
       }
-
-    })
-      ;
-  })
-;
+    });
+  });

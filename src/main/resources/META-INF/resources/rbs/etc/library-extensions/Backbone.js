@@ -39,54 +39,70 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
           return oldSet.apply(this, arguments);
         }
 
-        // if we do get a hash of attributes to set, just call the key, val version for each key to simplify the remaining code
-        if (typeof key === "object") {
-          var triggerChange = false;
-          _.each(key, function (value, attribute) {
-            if (!triggerChange && this.get(attribute) !== value) {
-              triggerChange = true;
+        // if key is the name of the attribute, convert to the object version of this call
+        var attrHash;
+        // name of attribute passed as first argument
+        if (typeof key === "string") {
+          attrHash = {};
+          attrHash[ key ] = val;
+        } else {
+          // set(hash, options) called
+          attrHash = key;
+          options = val || {};
+        }
+
+        var silentOptions = _.extend({}, options, { silent: true });
+        var triggerChange = false;
+
+        // for each attribute we're setting
+        _.each(attrHash, function (value, attribute) {
+          if (typeof attribute !== "string") {
+            if (typeof attribute.toString === "function") {
+              attribute = attribute.toString();
+            } else {
+              return;
             }
-            this.set(attribute, value, options);
-          }, this);
-          if (triggerChange) {
-            this.trigger("change", this, options);
           }
-          return this;
-        }
+          var pcs = attribute.split(".");
+          var firstPc = pcs.shift();
+          var topLevelValue = this.get(firstPc);
 
-        // at this point we know key is a string
-        var pcs = key.split(".");
-        // if we're not setting a nested attribute, defer to the old version
-        if (pcs.length === 1) {
-          return oldSet.apply(this, arguments);
-        }
-
-        // this is where the special logic starts - if we are setting a nested attribute, we will just use the old set
-        // on the first piece of the attribute, but modify the object that we are setting and trigger a change event on
-        // the nested attribute
-        var firstPc = pcs.shift();
-        var toSet = this.get(firstPc);
-        if (toSet === null || typeof toSet !== "object") {
-          toSet = {};
-        }
-        var ptr = toSet;
-
-        // modify toSet with the new val
-        while (pcs.length > 1) {
-          var nextPc = pcs.shift();
-          // if it's not set, just put an empty object there
-          if (ptr[ nextPc ] === null || typeof ptr[ nextPc ] === "undefined") {
-            ptr[ nextPc ] = {};
+          if (pcs.length > 0) {
+            var toSet = topLevelValue;
+            if (typeof toSet !== "object") {
+              toSet = {};
+            }
+            var ptr = toSet;
+            while (pcs.length > 1) {
+              var nextPc = pcs.shift();
+              if (typeof toSet[ nextPc ] !== "object") {
+                toSet[ nextPc ] = {};
+              }
+              ptr = toSet[ nextPc ];
+            }
+            var lastPc = pcs.shift();
+            var oldVal = ptr[ lastPc ];
+            if (_.isEqual(oldVal, value)) {
+              return;
+            }
+            triggerChange = true;
+            ptr[ lastPc ] = value;
+            oldSet.call(this, firstPc, toSet, silentOptions);
+            this.trigger("change:" + attribute, this, value, options);
+          } else {
+            // setting a top level attribute
+            if (_.isEqual(value, topLevelValue)) {
+              return;
+            }
+            triggerChange = true;
+            oldSet.call(this, firstPc, value, silentOptions);
+            this.trigger("change:" + firstPc, this, value, options);
           }
-          // move the ptr down a level
-          ptr = ptr[ nextPc ];
+        }, this);
+
+        if (triggerChange) {
+          this.trigger("change", this, options);
         }
-
-        ptr[ pcs.shift() ] = val;
-
-        // set toSet back into the parent using oldSet, silently
-        oldSet.call(this, firstPc, toSet, _.extend({}, options, { silent: true }));
-        this.trigger("change:" + key, this, val, options);
         return this;
       },
 

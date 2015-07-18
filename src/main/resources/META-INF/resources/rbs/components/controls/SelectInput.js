@@ -32,7 +32,8 @@ define([ "react", "underscore", "./DynamicInput" ],
         onKeyDown: React.PropTypes.func,
         onFocus: React.PropTypes.func,
         onBlur: React.PropTypes.func,
-        onRemove: React.PropTypes.func,
+        onRemove: React.PropTypes.func.isRequired,
+        onClear: React.PropTypes.func.isRequired,
         onChange: React.PropTypes.func.isRequired
       },
 
@@ -118,7 +119,8 @@ define([ "react", "underscore", "./DynamicInput" ],
 
       removeSelectedItemAt: function (countFromLast) {
         if (typeof countFromLast !== "number" || !this.props.multiple) {
-          this.props.onChange(null);
+          // clear
+          this.props.onClear();
           return;
         }
         var currentValue = this.props.selectedValue;
@@ -131,13 +133,10 @@ define([ "react", "underscore", "./DynamicInput" ],
         }
         var newValue = _.clone(currentValue);
         var removing = newValue.splice(realIndex, 1);
-        this.props.onChange(newValue);
         this.setState({
           cursorPosition: countFromLast - 1
         }, function () {
-          if (this.props.onRemove) {
-            this.props.onRemove(this.findModelByValue(removing), removing);
-          }
+          this.props.onRemove(this.findModelByValue(removing), removing);
         });
       },
 

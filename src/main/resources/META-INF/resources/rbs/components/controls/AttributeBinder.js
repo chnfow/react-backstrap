@@ -3,7 +3,7 @@
  * and sets the value of that attribute on change event of the component
  * i.e. 2-way binds the value and children to the model attribute
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "underscore", "../mixins/Events" ], function (React, _, events) {
   "use strict";
 
   return _.rf({
@@ -13,6 +13,7 @@ define([ "react", "underscore" ], function (React, _) {
       formatFunction: React.PropTypes.func,
       attribute: React.PropTypes.string
     },
+    mixins: [ events ],
 
     getDefaultProps: function () {
       return {
@@ -55,10 +56,6 @@ define([ "react", "underscore" ], function (React, _) {
     handleChange: function (e_or_value) {
       if (typeof e_or_value === "undefined") {
         this.clearValue();
-        return;
-      }
-      if (e_or_value === null) {
-        this.setValue(null);
         return;
       }
       var value = e_or_value;
