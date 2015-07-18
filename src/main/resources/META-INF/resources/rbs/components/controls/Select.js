@@ -22,7 +22,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
 
       propTypes: {
         // the currently selected value
-        value: React.PropTypes.any.isRequired,
+        value: React.PropTypes.any,
         // how to handle a change of the value
         onChange: React.PropTypes.func.isRequired,
         valueAttribute: React.PropTypes.string,
@@ -244,6 +244,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "./Sel
           selectInput(_.extend({}, this.props, {
             key: "input",
             value: this.state.searchText,
+            selectedValue: this.props.value,
             onChange: this.handleChange,
             onFocus: _.bind(this.setOpen, this, true),
             onBlur: _.bind(this.setOpen, this, false),

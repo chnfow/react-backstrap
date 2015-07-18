@@ -18,12 +18,12 @@ define([ "react", "underscore", "../mixins/Model" ], function (React, _, model) 
                     {
                         key: "strong",
                         attribute: "strong",
-                        component: "strong"
+                        component: React.DOM.strong
                     },
                     {
                         key: "message",
                         attribute: "message",
-                        component: "span"
+                        component: React.DOM.span
                     }
                 ]
             }

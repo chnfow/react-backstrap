@@ -20,6 +20,11 @@ define([ "react", "underscore", "./DynamicInput" ],
       propTypes: {
         modelComponent: React.PropTypes.func.isRequired,
         value: React.PropTypes.string.isRequired,
+        selectedValue: React.PropTypes.oneOfType([
+          React.PropTypes.string,
+          React.PropTypes.number,
+          React.PropTypes.array
+        ]),
         collection: React.PropTypes.object.isRequired,
         valueAttribute: React.PropTypes.string,
         placeholder: React.PropTypes.string,
@@ -100,7 +105,7 @@ define([ "react", "underscore", "./DynamicInput" ],
       },
 
       setCursorPosition: function (cp) {
-        var val = this.getValue();
+        var val = this.props.selectedValue;
         if (!_.isArray(val)) {
           cp = 0;
         } else {
@@ -116,7 +121,7 @@ define([ "react", "underscore", "./DynamicInput" ],
           this.props.onChange(null);
           return;
         }
-        var currentValue = this.getValue();
+        var currentValue = this.props.selectedValue;
         if (this.props.multiple && !_.isArray(currentValue)) {
           return;
         }
@@ -173,7 +178,7 @@ define([ "react", "underscore", "./DynamicInput" ],
       },
 
       render: function () {
-        var currentValue = this.getValue();
+        var currentValue = this.props.selectedValue;
 
         // get all the views for the selected items
         var selectedItems = [];

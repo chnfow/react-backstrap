@@ -9,7 +9,7 @@ define([ "react", "underscore", "./Div" ], function (React, _, model) {
       return model(_.extend({}, this.props, {
         attributes: [
           {
-            component: "span",
+            component: React.DOM.span,
             attribute: "name"
           }
         ]
