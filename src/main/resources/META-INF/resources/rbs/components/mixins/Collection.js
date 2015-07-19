@@ -12,7 +12,7 @@ define([ "react", "./Events", "underscore" ],
       propTypes: {
         collection: React.PropTypes.object.isRequired,
         // a factory function must be passed to component to create a component for each model in the collection
-        modelComponent: React.PropTypes.func.isRequired
+        modelComponent: React.PropTypes.func
       },
 
       getInitialState: function () {
@@ -37,6 +37,10 @@ define([ "react", "./Events", "underscore" ],
 
       // returns an instance of the modelComponent for the model
       getSingleComponentView: function (oneModel) {
+        if (typeof this.props.modelComponent !== "function") {
+          _.debug("Model component not passed to collection component");
+          return null;
+        }
         return this.props.modelComponent({
           key: oneModel.cid,
           model: oneModel
