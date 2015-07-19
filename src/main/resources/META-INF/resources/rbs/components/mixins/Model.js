@@ -12,25 +12,31 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
     attributeComponentMap.select = select;
     attributeComponentMap.text = _.rf({
       render: function () {
-        return React.DOM.input(_.extend({}, this.props, { type: "text" }));
+        return React.DOM.input(_.extend({}, this.props, { type: "text" }), null);
+      }
+    });
+
+    attributeComponentMap.textarea = _.rf({
+      render: function () {
+        return React.DOM.textarea(_.omit(this.props, "children"));
       }
     });
 
     attributeComponentMap.number = _.rf({
       render: function () {
-        return React.DOM.input(_.extend({}, this.props, { type: "number" }));
+        return React.DOM.input(_.extend({}, this.props, { type: "number" }), null);
       }
     });
 
     attributeComponentMap.email = _.rf({
       render: function () {
-        return React.DOM.input(_.extend({}, this.props, { type: "email" }));
+        return React.DOM.input(_.extend({}, this.props, { type: "email" }), null);
       }
     });
 
     attributeComponentMap.password = _.rf({
       render: function () {
-        return React.DOM.input(_.extend({}, this.props, { type: "password" }));
+        return React.DOM.input(_.extend({}, this.props, { type: "password" }), null);
       }
     });
 
@@ -43,7 +49,7 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
       },
 
       render: function () {
-        return React.DOM.input(_.extend({}, this.props, { type: "checkbox", onChange: this.transformChangeEvent }));
+        return React.DOM.input(_.extend({}, this.props, { type: "checkbox", onChange: this.transformChangeEvent }), null);
       }
     });
 

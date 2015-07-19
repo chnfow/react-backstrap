@@ -380,7 +380,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
             onKeyDown: this.handleKeyDown,
             onFocus: this.openDatePicker,
             placeholder: this.props.placeholder || this.props.displayFormat
-          })),
+          }), null),
           datepicker,
           clearButton
         ]);

@@ -55,6 +55,9 @@ define([ "react", "underscore", "../mixins/Collection" ],
       scrollHiliteIntoView: function () {
         var resultsNode = React.findDOMNode(this.refs.results);
         var hilitedNode = React.findDOMNode(this.refs[ "result-" + this.state.hilite ]);
+        if (hilitedNode === null) {
+          return;
+        }
         var resultsTop = resultsNode.scrollTop;
         var hiliteTop = hilitedNode.offsetTop;
         if (resultsTop > hiliteTop) {
