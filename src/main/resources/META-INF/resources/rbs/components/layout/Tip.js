@@ -52,8 +52,8 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
           className: "tip-" + this.props.placement,
           key: "tip"
         }, [
-          React.DOM.span({ className: "arrow", key: "a" }),
-          React.DOM.div({ className: "tip", key: "t" }, this.props.tip)
+          React.DOM.div({ className: "tip", key: "t" }, this.props.tip),
+          React.DOM.span({ className: "arrow", key: "a" })
         ]);
       }
 

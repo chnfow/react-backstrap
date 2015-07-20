@@ -91,7 +91,7 @@ so they're removed from the DOM when they're not
 
 /* Tooltips */
 .tip-container {
-    z-index: 1060;
+    z-index: 1;
     margin-left: 0.3em;
     display: inline-block;
     position: relative;
@@ -143,7 +143,7 @@ so they're removed from the DOM when they're not
     left: 100%;
     border-top: 0.5em solid transparent;
     border-bottom: 0.5em solid transparent;
-    border-right: 0.5em solid rgba(0, 0, 0, 0.2);
+    border-right: 0.5em solid white;
 }
 
 /* tip is off to the left */
@@ -156,7 +156,7 @@ so they're removed from the DOM when they're not
     right: 100%;
     border-top: 0.5em solid transparent;
     border-bottom: 0.5em solid transparent;
-    border-left: 0.5em solid rgba(0, 0, 0, 0.2);
+    border-left: 0.5em solid white;
 }
 
 /* this is true for top and bottom tips */
@@ -188,7 +188,7 @@ so they're removed from the DOM when they're not
     display: none;
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
-    border-top: 0.5em solid rgba(0, 0, 0, 0.2);
+    border-top: 0.5em solid white;
     bottom: 100%;
 }
 
@@ -203,7 +203,7 @@ so they're removed from the DOM when they're not
     display: none;
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
-    border-bottom: 0.5em solid rgba(0, 0, 0, 0.2);
+    border-bottom: 0.5em solid white;
     top: 100%;
 }
 
