@@ -12,9 +12,9 @@ This repository is a group of React components and libraries useful for building
         <version>***PROJECT VERSION***</version>
     </dependency>
 
-####[Require](requirejs.com) the require configuration
+####Add [Require](requirejs.com) to your page
 `<script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.19/require.min.js" data-main="app.js"></script>`
-####Configure require in app.js
+####Configure require in app.js using the provided require configuration
     define([ "rbs/RequireConfig" ], function (config) {
         "use strict";
         require.config(config);
