@@ -290,8 +290,12 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           } else {
             newValue = [ modelVal ];
           }
-          this.props.onChange(newValue);
-          this.doSearch("");
+          this.setState({
+            searchText: ""
+          }, function () {
+            this.doSearch(this.state.searchText);
+            this.props.onChange(newValue);
+          });
         }
       },
 
@@ -369,7 +373,8 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           onChange: this.handleChange,
           placeholder: placeholder,
           required: required,
-          value: this.state.searchText
+          value: this.state.searchText,
+          id: this.props.id
         });
 
         // determine what will go into the final div that will look like the input
@@ -409,13 +414,14 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           className = "fancy-select-search-results-open";
         }
 
-        return selectResults(_.extend({}, this.props, {
+        return selectResults({
           key: "results",
           ref: "results",
           collection: this.state.filteredCollection,
           onSelect: this.handleSelect,
+          modelComponent: this.props.modelComponent,
           className: className
-        }));
+        });
       },
 
       renderTabDiv: function () {
