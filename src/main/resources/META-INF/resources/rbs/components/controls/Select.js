@@ -374,7 +374,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
 
         // determine what will go into the final div that will look like the input
         var insideInput;
-        if (!this.props.multiple || (this.props.value && this.props.value.length > 0)) {
+        if (!this.props.multiple || (!this.props.value) || (this.props.value.length === 0)) {
           insideInput = selectedItems.concat(typingArea);
         } else {
           var position = selectedItems.length - this.state.cursorPosition;
