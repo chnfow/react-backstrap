@@ -40,7 +40,7 @@ define([ "react", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
 
             submit: function () {
                 if (this.isMounted()) {
-                    if (this.state.submitting = false) {
+                    if (this.state.submitting === false) {
                         this.setState({
                             submitting: true
                         }, function () {
