@@ -27,15 +27,18 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
       propTypes: {
         // the currently selected value
         value: React.PropTypes.any,
-        // how to handle a change of the value
+        // handle change of the currently selected value
         onChange: React.PropTypes.func.isRequired,
         valueAttribute: React.PropTypes.string,
+        // either an attribute name, a list of attribute names or a function that produces an array
+        // of values that can be searched
         searchOn: React.PropTypes.oneOfType([
           React.PropTypes.string,
           React.PropTypes.arrayOf(React.PropTypes.string),
           React.PropTypes.func
         ]),
         caseInsensitive: React.PropTypes.bool,
+        // what to break the search string on
         breakOn: React.PropTypes.string
       },
 
@@ -73,6 +76,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
       },
 
       doSearch: function (q) {
+        _.debug("updating filtered collection for a new search value", q);
         this.updateFilteredCollection(q, this.props.value);
         this.setState({
           searchText: q,
@@ -98,8 +102,9 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
             selectedVals = [ selectedVals ];
           }
         }
-
+        // the function that extracts searchable values out of a model
         var svf = this.getSearchValueFunction();
+        // the function that determines whether a value matches the search string
         var matcher = this.getMatcherFunction(q);
 
         this.state.filteredCollection.set(this.props.collection.filter(function (oneModel) {
@@ -121,7 +126,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         }, this));
       },
 
-      // get the function (model) that will be used to extract values to check against the query string
+      // get the function that will be used to extract values to check against the query string
       getSearchValueFunction: function () {
         var toReturn;
         var caseInsensitive = this.props.caseInsensitive;
@@ -300,13 +305,15 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
       setOpen: function (open) {
         this.setState({ open: open, searchText: "" }, function () {
           if (this.state.open) {
+            _.debug("updating filtered collection on open");
             this.updateFilteredCollection(this.state.searchText, this.props.value);
           }
         });
       },
 
       componentWillReceiveProps: function (nextProps) {
-        if (this.state.open && !_.isEqual(nextProps.value, this.props.value)) {
+        if (this.state.open && nextProps.value !== this.props.value) {
+          _.debug("updating filtered collection on receiving a new value");
           this.updateFilteredCollection(this.state.searchText, nextProps.value);
         }
       },
@@ -391,7 +398,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           key: "fake-input",
           onMouseDown: this.handleSelectClick,
           className: "fancy-select-fake-input " + openClassName + " " + (this.props.className || "")
-        }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children");
+        }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");
 
         return React.DOM.div(fakeInputProps, insideInput);
       },

@@ -126,6 +126,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
   Backbone.Collection = (function (oldCollection) {
     return oldCollection.extend({
       model: Backbone.Model,
+      serverSort: true,
       pageNo: 0,
       pageParam: "X-First-Result",
       pageSize: 20,
@@ -133,9 +134,9 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
       totalRecords: null,
       totalRecordsParam: "X-Total-Count",
       sorts: [],
-      additionalParams: {},
+      params: {},
 
-      options: [ "pageNo", "pageSize", "additionalParams", "sorts" ],
+      options: [ "pageNo", "pageSize", "params", "sorts" ],
 
       constructor: function (options) {
         if (options) {
@@ -208,7 +209,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
         } else {
           options.headers = this.getFetchHeaders();
         }
-        var paramString = [ $.param(_.result(this, "additionalParams")), this.getSortParams() ].join("&");
+        var paramString = [ $.param(_.result(this, "params")), this.getSortParams() ].join("&");
         if (options.data) {
           options.data = _.removeEmptyValues(options.data + "&" + paramString, "&");
         } else {
@@ -221,13 +222,20 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
       resetSort: function () {
         this.sorts = [];
         this.fetch();
+        return this;
       },
 
       sort: function (attribute, desc) {
-        var order = desc ? "D" : "A";
-        var sort = "sort=" + order + "|" + attribute;
-        this.sorts = [ sort ].concat(this.sorts);
-        this.fetch();
+        if (this.serverSort) {
+          var order = desc ? "D" : "A";
+          var sort = "sort=" + order + "|" + attribute;
+          this.sorts = [ sort ].concat(this.sorts);
+          this.fetch();
+          return this;
+        } else {
+          oldCollection.prototype.sort.apply(this, arguments);
+          return this;
+        }
       },
 
       getSortParams: function () {
