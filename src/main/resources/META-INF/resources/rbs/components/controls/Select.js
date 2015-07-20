@@ -2,8 +2,8 @@
  * A searchable dropdown
  */
 define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../collection/SelectResults",
-    "./DynamicInput", "../mixins/Collection" ],
-  function (React, _, $, Backbone, events, selectResults, dynamicInput, collection) {
+    "./DynamicInput" ],
+  function (React, _, $, Backbone, events, selectResults, dynamicInput) {
     "use strict";
 
     var KEY_DOWN = 40;
@@ -16,16 +16,13 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
     var KEY_HOME = 36;
     var KEY_END = 35;
 
-
     var KEY_BACKSPACE = 8;
     var KEY_LEFT = 37;
     var KEY_RIGHT = 39;
     var KEY_DELETE = 46;
 
-
     return _.rf({
       displayName: "Select",
-      mixins: [ collection ],
 
       propTypes: {
         // the currently selected value
@@ -309,7 +306,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
       },
 
       componentWillReceiveProps: function (nextProps) {
-        if (this.state.open) {
+        if (this.state.open && !_.isEqual(nextProps.value, this.props.value)) {
           this.updateFilteredCollection(this.state.searchText, nextProps.value);
         }
       },

@@ -7,14 +7,17 @@ define([ "react", "underscore", "../mixins/Collection" ],
     return _.rf({
       displayName: "Select Results",
 
-      mixins: [ collection, React.addons.PureRenderMixin ],
+      mixins: [ collection ],
 
       propTypes: {
-        onSelect: React.PropTypes.func.isRequired
+        onSelect: React.PropTypes.func.isRequired,
+        emptyMessage: React.PropTypes.node
       },
 
       getDefaultProps: function () {
-        return {};
+        return {
+          emptyMessage: "No options found."
+        };
       },
 
       getInitialState: function () {
@@ -47,9 +50,11 @@ define([ "react", "underscore", "../mixins/Collection" ],
         var max = this.state.collection.length - 1;
         var min = 0;
         newHilite = Math.max(min, Math.min(max, newHilite));
-        this.setState({
-          hilite: newHilite
-        }, this.scrollHiliteIntoView);
+        if (newHilite !== this.state.hilite) {
+          this.setState({
+            hilite: newHilite
+          }, this.scrollHiliteIntoView);
+        }
       },
 
       scrollHiliteIntoView: function () {
@@ -86,6 +91,10 @@ define([ "react", "underscore", "../mixins/Collection" ],
         return null;
       },
 
+      componentDidUpdate: function () {
+        this.setHilite(this.state.hilite);
+      },
+
       render: function () {
         var i = 0;
         // take the models and turn them into model components, then wrap each one in a search result div
@@ -104,6 +113,13 @@ define([ "react", "underscore", "../mixins/Collection" ],
             onMouseDown: _.bind(this.handleSelect, this, oneResultComponent.props.model)
           }, oneResultComponent);
         }, this);
+
+        if (results.length === 0) {
+          results.push(React.DOM.div({
+            className: "fancy-select-search-result",
+            key: "no-results"
+          }, this.props.emptyMessage));
+        }
 
         // put all the results in an absolutely positioned div under the search box
         return React.DOM.div(_.extend({}, this.props, {
