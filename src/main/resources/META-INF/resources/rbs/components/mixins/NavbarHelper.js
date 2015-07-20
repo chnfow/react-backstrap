@@ -32,10 +32,13 @@ define([ "react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdow
           return React.DOM.p({
             key: linkObject.text,
             className: "navbar-text"
-          }, [ icon({
-            key: "nav-icon",
-            name: linkObject.icon
-          }), React.DOM.span({ key: "nav-text" }, linkObject.text) ]);
+          }, [
+            icon({
+              key: "nav-icon",
+              name: linkObject.icon
+            }),
+            React.DOM.span({ key: "nav-text" }, linkObject.text)
+          ]);
         }
         if (isDropdown) {
           return dropdown({
