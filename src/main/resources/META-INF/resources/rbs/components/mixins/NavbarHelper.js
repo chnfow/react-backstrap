@@ -2,11 +2,16 @@
  * Provides methods for converting an array of objects and produces the appropriate component structure for a navbar
  * () indicates optional, object structure is {text, (icon), (href), (menu: [{text, (icon), (href)}, ...])}
  */
-define([ "react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon" ],
-  function (React, _, link, dropdown, icon) {
+define([ "react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon", "../mixins/Events" ],
+  function (React, _, link, dropdown, icon, events) {
     "use strict";
 
     return React.createMixin({
+      mixins: [ events ],
+
+      componentDidMount: function () {
+        this.listenTo(Backbone.history, "route", this.update);
+      },
 
       buildLinks: function (linkObjectOrArray) {
         if (!_.isArray(linkObjectOrArray)) {
