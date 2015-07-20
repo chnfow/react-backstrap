@@ -3,7 +3,7 @@
  * Also provides a method for converting an array of attribute descriptions to an array of components
  */
 define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Select",
-  "../layout/Icon"],
+    "../layout/Icon" ],
   function (React, _, events, binder, datepicker, select, icon) {
     "use strict";
 
@@ -49,7 +49,11 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
       },
 
       render: function () {
-        return React.DOM.input(_.extend({}, this.props, { type: "checkbox", onChange: this.transformChangeEvent }), null);
+        return React.DOM.input(_.omit(_.extend({}, this.props, {
+          checked: Boolean(this.props.value),
+          type: "checkbox",
+          onChange: this.transformChangeEvent
+        }), "children", "value"));
       }
     });
 
