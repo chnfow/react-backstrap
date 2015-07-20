@@ -1,8 +1,8 @@
 /**
  * Watches a model or collection for errors or success, and presents the appropriate Alerts for the errors
  */
-define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Collection" ],
-  function (React, _, Backbone, events, alert, collection) {
+define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Div" ],
+  function (React, _, Backbone, events, alert, dCol) {
     "use strict";
 
     return _.rf({
@@ -107,7 +107,7 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
       },
 
       render: function () {
-        return collection(_.extend({}, this.props, {
+        return dCol(_.extend({}, this.props, {
           modelComponent: alert,
           collection: this.state.errors
         }));

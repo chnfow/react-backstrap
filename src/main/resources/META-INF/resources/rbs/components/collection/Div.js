@@ -1,0 +1,23 @@
+/**
+ * Renders a collection as the children of a div
+ */
+define([ "react", "underscore", "../mixins/Collection" ], function (React, _, collection) {
+  "use strict";
+
+  return _.rf({
+    displayName: "Generic Collection View",
+
+    mixins: [ collection ],
+
+    propTypes: {},
+
+    getDefaultProps: function () {
+      return {};
+    },
+
+    render: function () {
+      return React.DOM.div(_.omit(_.extend({}, this.props), "modelComponent", "collection"), this.getModels());
+    }
+  });
+
+});
