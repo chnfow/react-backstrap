@@ -13,6 +13,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
       icon: React.PropTypes.string,
       caption: React.PropTypes.string,
       size: React.PropTypes.oneOf([ "xs", "sm", "lg" ]),
+      block: React.PropTypes.bool,
       type: React.PropTypes.string,
       ajax: React.PropTypes.bool,
       submit: React.PropTypes.bool,
@@ -23,6 +24,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
     getDefaultProps: function () {
       return {
         ajax: false,
+        block: false,
         type: "default",
         submit: false,
         clickDelay: 200
@@ -104,13 +106,15 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
     },
 
     getClassNames: function () {
-      var classNames = [];
+      var classNames = [ "btn" ];
       if (this.props.className) {
         classNames.push(this.props.className);
       }
-      classNames.push("btn");
       if (this.props.size) {
         classNames.push("btn-" + this.props.size);
+      }
+      if (this.props.block) {
+        classNames.push("btn-block");
       }
       classNames.push("btn-" + this.props.type);
       return classNames.join(" ");
