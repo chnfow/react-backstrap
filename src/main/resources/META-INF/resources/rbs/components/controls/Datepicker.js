@@ -239,7 +239,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
           classes.push("concurrent-month-days");
         }
         if (active) {
-          classes.push("bg-info");
+          classes.push("bg-primary");
         }
         if (!valid) {
           classes.push("invalid-day-option");
