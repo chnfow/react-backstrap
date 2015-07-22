@@ -2,14 +2,15 @@
  * Binds the model's JSON to this.state.model
  * Also provides a method for converting an array of attribute descriptions to an array of components
  */
-define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Select",
-    "../layout/Icon" ],
-  function (React, _, events, binder, datepicker, select, icon) {
+define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Timepicker",
+    "../controls/Select","../layout/Icon" ],
+  function (React, _, events, binder, datepicker, timepicker, select, icon) {
     "use strict";
 
     var attributeComponentMap = {};
     attributeComponentMap.date = datepicker;
     attributeComponentMap.select = select;
+    attributeComponentMap.time = timepicker;
     attributeComponentMap.text = _.rf({
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "text" }), null);
