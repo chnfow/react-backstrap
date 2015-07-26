@@ -64,6 +64,10 @@ form-group checkboxes
     color: white;
 }
 
+.navbar-text {
+    padding-left: 1em;
+}
+
 /**
 Modals display always. We use transition groups to manage whether they're visible,
 so they're removed from the DOM when they're not
