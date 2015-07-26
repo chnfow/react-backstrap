@@ -32,11 +32,11 @@ define([ "react", "./Events", "underscore" ],
       },
 
       getModels: function () {
-        return _.map(this.state.collection, this.getSingleComponentView, this);
+        return _.map(this.state.collection, this.getSingleModelView, this);
       },
 
       // returns an instance of the modelComponent for the model
-      getSingleComponentView: function (oneModel) {
+      getSingleModelView: function (oneModel) {
         if (typeof this.props.modelComponent !== "function") {
           _.debug("Model component not passed to collection component");
           return null;
