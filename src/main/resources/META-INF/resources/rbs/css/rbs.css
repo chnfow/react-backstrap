@@ -69,7 +69,7 @@ Modals display always. We use transition groups to manage whether they're visibl
 so they're removed from the DOM when they're not
 */
 .modal {
-    display: block;
+    display: block !important;
     overflow-y: auto;
     opacity: 1;
 }
