@@ -12,7 +12,8 @@ define([ "react", "./Events", "underscore" ],
       propTypes: {
         collection: React.PropTypes.object.isRequired,
         // a factory function must be passed to component to create a component for each model in the collection
-        modelComponent: React.PropTypes.func
+        modelComponent: React.PropTypes.func,
+        emptyNode: React.PropTypes.node
       },
 
       getInitialState: function () {
@@ -32,7 +33,13 @@ define([ "react", "./Events", "underscore" ],
       },
 
       getModels: function () {
-        return _.map(this.state.collection, this.getSingleModelView, this);
+        if (this.state.collection.length > 0) {
+          return _.map(this.state.collection, this.getSingleModelView, this);
+        } else {
+          if (this.props.emptyNode) {
+            return [ this.props.emptyNode ];
+          }
+        }
       },
 
       // returns an instance of the modelComponent for the model
