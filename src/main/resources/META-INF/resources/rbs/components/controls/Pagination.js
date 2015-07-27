@@ -1,5 +1,5 @@
-define([ "react", "underscore", "../mixins/Events" ],
-  function (React, _, events) {
+define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
+  function (React, _, events, icon) {
     "use strict";
 
     return _.rf({
@@ -9,8 +9,8 @@ define([ "react", "underscore", "../mixins/Events" ],
 
       propTypes: {
         collection: React.PropTypes.object.isRequired,
-        nextPage: React.PropTypes.string,
-        previousPage: React.PropTypes.string,
+        nextPage: React.PropTypes.node,
+        previousPage: React.PropTypes.node,
         size: React.PropTypes.oneOf([ "sm", "lg" ])
       },
 
@@ -20,8 +20,8 @@ define([ "react", "underscore", "../mixins/Events" ],
 
       getDefaultProps: function () {
         return {
-          previousPage: "&laquo;",
-          nextPage: "&raquo;",
+          previousPage: icon({ name: "chevron-left" }),
+          nextPage: icon({ name: "chevron-right" }),
           size: "sm",
           className: ""
         };
@@ -52,8 +52,8 @@ define([ "react", "underscore", "../mixins/Events" ],
           className: classes.join(" "),
           onClick: _.bind(this.handlePageClick, this, pageObject.page)
         }, React.DOM.a({
-          dangerouslySetInnerHTML: { __html: pageObject.text }
-        }));
+          href: "#"
+        }, pageObject.text));
       },
 
       getNumPages: function () {
