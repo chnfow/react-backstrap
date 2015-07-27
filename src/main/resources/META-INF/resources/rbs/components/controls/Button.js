@@ -10,7 +10,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
     displayName: "Fancy Button",
 
     propTypes: {
-      icon: React.PropTypes.string,
+      icon: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.node ]),
       caption: React.PropTypes.string,
       size: React.PropTypes.oneOf([ "xs", "sm", "lg" ]),
       block: React.PropTypes.bool,
@@ -63,8 +63,11 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
     },
 
     getIcon: function () {
-      if (this.props.icon) {
+      if (typeof this.props.icon === "string") {
         return icon({ key: "icon", name: this.props.icon });
+      }
+      if (typeof this.props.icon !== "undefined") {
+        return this.props.icon;
       }
       return null;
     },
@@ -90,7 +93,8 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
     },
 
     beforeOnClick: function (e) {
-      if (this.props.submit === false) {
+      // don't submit a form by default when the button is part of a form and is clicked
+      if (this.props.submit === false && typeof this.props.href !== "string") {
         e.preventDefault();
       }
       var now = this.getNow();
@@ -132,12 +136,19 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
         }
       }
 
-      return React.DOM.button(_.extend({}, this.props, {
+      var factory = React.DOM.button;
+      if (this.props.submit === false && typeof this.props.href === "string") {
+        factory = React.DOM.a;
+      }
+      var properties = _.extend({}, this.props, {
         onClick: this.beforeOnClick,
         className: this.getClassNames(),
         disabled: this.props.disabled || this.state.loading,
         type: (this.props.submit) ? "submit" : "button"
-      }), children);
+      });
+      properties = _.omit(properties, ["icon", "caption", "block", "size", "type", "ajax", "submit", "clickDelay"]);
+
+      return factory(properties, children);
     }
   });
 
