@@ -79,15 +79,8 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
         children = this.getModels();
       }
 
-      var className = "container-fluid";
-      if (this.props.className) {
-        className += " " + this.props.className;
-      }
-      return React.DOM.div({
-        className: className
-      }, React.DOM.div({
-        className: "row"
-      }, children));
+      var props = _.omit(this.props, "collection", "modelComponent", "emptyNode", "xs", "sm", "md", "lg");
+      return React.DOM.div(props, children);
     }
   });
 });
