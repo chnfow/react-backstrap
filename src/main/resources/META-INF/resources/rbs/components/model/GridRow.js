@@ -23,7 +23,7 @@ define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore" ],
         var children = _.map(origChildren, function (oneChildComponent) {
           var columns = oneChildComponent.props.columns || Math.floor((12 / (origChildren.length)));
           var colClass = [ "col", this.props.size, columns ].join("-");
-          return React.DOM.div({ className: colClass }, oneChildComponent);
+          return React.DOM.div({ className: colClass }, this.makeFormGroup(oneChildComponent));
         }, this);
 
         return React.DOM.div(_.extend({}, this.props, { className: "row" }), children);
