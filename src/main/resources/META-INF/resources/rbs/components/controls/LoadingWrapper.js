@@ -6,6 +6,8 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
   "use strict";
 
   return _.rf({
+    displayName: "Loading Wrapper",
+
     mixins: [ events ],
 
     propTypes: {

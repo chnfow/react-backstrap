@@ -4,23 +4,22 @@
 define([ "react", "underscore", "../mixins/Collection" ], function (React, _, collection) {
   "use strict";
 
-  var sizes = [ "xs", "sm", "md", "lg" ];
   var sizeUps = {
     xs: [ "sm", "md", "lg" ],
     sm: [ "md", "lg" ],
     md: [ "lg" ],
     lg: []
   };
+  var sizes = _.keys(sizeUps);
   var validSizes = React.PropTypes.oneOf([ 1, 2, 3, 4, 6, 12 ]);
 
   return _.rf({
+    displayName: "Rows Collection",
+
     mixins: [ collection ],
 
     propTypes: {
-      xs: validSizes,
-      sm: validSizes,
-      md: validSizes,
-      lg: validSizes
+      xs: validSizes, sm: validSizes, md: validSizes, lg: validSizes
     },
 
     getDefaultProps: function () {
@@ -32,7 +31,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
     wrapChildren: function (className, oneComponent) {
       return React.DOM.div({
         className: className,
-        key: oneComponent.key
+        key: "col-" + oneComponent.key
       }, oneComponent);
     },
 

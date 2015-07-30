@@ -11,7 +11,6 @@ define([ "react", "underscore", "jquery" ], function (React, _, $) {
   var widthStyles = [ "font", "fontStyle", "fontVariant", "fontWeight", "fontSize", "fontFamily", "boxSizing", "padding", "margin", "border" ];
 
   return _.rf({
-
     displayName: "Dynamic Input",
 
     propTypes: {

@@ -16,6 +16,12 @@ define([ "react", "./Events", "underscore" ],
         emptyNode: React.PropTypes.node
       },
 
+      getDefaultProps: function () {
+        return {
+          emptyNode: null
+        };
+      },
+
       getInitialState: function () {
         return {
           collection: this.props.collection.toArray()

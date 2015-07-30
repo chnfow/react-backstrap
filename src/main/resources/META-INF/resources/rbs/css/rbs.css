@@ -222,18 +222,18 @@ so they're removed from the DOM when they're not
  select control styling
 */
 /* the container returned by the fancy select */
-.fancy-select-container {
+.react-select-container {
     position: relative;
 }
 
 /* where the typing in the select goes */
-.fancy-select-type-area {
+.react-select-type-area {
     outline: 0;
     border: 0;
 }
 
 /* container for the search results */
-.fancy-select-search-results {
+.react-select-search-results {
     width: 100%;
     position: absolute;
     overflow-y: auto;
@@ -246,11 +246,11 @@ so they're removed from the DOM when they're not
     display: none;
 }
 
-.fancy-select-search-results.fancy-select-search-results-open {
+.react-select-search-results.react-select-search-results-open {
     display: block;
 }
 
-.fancy-select-search-focus-on-select {
+.react-select-search-focus-on-select {
     width: 0;
     position: absolute;
     height: 0;
@@ -258,24 +258,24 @@ so they're removed from the DOM when they're not
 }
 
 /* a container for a single result in a select dropdown */
-.fancy-select-search-result {
+.react-select-search-result {
     padding: 0.4em;
     cursor: pointer;
 }
 
 /* a hilited result */
-.fancy-select-search-result.hilited {
+.react-select-search-result.hilited {
     background-color: #5897fb;
     color: white;
 }
 
 /* this class wraps each of the selected options in a single select */
-.fancy-select-single-choice {
+.react-select-single-choice {
     display: inline-block;
 }
 
 /* this class wraps each of the selected options in a multiple select */
-.fancy-select-multiple-choice {
+.react-select-multiple-choice {
     display: inline-block;
     border-radius: 0.2em;
     padding: 0.12em 0.3em;
@@ -284,19 +284,19 @@ so they're removed from the DOM when they're not
 }
 
 /* this is the element that wraps the typing area and the selected options */
-.fancy-select-fake-input {
+.react-select-fake-input {
     height: auto !important;
     cursor: pointer;
     overflow-x: hidden;
 }
 
-.fancy-select-fake-input.dropup {
+.react-select-fake-input.dropup {
     cursor: default;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
 
-.fancy-select-fake-input .caret {
+.react-select-fake-input .caret {
     position: absolute;
     top: 50%;
     margin-top: -2px;

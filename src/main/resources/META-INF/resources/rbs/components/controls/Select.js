@@ -22,7 +22,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
     var KEY_DELETE = 46;
 
     return _.rf({
-      displayName: "Select",
+      displayName: "RBS Select",
 
       propTypes: {
         // the currently selected value
@@ -331,7 +331,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           if (this.state.searchText.length === 0) {
             var model = this.findModelByValue(currentValue);
             if (model) {
-              selectedItems = [ this.getDisplayItem("fancy-select-single-choice", model) ];
+              selectedItems = [ this.getDisplayItem("react-select-single-choice", model) ];
             }
           }
         } else {
@@ -339,7 +339,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
             // items not found in the collection are not displayed
             var selectedModels = _.filter(_.map(currentValue, this.findModelByValue, this), Boolean);
             // map them into views
-            selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "fancy-select-multiple-choice"));
+            selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "react-select-multiple-choice"));
           }
         }
 
@@ -364,7 +364,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         // create the typing area
         var typingArea = dynamicInput({
           // don't take the styling for the input since this is just where the cursor goes
-          className: "fancy-select-type-area",
+          className: "react-select-type-area",
           ref: "search",
           key: "search",
           onKeyDown: this.handleKeyDown,
@@ -402,7 +402,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           ref: "fakeInput",
           key: "fake-input",
           onMouseDown: this.handleSelectClick,
-          className: "fancy-select-fake-input " + openClassName + " " + (this.props.className || "")
+          className: "react-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");
 
         return React.DOM.div(fakeInputProps, insideInput);
@@ -411,7 +411,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
       renderResults: function () {
         var className;
         if (this.state.open) {
-          className = "fancy-select-search-results-open";
+          className = "react-select-search-results-open";
         }
 
         return selectResults({
@@ -428,14 +428,14 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         return React.DOM.div({
           key: "toFocus",
           ref: "toFocus",
-          className: "fancy-select-search-focus-on-select",
+          className: "react-select-search-focus-on-select",
           tabIndex: -1
         });
       },
 
       render: function () {
         return React.DOM.div({
-          className: "fancy-select-container",
+          className: "react-select-container",
           ref: "container"
         }, [ this.renderFakeInput(), this.renderResults(), this.renderTabDiv() ]);
       }

@@ -6,6 +6,8 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
     "use strict";
 
     return _.rf({
+      displayName: "Alerts Collection",
+
       mixins: [ events, React.addons.PureRenderMixin ],
 
       propTypes: {

@@ -7,6 +7,8 @@ define([ "react", "underscore", "../mixins/Events" ], function (React, _, events
   "use strict";
 
   return _.rf({
+    displayName: "Attribute Binder",
+
     propTypes: {
       model: React.PropTypes.object.isRequired,
       component: React.PropTypes.func.isRequired,

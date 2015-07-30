@@ -7,7 +7,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
   "use strict";
 
   return _.rf({
-    displayName: "Fancy Button",
+    displayName: "RBS Button",
 
     propTypes: {
       icon: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.node ]),
