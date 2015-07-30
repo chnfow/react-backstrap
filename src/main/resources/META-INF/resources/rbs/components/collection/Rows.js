@@ -28,7 +28,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
       };
     },
 
-    wrapChildren: function (className, oneComponent) {
+    wrapComponent: function (className, oneComponent) {
       return React.DOM.div({
         className: className,
         key: "col-" + oneComponent.key
@@ -51,7 +51,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
         var clearSizes = _.pluck(clearEvery, "size");
 
         // put clearfixes where appropriate
-        children = _.map(this.getModels(), _.partial(this.wrapChildren, classes.join(" ")));
+        children = _.map(this.getModels(), _.partial(this.wrapComponent, classes.join(" ")));
         if (clearEvery.length > 0) {
           var newChildren = [];
           var ct = 0;
@@ -78,10 +78,18 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
           children = newChildren;
         }
       } else {
-        children = this.getModels();
+        children = _.map(this.getModels(), function (oneC) {
+          return this.wrapComponent("col-xs-12", oneC);
+        }, this);
       }
 
-      var props = _.omit(this.props, "collection", "modelComponent", "emptyNode", "xs", "sm", "md", "lg");
+      var cn = "row";
+      if (typeof this.props.className === "string") {
+        cn += this.props.className;
+      }
+      var props = _.extend(_.omit(this.props, "collection", "modelComponent", "emptyNode", "xs", "sm", "md", "lg"), {
+        className: cn
+      });
       return React.DOM.div(props, children);
     }
   });
