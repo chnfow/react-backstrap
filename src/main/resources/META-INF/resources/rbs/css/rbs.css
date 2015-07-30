@@ -59,11 +59,6 @@ form-group checkboxes
     margin-left: 0.4em;
 }
 
-/* inverse navbars should have white text in the buttons */
-.navbar-inverse button.navbar-toggle {
-    color: white;
-}
-
 .navbar-text {
     padding-left: 1em;
 }
