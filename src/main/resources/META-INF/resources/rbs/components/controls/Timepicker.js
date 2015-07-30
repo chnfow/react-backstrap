@@ -5,6 +5,8 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
   "use strict";
 
   var KEY_ENTER = 13;
+  var KEY_N = 78;
+  var KEY_T = 84;
 
   return _.rf({
     propTypes: {
@@ -18,8 +20,8 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
 
     getDefaultProps: function () {
       return {
-        allowedFormats: [ "HH:MM", "H:MM", "hh:mma", "h:mma", "hh:mmA", "h:mmA", "hh:mm A", "h:mm A" ],
-        saveFormat: [ "HH:MM" ],
+        allowedFormats: [ "HH:mm", "H:mm", "hh:mma", "h:mma", "hh:mmA", "h:mmA", "hh:mm A", "h:mm A" ],
+        saveFormat: "HH:mm",
         displayFormat: "h:mm A",
         polyfillOnly: false
       };
@@ -81,9 +83,21 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
     },
 
     handleKeyDown: function (e) {
-      if (e.keyCode === KEY_ENTER) {
-        e.preventDefault();
-        this.saveTransientValue();
+      switch (e.keyCode) {
+        case KEY_ENTER:
+          e.preventDefault();
+          this.saveTransientValue();
+          break;
+        case KEY_N:
+        case KEY_T:
+          e.preventDefault();
+          if (this.isMounted()) {
+            var d = new Date();
+            this.setState({
+              transientValue: d.getHours() + ":" + d.getMinutes()
+            });
+          }
+          break;
       }
     },
 
@@ -95,12 +109,12 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
         onFocus: _.bind(this.handleFocus, this),
         onBlur: _.bind(this.handleBlur, this),
         onChange: _.bind(this.handleChange, this),
-        keyDown: _.bind(this.handleKeyDown, this)
+        onKeyDown: _.bind(this.handleKeyDown, this)
       }));
     },
 
     componentWillReceiveProps: function (nextProps) {
-      var mt = this.parseStringToMoment(nextProps);
+      var mt = this.parseStringToMoment(nextProps.value);
       if (this.isMounted()) {
         this.setState({
           transientValue: (mt === null) ? "" : mt.format(this.props.displayFormat)
@@ -109,7 +123,8 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
     },
 
     getTimePicker: function () {
-      if (!this.state.open) {
+      // not yet implemented, always return null
+      if (!this.state.open || true) {
         return null;
       }
 
