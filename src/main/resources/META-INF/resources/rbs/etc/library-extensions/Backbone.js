@@ -126,126 +126,141 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
   Backbone.Collection = (function (oldCollection) {
     return oldCollection.extend({
       model: Backbone.Model,
-      serverSort: true,
-      pageNo: 0,
-      pageParam: "X-First-Result",
-      pageSize: 20,
-      pageSizeParam: "X-Per-Page",
-      totalRecords: null,
-      totalRecordsParam: "X-Total-Count",
-      sorts: [],
-      params: {},
 
+      // internal state variables
+      _pageNo: 0,
+      _pageSize: 20,
+      _totalRecords: null,
+
+      // query parameter names
+      startParam: "start",
+      countParam: "count",
+      sortParam: "sort",
+
+      // header expected in the response for the total number of records for a server collection
+      totalRecordsHeader: "X-Total-Count",
+
+      // the applied sorts
+      // each sort is represented as { attribute: string, desc: boolean }
+      sorts: [],
+      // the additional query parameters to use for fetching
+      params: {},
+      // whether the server is used for sorting and pagination
+      server: true,
+
+      // options that can be passed to the constructor
       options: [ "pageNo", "pageSize", "params", "sorts" ],
 
       constructor: function (options) {
         if (options) {
           _.extend(this, _.pick(options, this.options));
         }
-        // allow multiple back-to-back configuration calls and only re-fetching once
-        this.fetch = _.debounce(_.bind(this.fetch, this), 25);
+
         oldCollection.apply(this, arguments);
       },
 
-      save: function (options) {
-        return Backbone.sync("update", this, options);
-      },
 
       size: function () {
-        return (!isNaN(parseInt(this.totalRecords))) ?
-          parseInt(this.totalRecords) : oldCollection.prototype.size.apply(this, arguments);
+        if (this.server) {
+          return (this.totalRecords !== null) ? this.totalRecords : this.models.length;
+        }
+
+        return oldCollection.prototype.size.apply(this, arguments);
       },
 
       getPageNo: function () {
-        return this.pageNo;
+        return this._pageNo;
       },
 
       setPageNo: function (pageNo) {
-        var oldPageNo = this.pageNo;
-        this.pageNo = pageNo;
+        this._pageNo = pageNo;
         this.validatePageNo();
-        if (oldPageNo !== this.pageNo) {
-          this.fetch();
-        }
       },
 
       prevPage: function () {
-        var oldPageNo = this.pageNo;
-        this.pageNo--;
-        this.validatePageNo();
-        if (oldPageNo !== this.pageNo) {
-          this.fetch();
-        }
+        this.setPageNo(this._pageNo - 1);
       },
 
       nextPage: function () {
-        var oldPageNo = this.pageNo;
-        this.pageNo++;
-        this.validatePageNo();
-        if (oldPageNo !== this.pageNo) {
-          this.fetch();
-        }
+        this.setPageNo(this._pageNo + 1);
       },
 
       validatePageNo: function () {
-        this.pageNo = Math.round(this.pageNo);
-        if (this.totalRecords !== null) {
-          this.pageNo = Math.min(Math.ceil(this.totalRecords / this.pageSize) - 1, this.pageNo);
+        // must be a number
+        if (!_.isNumber(this._pageNo) || isNaN(this._pageNo)) {
+          this._pageNo = 0;
+          return;
         }
-        this.pageNo = Math.max(0, this.pageNo);
+        // must be an integer
+        this._pageNo = Math.round(this._pageNo);
+        if (this.server) {
+          if (this._totalRecords !== null) {
+            this._pageNo = Math.min(Math.ceil(this._totalRecords / this.pageSize) - 1, this._pageNo);
+          }
+        }
+        this._pageNo = Math.max(0, this._pageNo);
       },
 
       parse: function (response, options) {
-        var responseHeaderCount = options && options.xhr && options.xhr.getResponseHeader ? options.xhr.getResponseHeader(this.totalRecordsParam) : 0;
-        this.totalRecords = Math.max(response.length, parseInt(responseHeaderCount));
+        var responseHeaderCount = (options && options.xhr && options.xhr.getResponseHeader ) ? parseInt(options.xhr.getResponseHeader(this.totalRecordsParam)) : 0;
+        if (!isNaN(responseHeaderCount)) {
+          this._totalRecords = Math.max(response.length, responseHeaderCount);
+        } else {
+          this._totalRecords = response.length;
+        }
+        // use the JSOG library to decode whatever the response is
         return _.isObject(response) ? JSOG.decode(response) : response;
       },
 
       fetch: function (options) {
         options = options || {};
 
-        if (options.headers) {
-          $.extend(options.headers, this.getFetchHeaders());
-        } else {
-          options.headers = this.getFetchHeaders();
-        }
-        var paramString = [ $.param(_.result(this, "params")), this.getSortParams() ].join("&");
+        var dataOptions = {};
         if (options.data) {
-          options.data = _.removeEmptyValues(options.data + "&" + paramString, "&");
-        } else {
-          options.data = _.removeEmptyValues(paramString, "&");
+          dataOptions = _.parseQueryString(options.data);
         }
+        var params = _.extend(this.getPaginationParams(), this.getSortParams(), _.result(this, "params"), dataOptions);
 
+        options.data = $.param(params, true);
         return oldCollection.prototype.fetch.call(this, options);
       },
 
-      resetSort: function () {
+      resetSorts: function () {
         this.sorts = [];
-        this.fetch();
         return this;
       },
 
-      sort: function (attribute, desc) {
-        if (this.serverSort) {
-          var order = desc ? "D" : "A";
-          var sort = "sort=" + order + "|" + attribute;
-          this.sorts = [ sort ].concat(this.sorts);
-          this.fetch();
-          return this;
-        } else {
-          oldCollection.prototype.sort.apply(this, arguments);
+      comparator: function (m1, m2) {
+        if (this.server) {
+          return 0;
+        }
+        // TO-DO implement this method for client sorting
+        return 0;
+      },
+
+      addSort: function (attribute, desc) {
+        if (typeof attribute !== "string") {
           return this;
         }
+        this.sorts.push({
+          attribute: attribute,
+          desc: Boolean(desc)
+        });
+        return this;
       },
 
       getSortParams: function () {
-        return this.sorts.join("&");
+        var toReturn = {};
+        toReturn[ this.sortParam ] = _.map(this.sorts, function (oneSort) {
+          return oneSort.attribute + "|" + (Boolean(oneSort.desc)).toString();
+        });
+        return toReturn;
       },
 
-      getFetchHeaders: function () {
+      getPaginationParams: function () {
         var toReturn = {};
-        toReturn[ this.pageParam ] = this.pageNo * this.pageSize;
-        toReturn[ this.pageSizeParam ] = this.pageSize;
+        toReturn[ this.startParam ] = this._pageNo * this._pageSize;
+        toReturn[ this.countParam ] = this._pageSize;
         return toReturn;
       }
 
@@ -253,7 +268,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
 
   })(Backbone.Collection);
 
-  // don't use Backbone views :)
+  // don't use Backbone views
   delete Backbone.View;
 
   return Backbone;

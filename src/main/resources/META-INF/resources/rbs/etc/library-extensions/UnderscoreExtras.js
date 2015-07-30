@@ -148,6 +148,51 @@ define([ "original-underscore", "react" ], function (_, React) {
     return Math.round((monthEnd - monthStart) / (1000 * 60 * 60 * 24));
   };
 
+  util.parseQueryString = function (queryString) {
+    if (typeof queryString !== "string") {
+      return {};
+    }
+    var toReturn = {};
+
+    // read the query string
+    queryString = decodeURIComponent(queryString);
+    var pieces = queryString.split("&");
+    _.each(pieces, function (onePiece) {
+      var equationPieces = onePiece.split("=");
+      if (equationPieces.length !== 2) {
+        return;
+      }
+      var attribute = equationPieces[ 0 ];
+      var value = equationPieces[ 1 ];
+      // invalid attribute name
+      if (attribute.length === 0) {
+        return;
+      }
+      var isArray = (attribute.substr(attribute.length - 2, 2) === "[]");
+      if (value.length === 0) {
+        toReturn[ attribute ] = null;
+        return;
+      }
+      if (!isNaN(+value)) {
+        value = +value;
+      }
+      if (value.toLowerCase() === "false") {
+        value = false;
+      }
+      if (value.toLowerCase() === "true") {
+        value = true;
+      }
+      if (isArray) {
+        attribute = attribute.substr(0, attribute.length - 2);
+        toReturn[ attribute ] = (toReturn[ attribute ] || []).concat([ value ]);
+      } else {
+        toReturn[ attribute ] = value;
+      }
+    });
+
+    return toReturn;
+  };
+
   util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);
