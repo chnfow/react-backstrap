@@ -68,7 +68,10 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
                   }
                   return true;
                 });
-                newChildren.push(React.DOM.div({ className: clearFixClasses.join(" ") }));
+                newChildren.push(React.DOM.div({
+                  className: clearFixClasses.join(" "),
+                  key: [ "clearfix", ct, oneClear.size ].join("-")
+                }));
               }
             });
           });
