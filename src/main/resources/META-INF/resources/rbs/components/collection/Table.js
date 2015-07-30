@@ -12,7 +12,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
     mixins: [ collection ],
 
     propTypes: {
-      columns: rpt.arrayOf(rpt.shape({ label: rpt.string.isRequired, sortOn: rpt.string })).isRequired,
+      columns: rpt.arrayOf(rpt.shape({ label: rpt.string, sortOn: rpt.string })).isRequired,
       striped: rpt.bool,
       condensed: rpt.bool,
       hover: rpt.bool,
@@ -29,10 +29,12 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
         responsive: true
       };
     },
+
     getHeader: function () {
+      var i = 0;
       var ths = _.map(this.props.columns, function (oneColumn) {
         return React.DOM.th({
-          key: oneColumn.label,
+          key: i++,
           onClick: _.bind(this.sortCollection, this, oneColumn.sortOn)
         }, oneColumn.label);
       }, this);
