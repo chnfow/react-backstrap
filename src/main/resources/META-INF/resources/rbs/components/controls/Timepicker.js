@@ -38,7 +38,7 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
     getInitialState: function () {
       return {
         open: false,
-        transientValue: ""
+        transientValue: this.props.value
       };
     },
 
@@ -69,8 +69,14 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
       var mt = this.parseStringToMoment(this.state.transientValue);
       if (mt === null) {
         this.props.onChange(null);
+        this.setState({
+          transientValue: ""
+        });
       } else {
         this.props.onChange(mt.format(this.props.saveFormat));
+        this.setState({
+          transientValue: mt.format(this.props.displayFormat)
+        });
       }
     },
 
@@ -93,8 +99,9 @@ define([ "react", "underscore", "modernizr", "moment" ], function (React, _, Mod
           e.preventDefault();
           if (this.isMounted()) {
             var d = new Date();
+            var m = this.parseStringToMoment(d.getHours() + ":" + d.getMinutes());
             this.setState({
-              transientValue: d.getHours() + ":" + d.getMinutes()
+              transientValue: m.format(this.props.displayFormat)
             });
           }
           break;
