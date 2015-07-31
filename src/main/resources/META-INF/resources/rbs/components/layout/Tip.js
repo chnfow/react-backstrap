@@ -1,7 +1,7 @@
 /**
  * React Component that renders a question sign and a tooltip when hovered over
  */
-define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ], function (React, _, icon, TTG) {
+define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function (React, _, TTG) {
   "use strict";
 
   return _.rf({
@@ -9,13 +9,11 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,
-      placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ]),
-      icon: React.PropTypes.string
+      placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ])
     },
 
     getDefaultProps: function () {
       return {
-        icon: "question-circle",
         placement: "right"
       };
     },
@@ -60,9 +58,8 @@ define([ "react", "underscore", "./Icon", "../controls/TimeoutTransitionGroup" ]
       return React.DOM.span({
         className: "tip-container"
       }, [
-        React.DOM.span(_.extend({
-          key: "content"
-        }, this.props, {
+        React.DOM.span(_.extend(_.omit(this.props, "placement"), {
+          key: "content",
           onMouseEnter: _.bind(this.setTipState, this, true),
           onMouseLeave: _.bind(this.setTipState, this, false),
           onMouseDown: _.bind(this.toggleTipState, this)
