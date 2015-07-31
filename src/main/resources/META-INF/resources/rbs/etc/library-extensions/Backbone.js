@@ -162,7 +162,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
 
       size: function () {
         if (this.server) {
-          return (this.totalRecords !== null) ? this.totalRecords : this.models.length;
+          return (this._totalRecords !== null) ? this._totalRecords : this.models.length;
         }
 
         return oldCollection.prototype.size.apply(this, arguments);
@@ -175,14 +175,24 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
       setPageNo: function (pageNo) {
         this._pageNo = pageNo;
         this.validatePageNo();
+        return this;
       },
 
       prevPage: function () {
-        this.setPageNo(this._pageNo - 1);
+        return this.setPageNo(this._pageNo - 1);
       },
 
       nextPage: function () {
-        this.setPageNo(this._pageNo + 1);
+        return this.setPageNo(this._pageNo + 1);
+      },
+
+      setPageSize: function (ps) {
+        this._pageSize = ps;
+        return this;
+      },
+
+      getPageSize: function () {
+        return this._pageSize;
       },
 
       validatePageNo: function () {
@@ -195,14 +205,16 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
         this._pageNo = Math.round(this._pageNo);
         if (this.server) {
           if (this._totalRecords !== null) {
-            this._pageNo = Math.min(Math.ceil(this._totalRecords / this.pageSize) - 1, this._pageNo);
+            this._pageNo = Math.min(Math.ceil(this._totalRecords / this._pageSize) - 1, this._pageNo);
           }
         }
         this._pageNo = Math.max(0, this._pageNo);
+        return this;
       },
 
       parse: function (response, options) {
-        var responseHeaderCount = (options && options.xhr && options.xhr.getResponseHeader ) ? parseInt(options.xhr.getResponseHeader(this.totalRecordsParam)) : 0;
+        var responseHeaderCount = (options && options.xhr && options.xhr.getResponseHeader ) ?
+          parseInt(options.xhr.getResponseHeader(this.totalRecordsHeader)) : 0;
         if (!isNaN(responseHeaderCount)) {
           this._totalRecords = Math.max(response.length, responseHeaderCount);
         } else {

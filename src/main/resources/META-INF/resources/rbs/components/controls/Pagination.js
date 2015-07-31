@@ -15,27 +15,26 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
       },
 
       componentDidMount: function () {
-        this.listenTo(this.props.collection, "add remove reset sync", this.update);
+        this.listenTo(this.props.collection, "update reset sync", this.update);
       },
 
       getDefaultProps: function () {
         return {
           previousPage: icon({ name: "chevron-left" }),
           nextPage: icon({ name: "chevron-right" }),
-          size: "sm",
-          className: ""
+          size: "sm"
         };
       },
 
       handlePageClick: function (page) {
         if (page === "N") {
-          this.props.collection.nextPage();
+          this.props.collection.nextPage().fetch();
         }
         if (page === "P") {
-          this.props.collection.prevPage();
+          this.props.collection.prevPage().fetch();
         }
         if (!isNaN(parseInt(page))) {
-          this.props.collection.setPageNo(parseInt(page));
+          this.props.collection.setPageNo(parseInt(page)).fetch();
         }
       },
 
@@ -58,7 +57,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
 
       getNumPages: function () {
         var numRecords = this.props.collection.size();
-        var pageSize = this.props.collection.pageSize;
+        var pageSize = this.props.collection.getPageSize();
         return Math.max(Math.ceil(numRecords / pageSize), 1);
       },
 
@@ -66,15 +65,16 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         var pageButtons = [];
 
         var numPages = this.getNumPages();
+        var curPage = this.props.collection.getPageNo();
         pageButtons.push(
           this.getPage({
             page: "P",
             text: this.props.previousPage,
-            disabled: this.props.collection.pageNo === 0
+            disabled: curPage === 0
           })
         );
         for (var i = 0; i < numPages; i++) {
-          var active = (i === this.props.collection.pageNo);
+          var active = (i === curPage);
           pageButtons.push(this.getPage({
             page: i,
             text: i + 1,
@@ -85,7 +85,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
           this.getPage({
             page: "N",
             text: this.props.nextPage,
-            disabled: this.props.collection.pageNo === (numPages - 1)
+            disabled: curPage === (numPages - 1)
           })
         );
 
