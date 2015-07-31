@@ -76,7 +76,7 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
             key: i++,
             onClick: _.bind(this.sortCollection, this, so),
             className: hasSort ? "sortable-column-header" : ""
-          }, [ oneColumn.label, icon({ name: sortIcon }) ]);
+          }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
         }, this);
 
         return React.DOM.thead({ key: "thead" }, ths);
