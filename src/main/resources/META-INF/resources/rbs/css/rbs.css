@@ -58,6 +58,7 @@ form-group checkboxes
 .fa + * {
     margin-left: 0.4em;
 }
+
 * + .fa {
     margin-left: 0.4em;
 }
@@ -89,6 +90,10 @@ so they're removed from the DOM when they're not
 /* dropdown menus display always, using transition groups to manage whether they're visible */
 .dropdown-menu {
     display: block;
+}
+
+.sortable-column-header {
+    cursor: pointer;
 }
 
 /* Tooltips */

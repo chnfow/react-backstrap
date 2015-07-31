@@ -255,7 +255,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
           for (var i = 0; i < this.sorts.length; i++) {
             var st = this.sorts[ i ];
             var attr = st.attribute;
-            var desc = (st.desc) ? -1 : 1;
+            var desc = (st.desc) ? 1 : -1;
             if (typeof attr !== "string") {
               continue;
             }
