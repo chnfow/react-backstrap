@@ -378,6 +378,28 @@ so they're removed from the DOM when they're not
     cursor: pointer;
 }
 
+/* timepicker stuff */
+.timepicker-container {
+    position: relative;
+}
+
+.timepicker {
+    position: absolute;
+    width: 240px;
+    background-color: white;
+    padding: 0.5em;
+    z-index: 1000;
+    -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    border-bottom-left-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+}
+
+.timepicker .timepicker-buttons {
+    cursor: pointer;
+}
+
 /* a fade transition for using with the timeout transition group */
 .fade-enter {
     opacity: 0;
