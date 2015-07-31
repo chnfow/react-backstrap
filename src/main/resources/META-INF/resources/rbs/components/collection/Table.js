@@ -1,7 +1,7 @@
 /**
  *
  */
-define([ "react", "underscore", "../mixins/Collection", "../model/TableRow" ], function (React, _, collection, tr) {
+define([ "react", "underscore", "../mixins/Collection", "../model/TableRow", "../layout/Icon" ], function (React, _, collection, tr, icon) {
   "use strict";
 
   var rpt = React.PropTypes;
@@ -48,10 +48,17 @@ define([ "react", "underscore", "../mixins/Collection", "../model/TableRow" ], f
     getHeader: function () {
       var i = 0;
       var ths = _.map(this.props.columns, function (oneColumn) {
+        var so = oneColumn.sortOn;
+        var sortIcon = null;
+        var onClick = _.noop;
+        if (typeof so !== "undefined") {
+          onClick = _.bind(this.sortCollection, this, so);
+          sortIcon = icon({ key: "i", name: "sort-amount-asc" });
+        }
         return React.DOM.th({
           key: i++,
-          onClick: _.bind(this.sortCollection, this, oneColumn.sortOn)
-        }, oneColumn.label);
+          onClick: onClick
+        }, [ oneColumn.label, sortIcon ]);
       }, this);
 
       return React.DOM.thead({ key: "thead" }, ths);
@@ -60,7 +67,8 @@ define([ "react", "underscore", "../mixins/Collection", "../model/TableRow" ], f
     sortCollection: function (on) {
       if (typeof on === "string") {
         // sort the collection
-        this.props.collection.sort(on, true);
+        this.props.collection.addSort(on, true);
+        this.props.collection.sort();
       }
     },
 

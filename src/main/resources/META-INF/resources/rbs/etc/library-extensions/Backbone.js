@@ -149,7 +149,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
       server: true,
 
       // options that can be passed to the constructor
-      options: [ "pageNo", "pageSize", "params", "sorts" ],
+      options: [ "params", "server" ],
 
       constructor: function (options) {
         if (options) {
@@ -159,6 +159,9 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
         oldCollection.apply(this, arguments);
       },
 
+      isServerSide: function () {
+        return this.server;
+      },
 
       size: function () {
         if (this.server) {
@@ -244,9 +247,29 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
 
       comparator: function (m1, m2) {
         if (this.server) {
+          // server side sorting means never do any client sorting
           return 0;
         }
-        // TO-DO implement this method for client sorting
+        if (this.sorts.length > 0) {
+          for (var i = 0; i < this.sorts.length; i++) {
+            var st = this.sorts[ i ];
+            var attr = st.attribute;
+            var desc = (st.desc) ? 1 : -1;
+            if (typeof attr !== "string") {
+              continue;
+            }
+            var m1a = m1.get(attr);
+            var m2a = m2.get(attr);
+
+            if (m1a < m2a) {
+              return desc;
+            }
+            if (m2a < m1a) {
+              return -1 * desc;
+            }
+          }
+        }
+        // equal at all attributes
         return 0;
       },
 
@@ -254,10 +277,12 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore" ], functio
         if (typeof attribute !== "string") {
           return this;
         }
-        this.sorts.push({
-          attribute: attribute,
-          desc: Boolean(desc)
-        });
+        this.sorts = [
+          {
+            attribute: attribute,
+            desc: Boolean(desc)
+          }
+        ].concat(this.sorts);
         return this;
       },
 

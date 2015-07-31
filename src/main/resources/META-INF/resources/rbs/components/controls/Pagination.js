@@ -27,14 +27,21 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
       },
 
       handlePageClick: function (page) {
+        var oldPageNo = this.props.collection.getPageNo();
         if (page === "N") {
-          this.props.collection.nextPage().fetch();
+          this.props.collection.nextPage();
         }
         if (page === "P") {
-          this.props.collection.prevPage().fetch();
+          this.props.collection.prevPage();
         }
         if (!isNaN(parseInt(page))) {
-          this.props.collection.setPageNo(parseInt(page)).fetch();
+          this.props.collection.setPageNo(parseInt(page));
+        }
+        if (oldPageNo !== this.props.collection.getPageNo()) {
+          if (this.props.collection.isServerSide()) {
+            this.props.collection.fetch();
+          }
+          this.update();
         }
       },
 
