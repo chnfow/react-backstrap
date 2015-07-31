@@ -1,23 +1,37 @@
 /**
  *
  */
-define([ "react", "underscore", "../mixins/Collection" ], function (React, _, collection) {
+define([ "react", "underscore", "../mixins/Collection", "../model/TableRow" ], function (React, _, collection, tr) {
   "use strict";
 
   var rpt = React.PropTypes;
 
+  var tbody = _.rf({
+    displayName: "Collection Table Body",
+    mixins: [ collection ],
+    render: function () {
+      return React.DOM.tbody(_.omit(this.props, "collection", "modelComponent", "emptyNode"), this.getModels());
+    }
+  });
+
   return _.rf({
     displayName: "Collection Table",
 
-    mixins: [ collection ],
-
     propTypes: {
-      columns: rpt.arrayOf(rpt.shape({ label: rpt.string, sortOn: rpt.string })).isRequired,
+      // this is required to indicate the headers-optionally if you do not specify a model component, these columns will also
+      // be used to build a table row
+      columns: rpt.arrayOf(
+        rpt.shape({
+          label: rpt.string,
+          sortOn: rpt.string
+        })
+      ).isRequired,
       striped: rpt.bool,
       condensed: rpt.bool,
       hover: rpt.bool,
       bordered: rpt.bool,
-      responsive: rpt.bool
+      responsive: rpt.bool,
+      emptyMessage: rpt.string
     },
 
     getDefaultProps: function () {
@@ -26,7 +40,8 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
         condensed: false,
         hover: false,
         bordered: false,
-        responsive: true
+        responsive: true,
+        emptyMessage: "No records found."
       };
     },
 
@@ -50,7 +65,23 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
     },
 
     getBody: function () {
-      return React.DOM.tbody({ key: "tbody" }, this.getModels());
+      var mc = this.props.modelComponent;
+
+      if (typeof mc !== "function") {
+        var attrs = this.props.columns;
+        mc = _.rf({
+          render: function () {
+            return tr({ model: this.props.model, attributes: attrs })
+          }
+        });
+      }
+
+      return tbody({
+        key: "tbody",
+        collection: this.props.collection,
+        modelComponent: mc,
+        emptyNode: React.DOM.tr({}, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
+      });
     },
 
     getTable: function () {

@@ -3,7 +3,7 @@
  * Also provides a method for converting an array of attribute descriptions to an array of components
  */
 define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Timepicker",
-    "../controls/Select","../layout/Icon" ],
+    "../controls/Select", "../layout/Icon" ],
   function (React, _, events, binder, datepicker, timepicker, select, icon) {
     "use strict";
 
@@ -64,13 +64,20 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
       }
     });
 
+    var rpt = React.PropTypes;
     return React.createMixin({
 
       mixins: [ events ],
 
       propTypes: {
-        model: React.PropTypes.object.isRequired,
-        attributes: React.PropTypes.arrayOf(React.PropTypes.object)
+        model: rpt.object.isRequired,
+        attributes: rpt.arrayOf(
+          rpt.shape({
+            component: rpt.oneOfType([ rpt.string, rpt.func ]),
+            attribute: rpt.string,
+            key: rpt.string
+          })
+        )
       },
 
       componentDidMount: function () {
