@@ -58,6 +58,9 @@ form-group checkboxes
 .fa + * {
     margin-left: 0.4em;
 }
+* + .fa {
+    margin-left: 0.4em;
+}
 
 .navbar-text {
     padding-left: 1em;
