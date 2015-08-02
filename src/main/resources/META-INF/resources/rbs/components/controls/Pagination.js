@@ -11,7 +11,8 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         collection: React.PropTypes.object.isRequired,
         nextPage: React.PropTypes.node,
         previousPage: React.PropTypes.node,
-        size: React.PropTypes.oneOf([ "sm", "lg" ])
+        size: React.PropTypes.oneOf([ "sm", "lg" ]),
+        maxPages: React.PropTypes.number
       },
 
       componentDidMount: function () {
@@ -22,18 +23,13 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         return {
           previousPage: icon({ name: "chevron-left" }),
           nextPage: icon({ name: "chevron-right" }),
-          size: "sm"
+          size: "sm",
+          maxPages: 7
         };
       },
 
       handlePageClick: function (page) {
         var oldPageNo = this.props.collection.getPageNo();
-        if (page === "N") {
-          this.props.collection.nextPage();
-        }
-        if (page === "P") {
-          this.props.collection.prevPage();
-        }
         if (!isNaN(parseInt(page))) {
           this.props.collection.setPageNo(parseInt(page));
         }
@@ -54,7 +50,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
           classes.push("disabled");
         }
         return React.DOM.li({
-          key: "page-" + pageObject.page,
+          key: "page-" + pageObject.key,
           className: classes.join(" "),
           onClick: _.bind(this.handlePageClick, this, pageObject.page)
         }, React.DOM.a({
@@ -68,6 +64,23 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         return Math.max(Math.ceil(numRecords / pageSize), 1);
       },
 
+      getFirstPage: function () {
+        var pages = this.getNumPages();
+        if (pages <= this.props.maxPages) {
+          return 0;
+        }
+        var currentPage = this.props.collection.getPageNo();
+        var firstPage = Math.ceil(currentPage - (this.props.maxPages / 2));
+        var lastPage = Math.floor(currentPage + (this.props.maxPages / 2));
+        if (lastPage > (pages - 1)) {
+          firstPage -= (lastPage - (pages - 1));
+        }
+        if (firstPage < 0) {
+          firstPage = 0;
+        }
+        return firstPage;
+      },
+
       render: function () {
         var pageButtons = [];
 
@@ -75,14 +88,25 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         var curPage = this.props.collection.getPageNo();
         pageButtons.push(
           this.getPage({
-            page: "P",
+            key: "first",
+            page: 0,
+            text: "First",
+            disabled: curPage === 0
+          })
+        );
+        pageButtons.push(
+          this.getPage({
+            key: "prev",
+            page: curPage - 1,
             text: this.props.previousPage,
             disabled: curPage === 0
           })
         );
-        for (var i = 0; i < numPages; i++) {
+        var fp = this.getFirstPage();
+        for (var i = fp; i < (fp + Math.min(this.props.maxPages, numPages)); i++) {
           var active = (i === curPage);
           pageButtons.push(this.getPage({
+            key: i,
             page: i,
             text: i + 1,
             active: active
@@ -90,8 +114,17 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         }
         pageButtons.push(
           this.getPage({
-            page: "N",
+            key: "next",
+            page: curPage + 1,
             text: this.props.nextPage,
+            disabled: curPage === (numPages - 1)
+          })
+        );
+        pageButtons.push(
+          this.getPage({
+            key: "last",
+            page: numPages - 1,
+            text: "Last",
             disabled: curPage === (numPages - 1)
           })
         );
