@@ -69,7 +69,7 @@ define([ "react", "underscore", "../mixins/Events" ], function (React, _, events
     },
 
     render: function () {
-      var props = _.extend(_.omit(this.props, [ "model", "component", "attribute" ]), {
+      var props = _.extend(_.omit(this.props, [ "component" ]), {
         value: this.getValue(),
         onChange: _.bind(this.handleChange, this)
       });
