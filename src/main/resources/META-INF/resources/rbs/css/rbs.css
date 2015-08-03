@@ -94,6 +94,7 @@ so they're removed from the DOM when they're not
 
 .sortable-column-header {
     cursor: pointer;
+    white-space: nowrap;
 }
 
 /* Tooltips */
