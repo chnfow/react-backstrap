@@ -19,8 +19,12 @@ define([ "react", "underscore", "./Icon" ],
       },
 
 
-      handleClick: function () {
-        this.props.onClick();
+      handleClick: function (e) {
+        this.props.onClick(e);
+      },
+
+      doNothing: function (e) {
+        e.preventDefault();
       },
 
       getIcon: function () {
@@ -38,7 +42,7 @@ define([ "react", "underscore", "./Icon" ],
         if (this.props.children) {
           children = children.concat(this.props.children);
         }
-        return React.DOM.li({ onClick: this.handleClick }, React.DOM.a({ href: "#" }, children));
+        return React.DOM.li({ onClick: this.handleClick }, React.DOM.a({ onClick: this.doNothing, href: "#" }, children));
       }
     });
   });

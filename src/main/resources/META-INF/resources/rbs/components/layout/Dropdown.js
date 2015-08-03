@@ -52,7 +52,8 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
         if (this.state.open) {
           menu = React.DOM.ul({
             className: "dropdown-menu" + (this.props.right ? " dropdown-menu-right" : ""),
-            role: "menu"
+            role: "menu",
+            onClick: _.bind(this.toggleOpen, this)
           }, this.props.children);
         }
 
