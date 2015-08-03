@@ -23,7 +23,7 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
         return {
           dropup: false,
           right: false,
-          animate: true
+          animate: false
         };
       },
 
