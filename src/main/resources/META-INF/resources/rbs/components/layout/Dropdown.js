@@ -7,7 +7,8 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
 
       propTypes: {
         dropup: React.PropTypes.bool,
-        right: React.PropTypes.bool
+        right: React.PropTypes.bool,
+        animate: React.PropTypes.bool
       },
 
       mixins: [ React.addons.PureRenderMixin, onClickOutside ],
@@ -21,7 +22,8 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
       getDefaultProps: function () {
         return {
           dropup: false,
-          right: false
+          right: false,
+          animate: true
         };
       },
 
@@ -51,6 +53,7 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
         var menu = null;
         if (this.state.open) {
           menu = React.DOM.ul({
+            key: "mnu",
             className: "dropdown-menu" + (this.props.right ? " dropdown-menu-right" : ""),
             role: "menu",
             onClick: _.bind(this.toggleOpen, this)
@@ -62,13 +65,13 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
           className: className
         }, [
           dropdownButton,
-          TTG({
+          this.props.animate ? TTG({
             key: "menuttg",
             transitionName: "flip-in-x",
             component: "div",
             leaveTimeout: 500,
             enterTimeout: 500
-          }, menu)
+          }, menu) : menu
         ]);
       }
     });
