@@ -12,6 +12,10 @@ body {
     margin-left: 0.3em;
 }
 
+.btn > * + .caret {
+    margin-left: 0.3em !important;
+}
+
 /* no resizing of textarea in forms */
 textarea.form-control {
     resize: none;
@@ -19,7 +23,7 @@ textarea.form-control {
 
 /*
 form-group checkboxes
-*/
+*/  
 .form-group > input[type="checkbox"].form-control {
     float: left;
     margin-right: 0.3em;
