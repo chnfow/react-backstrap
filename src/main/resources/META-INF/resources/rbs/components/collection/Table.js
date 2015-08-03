@@ -112,7 +112,7 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
           key: "tbody",
           collection: this.props.collection,
           modelComponent: mc,
-          emptyNode: React.DOM.tr({}, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
+          emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
         });
       },
 
