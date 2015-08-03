@@ -5,25 +5,29 @@
 define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function (React, _, events, icon) {
   "use strict";
 
+  var rpt = React.PropTypes;
+
   return _.rf({
     displayName: "Loading Wrapper",
 
     mixins: [ events ],
 
     propTypes: {
-      watch: React.PropTypes.oneOfType([
-        React.PropTypes.arrayOf(React.PropTypes.object),
-        React.PropTypes.object
-      ]).isRequired,
-      icon: React.PropTypes.string,
-      animate: React.PropTypes.string,
-      size: React.PropTypes.string,
-      backdrop: React.PropTypes.bool,
-      hideWhileLoading: React.PropTypes.bool
+      watch: rpt.oneOfType([
+        rpt.arrayOf(rpt.object),
+        rpt.object
+      ]),
+      icon: rpt.string,
+      animate: rpt.string,
+      size: rpt.string,
+      backdrop: rpt.bool,
+      hideWhileLoading: rpt.bool,
+      loading: rpt.bool
     },
 
     getDefaultProps: function () {
       return {
+        watch: null,
         icon: "refresh",
         animate: "spin",
         size: "3x",
@@ -40,10 +44,12 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
     },
 
     componentDidMount: function () {
-      if (_.isArray(this.props.watch)) {
-        _.each(this.props.watch, this._listenToObject, this);
-      } else {
-        this._listenToObject(this.props.watch);
+      if (this.props.watch !== null) {
+        if (_.isArray(this.props.watch)) {
+          _.each(this.props.watch, this._listenToObject, this);
+        } else {
+          this._listenToObject(this.props.watch);
+        }
       }
     },
 
@@ -72,7 +78,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
     render: function () {
       var loadingIndicator = null;
       var loadingBackdrop = null;
-      if (this.state.loading > 0) {
+      if (this.state.loading > 0 || this.props.loading) {
         if (this.props.backdrop) {
           loadingBackdrop = React.DOM.div({
             key: "loading-indicator-backdrop",
