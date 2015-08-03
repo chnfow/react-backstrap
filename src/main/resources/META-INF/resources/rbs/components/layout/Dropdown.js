@@ -6,7 +6,8 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
       displayName: "Dropdown Button",
 
       propTypes: {
-        dropup: React.PropTypes.bool
+        dropup: React.PropTypes.bool,
+        right: React.PropTypes.bool
       },
 
       mixins: [ React.addons.PureRenderMixin, onClickOutside ],
@@ -19,7 +20,8 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
 
       getDefaultProps: function () {
         return {
-          dropup: false
+          dropup: false,
+          right: false
         };
       },
 
@@ -49,7 +51,7 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
         var menu = null;
         if (this.state.open) {
           menu = React.DOM.ul({
-            className: "dropdown-menu",
+            className: "dropdown-menu" + (this.props.right ? " dropdown-menu-right" : ""),
             role: "menu"
           }, this.props.children);
         }

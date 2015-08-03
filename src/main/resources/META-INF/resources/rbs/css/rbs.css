@@ -89,7 +89,7 @@ so they're removed from the DOM when they're not
 
 /* dropdown menus display always, using transition groups to manage whether they're visible */
 .dropdown-menu {
-    display: block;
+    display: block !important;
 }
 
 .sortable-column-header {
