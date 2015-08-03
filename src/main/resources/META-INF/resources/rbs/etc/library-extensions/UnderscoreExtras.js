@@ -118,7 +118,7 @@ define([ "original-underscore", "react" ], function (_, React) {
 
   util.debug = function () {
     if (window.debug === true) {
-      window.console.log.apply(window.console, arguments);
+      window.console.debug.apply(window.console, arguments);
     }
     if (typeof window.debug === "function") {
       window.debug.apply(window, arguments);
