@@ -17,7 +17,9 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         hover: rpt.bool,
         bordered: rpt.bool,
         // what the table should say when empty
-        emptyMessage: rpt.string
+        emptyMessage: rpt.string,
+        scroll: rpt.bool,
+        responsive: rpt.bool
       },
 
       getDefaultProps: function () {
@@ -26,7 +28,9 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
           condensed: false,
           hover: false,
           bordered: false,
-          emptyMessage: "No records found."
+          emptyMessage: "No records found.",
+          scroll: false,
+          responsive: true
         };
       },
 
@@ -71,14 +75,16 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         if (this.props.hover) {
           cn.push("table-hover");
         }
+        if (this.props.responsive) {
+          cn.push("table-responsive-horizontal");
+        }
 
         if (typeof this.props.className === "string") {
           cn.push(this.props.className);
         }
 
         var properties = _.extend(_.omit(this.props, "columns", "striped", "condensed", "hover", "bordered"), { className: cn.join(" ") });
-
-        return React.DOM.table(properties, [
+        var table = React.DOM.table(properties, [
           thead({ key: "thead", columns: this.props.columns, collection: this.props.collection }),
           tbody({
             key: "tbody",
@@ -87,6 +93,11 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
             emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
           })
         ]);
+
+        if (this.props.scroll) {
+          return React.DOM.div({ className: "table-responsive" }, table);
+        }
+        return table;
       }
     });
   });
