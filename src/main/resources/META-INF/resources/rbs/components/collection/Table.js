@@ -7,77 +7,31 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
 
     var rpt = React.PropTypes;
 
-    var tbody = _.rf({
-      displayName: "Collection Table Body",
-      mixins: [ collection ],
-      render: function () {
-        return React.DOM.tbody(_.omit(this.props, "collection", "modelComponent", "emptyNode"), this.getModels());
-      }
-    });
-
-    return _.rf({
-      displayName: "Collection Table",
-
-      mixins: [ events ],
+    var thead = _.rf({
+      displayName: "Collection Table Header",
 
       propTypes: {
-        // this is required to indicate the headers-optionally if you do not specify a model component, these columns will also
-        // be used to build a table row
         columns: rpt.arrayOf(
           rpt.shape({
             label: rpt.string,
             sortOn: rpt.string
           })
-        ).isRequired,
-        striped: rpt.bool,
-        condensed: rpt.bool,
-        hover: rpt.bool,
-        bordered: rpt.bool,
-        emptyMessage: rpt.string
+        )
       },
 
-      getDefaultProps: function () {
-        return {
-          striped: true,
-          condensed: false,
-          hover: false,
-          bordered: false,
-          emptyMessage: "No records found."
-        };
-      },
+      mixins: [ events ],
 
       componentDidMount: function () {
+        // must re-render the header when the collection is sorted
         this.listenTo(this.props.collection, "sort", this.update);
       },
 
+      // get the last sort applied to the collection
       getLastSort: function () {
         if (this.props.collection.sorts && this.props.collection.sorts.length > 0) {
           return this.props.collection.sorts[ 0 ];
         }
         return null;
-      },
-
-      getHeader: function () {
-        var i = 0;
-        var lastSort = this.getLastSort();
-
-        var ths = _.map(this.props.columns, function (oneColumn) {
-          var so = oneColumn.sortOn;
-          var hasSort = (typeof so !== "undefined" && so !== null);
-          var sortIcon = null;
-          if (typeof so !== "undefined") {
-            if (lastSort !== null && lastSort.attribute === so) {
-              sortIcon = lastSort.desc ? "sort-amount-desc" : "sort-amount-asc";
-            }
-          }
-          return React.DOM.th({
-            key: i++,
-            onClick: _.bind(this.sortCollection, this, so),
-            className: hasSort ? "sortable-column-header" : ""
-          }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
-        }, this);
-
-        return React.DOM.thead({ key: "thead" }, ths);
       },
 
       sortCollection: function (on, e) {
@@ -94,11 +48,76 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
         }
       },
 
-      getBody: function () {
-        var mc = this.props.modelComponent;
+      render: function () {
+        var i = 0;
+        var lastSort = this.getLastSort();
+
+        var ths = _.map(this.props.columns, function (oneColumn) {
+          var so = oneColumn.sortOn;
+          var hasSort = (typeof so !== "undefined" && so !== null);
+          var sortIcon = null;
+          if (typeof so !== "undefined") {
+            if (lastSort !== null && lastSort.attribute === so) {
+              sortIcon = lastSort.desc ? "sort-amount-desc" : "sort-amount-asc";
+            }
+          }
+          return React.DOM.th({
+            key: i++,
+            onMouseDown: _.bind(this.sortCollection, this, so),
+            className: hasSort ? "sortable-column-header" : ""
+          }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
+        }, this);
+
+        return React.DOM.thead({ key: "thead" }, ths);
+      }
+
+    });
+
+    var tbody = _.rf({
+      displayName: "Collection Table Body",
+
+      mixins: [ collection ],
+
+      render: function () {
+        var cols = this.props.columns;
+        var children = _.map(this.getModels(), function (oneComp) {
+          return React.cloneElement(oneComp, { columns: cols });
+        });
+
+        return React.DOM.tbody(_.omit(this.props, "collection", "modelComponent", "emptyNode"), children);
+      }
+    });
+
+    // start table view
+    return _.rf({
+      displayName: "Collection Table",
+
+      propTypes: {
+        // bootstrap classes
+        striped: rpt.bool,
+        condensed: rpt.bool,
+        hover: rpt.bool,
+        bordered: rpt.bool,
+        // what the table should say when empty
+        emptyMessage: rpt.string
+      },
+
+      getDefaultProps: function () {
+        return {
+          striped: true,
+          condensed: false,
+          hover: false,
+          bordered: false,
+          emptyMessage: "No records found."
+        };
+      },
+
+      getModelComponent: function (props) {
+        var mc = props.modelComponent;
 
         if (typeof mc !== "function") {
-          var attrs = this.props.columns;
+          var attrs = props.columns;
+          // just a plain wrapper around the tr that passes the columns for the attrs
           mc = _.rf({
             render: function () {
               return tr({ model: this.props.model, attributes: attrs })
@@ -106,16 +125,24 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
           });
         }
 
-        return tbody({
-          key: "tbody",
-          columns: this.props.columns,
-          collection: this.props.collection,
-          modelComponent: mc,
-          emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
-        });
+        return mc;
       },
 
-      getTable: function () {
+      componentWillReceiveProps: function (nextProps) {
+        if (this.isMounted()) {
+          this.setState({
+            modelComponent: this.getModelComponent(nextProps)
+          });
+        }
+      },
+
+      getInitialState: function () {
+        return {
+          modelComponent: this.getModelComponent(this.props)
+        };
+      },
+
+      render: function () {
         var cn = [ "table" ];
         if (this.props.striped) {
           cn.push("table-striped");
@@ -131,14 +158,17 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
           cn.push(this.props.className);
         }
 
-        return React.DOM.table(_.extend(_.omit(this.props, "columns"), { className: cn.join(" ") }), [
-          this.getHeader(),
-          this.getBody()
-        ]);
-      },
+        var properties = _.extend(_.omit(this.props, "columns", "striped", "condensed", "hover", "bordered"), { className: cn.join(" ") });
 
-      render: function () {
-        return this.getTable();
+        return React.DOM.table(properties, [
+          thead({ key: "thead", columns: this.props.columns, collection: this.props.collection }),
+          tbody({
+            key: "tbody",
+            collection: this.props.collection,
+            modelComponent: this.state.modelComponent,
+            emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
+          })
+        ]);
       }
     });
   });
