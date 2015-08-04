@@ -115,7 +115,6 @@ so they're removed from the DOM when they're not
         max-width: 100%;
     }
 
-    /* hide the table header for small screerns */
     table.table-responsive-horizontal > thead {
         display: none;
     }
@@ -128,7 +127,7 @@ so they're removed from the DOM when they're not
     }
 
     table.table-responsive-horizontal > tbody > tr {
-        border: #dddddd solid 0.1em;
+        border: 0.1em solid gray;
     }
 
     table.table-responsive-horizontal > tbody > tr > td {

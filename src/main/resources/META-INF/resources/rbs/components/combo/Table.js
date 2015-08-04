@@ -19,7 +19,13 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         // what the table should say when empty
         emptyMessage: rpt.string,
         scroll: rpt.bool,
-        responsive: rpt.bool
+        responsive: rpt.bool,
+        attributes: rpt.arrayOf(
+          rpt.shape({
+            label: rpt.string,
+            sortOn: rpt.string
+          })
+        )
       },
 
       getDefaultProps: function () {
@@ -35,19 +41,13 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
       },
 
       getModelComponent: function (props) {
-        var mc = props.modelComponent;
+        var attrs = props.attributes;
 
-        if (typeof mc !== "function") {
-          var attrs = props.columns;
-          // just a plain wrapper around the tr that passes the columns for the attrs
-          mc = _.rf({
-            render: function () {
-              return tr({ model: this.props.model, attributes: attrs })
-            }
-          });
-        }
-
-        return mc;
+        return _.rf({
+          render: function () {
+            return tr({ model: this.props.model, attributes: attrs })
+          }
+        });
       },
 
       componentWillReceiveProps: function (nextProps) {
@@ -64,6 +64,15 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         };
       },
 
+      getColumns: function () {
+        return _.map(this.props.attributes, function (oneAttribute) {
+          return {
+            label: oneAttribute.label,
+            sortOn: oneAttribute.sortOn
+          };
+        });
+      },
+
       render: function () {
         var cn = [ "table" ];
         if (this.props.striped) {
@@ -78,19 +87,20 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         if (this.props.responsive) {
           cn.push("table-responsive-horizontal");
         }
-
         if (typeof this.props.className === "string") {
           cn.push(this.props.className);
         }
 
-        var properties = _.extend(_.omit(this.props, "columns", "striped", "condensed", "hover", "bordered"), { className: cn.join(" ") });
+        var columns = this.getColumns();
+
+        var properties = _.extend(_.omit(this.props, "attributes", "columns", "striped", "condensed", "hover", "bordered"), { className: cn.join(" ") });
         var table = React.DOM.table(properties, [
-          thead({ key: "thead", columns: this.props.columns, collection: this.props.collection }),
+          thead({ key: "thead", columns: columns, collection: this.props.collection }),
           tbody({
             key: "tbody",
             collection: this.props.collection,
             modelComponent: this.state.modelComponent,
-            emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
+            emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: columns.length }, this.props.emptyMessage))
           })
         ]);
 
