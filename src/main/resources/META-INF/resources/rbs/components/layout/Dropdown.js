@@ -1,5 +1,5 @@
-define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
-  function (React, _, Button, TTG, onClickOutside) {
+define([ "react", "underscore", "jquery", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
+  function (React, _, $, Button, TTG, onClickOutside) {
     "use strict";
 
     return _.rf({
@@ -30,7 +30,26 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
       toggleOpen: function () {
         this.setState({
           open: !this.state.open
-        });
+        }, this.scrollIntoView);
+      },
+
+      scrollIntoView: function () {
+        if (this.state.open && this.isMounted()) {
+          var menu = $(React.findDOMNode(this.refs.mnu));
+          var menuTop = menu.offset().top;
+          var menuBottom = menuTop + menu.outerHeight();
+          var windowScrollTop = $(window).scrollTop();
+          var windowHeight = $(window).height();
+          if (this.props.dropup) {
+            if (menuTop < windowScrollTop) {
+              $(window).scrollTop(menuTop);
+            }
+          } else {
+            if (menuBottom > (windowScrollTop + windowHeight)) {
+              $(window).scrollTop(menuBottom - windowHeight);
+            }
+          }
+        }
       },
 
       onClickOutside: function () {
@@ -54,6 +73,7 @@ define([ "react", "underscore", "../controls/Button", "../controls/TimeoutTransi
         if (this.state.open) {
           menu = React.DOM.ul({
             key: "mnu",
+            ref: "mnu",
             className: "dropdown-menu" + (this.props.right ? " dropdown-menu-right" : ""),
             role: "menu",
             onClick: _.bind(this.toggleOpen, this)
