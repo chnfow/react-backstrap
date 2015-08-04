@@ -21,6 +21,8 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
     var KEY_RIGHT = 39;
     var KEY_DELETE = 46;
 
+    var rpt = React.PropTypes;
+
     return _.rf({
       displayName: "RBS Select",
 
@@ -28,20 +30,20 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
 
       propTypes: {
         // the currently selected value
-        value: React.PropTypes.any,
+        value: rpt.any,
         // handle change of the currently selected value
-        onChange: React.PropTypes.func.isRequired,
-        valueAttribute: React.PropTypes.string,
+        onChange: rpt.func.isRequired,
+        valueAttribute: rpt.string,
         // either an attribute name, a list of attribute names or a function that produces an array
         // of values that can be searched
-        searchOn: React.PropTypes.oneOfType([
-          React.PropTypes.string,
-          React.PropTypes.arrayOf(React.PropTypes.string),
-          React.PropTypes.func
+        searchOn: rpt.oneOfType([
+          rpt.string,
+          rpt.arrayOf(rpt.string),
+          rpt.func
         ]),
-        caseInsensitive: React.PropTypes.bool,
+        caseInsensitive: rpt.bool,
         // what to break the search string on
-        breakOn: React.PropTypes.string
+        breakOn: rpt.string
       },
 
       getDefaultProps: function () {
@@ -144,6 +146,9 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
             var attr = this.props.searchOn;
             toReturn = function (model) {
               var val = model.get(attr);
+              if (val && val.toString) {
+                val = val.toString();
+              }
               if (caseInsensitive && typeof val === "string") {
                 val = val.toUpperCase();
               }
@@ -155,6 +160,9 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
             toReturn = function (model) {
               return _.map(attrs, function (oneAttr) {
                 var val = model.get(oneAttr);
+                if (val && val.toString) {
+                  val = val.toString();
+                }
                 if (caseInsensitive && typeof val === "string") {
                   val = val.toUpperCase();
                 }
