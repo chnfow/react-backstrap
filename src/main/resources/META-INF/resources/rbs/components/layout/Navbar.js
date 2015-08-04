@@ -1,8 +1,8 @@
 /**
  * React Component renders a bootstrap navbar
  */
-define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events" ],
-  function (React, $, _, icon, Backbone, events) {
+define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events", "../controls/TimeoutTransitionGroup" ],
+  function (React, $, _, icon, Backbone, events, TTG) {
     "use strict";
 
     return _.rf({
@@ -65,7 +65,7 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
         }, [
           React.DOM.button({
             key: "navbar-toggle-collapsed",
-            className: "navbar-toggle" + (this.state.collapsed ? " collapsed" : ""),
+            className: "navbar-toggle",
             onClick: _.bind(this.toggleCollapsed, this)
           }, icon({ name: "bars" })),
           React.DOM.a({
@@ -75,9 +75,21 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
           }, this.props.brand)
         ]);
 
-        var navbarLinks = React.DOM.div({
-          className: "navbar-collapse collapse" + (this.state.collapsed ? "" : " in"),
-          key: "navbar-links"
+        // this is the collapsible navbar-it only displays on xs screens
+        var navbarLinks = null;
+        if (!this.state.collapsed) {
+          navbarLinks = React.DOM.div({
+            className: "navbar-collapse in visible-xs",
+            key: "navbar-links-collapsible"
+          }, [
+            this.props.children
+          ]);
+        }
+
+        // this is the same navbar, but it displays regardless of the collapsed state on screens larger than xs
+        var alwaysShowLinks = React.DOM.div({
+          className: "navbar-collapse in hidden-xs",
+          key: "navbar-links-always"
         }, [
           this.props.children
         ]);
@@ -95,7 +107,13 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
           className: "container" + (this.props.fullWidth ? "-fluid" : "")
         }, [
           navbarHeader,
-          navbarLinks
+          TTG({
+            key: "ttg",
+            transitionName: "fade",
+            enterTimeout: 500,
+            leaveTimeout: 500
+          }, navbarLinks),
+          alwaysShowLinks
         ]));
       }
     });
