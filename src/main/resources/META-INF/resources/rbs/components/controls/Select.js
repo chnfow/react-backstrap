@@ -24,6 +24,8 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
     return _.rf({
       displayName: "RBS Select",
 
+      mixins: [ events ],
+
       propTypes: {
         // the currently selected value
         value: React.PropTypes.any,
@@ -69,6 +71,10 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           cursorPosition: 0,
           open: false
         };
+      },
+
+      componentDidMount: function () {
+        this.listenTo(this.props.collection, "update reset", this.update);
       },
 
       handleChange: function (e) {
