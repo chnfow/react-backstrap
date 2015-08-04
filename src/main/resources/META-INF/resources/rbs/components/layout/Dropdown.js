@@ -36,10 +36,16 @@ define([ "react", "underscore", "jquery", "../controls/Button", "../controls/Tim
       scrollIntoView: function () {
         if (this.state.open && this.isMounted()) {
           var menu = $(React.findDOMNode(this.refs.mnu));
-          var menuTop = menu.offset().top;
+          var menuOffset = menu.offset();
+          var menuTop = menuOffset.top;
+          var menuLeft = menuOffset.left;
+          var menuWidth = menu.outerWidth();
+          var menuRight = menuLeft + menuWidth;
           var menuBottom = menuTop + menu.outerHeight();
           var windowScrollTop = $(window).scrollTop();
           var windowHeight = $(window).height();
+          var windowScrollLeft = $(window).scrollLeft();
+          var windowWidth = $(window).width();
           if (this.props.dropup) {
             if (menuTop < windowScrollTop) {
               $(window).scrollTop(menuTop);
@@ -48,6 +54,12 @@ define([ "react", "underscore", "jquery", "../controls/Button", "../controls/Tim
             if (menuBottom > (windowScrollTop + windowHeight)) {
               $(window).scrollTop(menuBottom - windowHeight);
             }
+          }
+          if ((windowScrollLeft + windowWidth) < menuRight) {
+            $(window).scrollLeft(menuRight - windowWidth);
+          }
+          if (windowScrollLeft > menuLeft) {
+            $(window).scrollLeft(menuLeft);
           }
         }
       },

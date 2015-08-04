@@ -33,7 +33,6 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
         condensed: rpt.bool,
         hover: rpt.bool,
         bordered: rpt.bool,
-        responsive: rpt.bool,
         emptyMessage: rpt.string
       },
 
@@ -43,7 +42,6 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
           condensed: false,
           hover: false,
           bordered: false,
-          responsive: true,
           emptyMessage: "No records found."
         };
       },
@@ -110,6 +108,7 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
 
         return tbody({
           key: "tbody",
+          columns: this.props.columns,
           collection: this.props.collection,
           modelComponent: mc,
           emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.columns.length }, this.props.emptyMessage))
@@ -128,6 +127,10 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
           cn.push("table-hover");
         }
 
+        if (typeof this.props.className === "string") {
+          cn.push(this.props.className);
+        }
+
         return React.DOM.table(_.extend(_.omit(this.props, "columns"), { className: cn.join(" ") }), [
           this.getHeader(),
           this.getBody()
@@ -135,11 +138,7 @@ define([ "react", "underscore", "../mixins/Collection", "../mixins/Events", "../
       },
 
       render: function () {
-        var table = this.getTable();
-        if (this.props.responsive) {
-          return React.DOM.div({ className: "table-responsive" }, table);
-        }
-        return table;
+        return this.getTable();
       }
     });
   });
