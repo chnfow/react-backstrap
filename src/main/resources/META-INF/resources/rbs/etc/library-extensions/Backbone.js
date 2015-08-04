@@ -164,6 +164,14 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
           return this.server;
         },
 
+        sort: function () {
+          if (this.isServerSide()) {
+            // TO-DO check if the sorts have changed since the last fetch and do another fetch if they have
+            return this;
+          }
+          return oldCollection.prototype.sort.apply(this, arguments);
+        },
+
         size: function () {
           if (this.server) {
             return (this._totalRecords !== null) ? this._totalRecords : this.models.length;
