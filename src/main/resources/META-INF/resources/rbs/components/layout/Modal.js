@@ -1,7 +1,7 @@
 /**
  * We are not using bootstrap's modals because it's styling is too mixed in with the rest of the css
  */
-define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function (React, _, TTG) {
+define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup" ], function (React, $, _, TTG) {
   "use strict";
 
   // renders an icon with the name property
@@ -33,6 +33,22 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
     // it's up to the owner to implement onClose since they trigger the open
     close: function () {
       this.props.onClose();
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+      if (this.isMounted()) {
+        if (nextProps.open && !this.props.open) {
+          $("body").addClass("modal-open");
+        } else if (!nextProps.open && this.props.open) {
+          $("body").removeClass("modal-open");
+        }
+      }
+    },
+
+    componentWillUnmount: function () {
+      if (this.props.open) {
+        $("body").removeClass("modal-open");
+      }
     },
 
     render: function () {

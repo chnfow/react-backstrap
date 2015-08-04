@@ -107,6 +107,14 @@ so they're removed from the DOM when they're not
         table-layout: fixed;
     }
 
+    table.table-responsive-horizontal > tbody > tr > td > span {
+        display: inline-block;
+        overflow-x: hidden;
+        -ms-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
     /* hide the table header for small screerns */
     table.table-responsive-horizontal > thead {
         display: none;
