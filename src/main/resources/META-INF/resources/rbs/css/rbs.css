@@ -103,6 +103,10 @@ so they're removed from the DOM when they're not
 }
 
 @media (max-width: 768px) {
+    table.table-responsive-horizontal {
+        table-layout: fixed;
+    }
+
     /* hide the table header for small screerns */
     table.table-responsive-horizontal > thead {
         display: none;
@@ -113,6 +117,10 @@ so they're removed from the DOM when they're not
         display: block;
         text-align: left;
         font-weight: bolder;
+    }
+
+    table.table-responsive-horizontal > tbody > tr {
+        border: #dddddd solid 0.1em;
     }
 
     table.table-responsive-horizontal > tbody > tr > td {
