@@ -74,20 +74,49 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
                 toSet = {};
               }
               var ptr = toSet;
+              var lastPtr = ptr;
+              var lastSetPc = firstPc;
               while (pcs.length > 1) {
                 var nextPc = pcs.shift();
                 if (typeof toSet[ nextPc ] !== "object") {
                   toSet[ nextPc ] = {};
                 }
+                lastPtr = ptr;
+                lastSetPc = nextPc;
                 ptr = toSet[ nextPc ];
               }
               var lastPc = pcs.shift();
-              var oldVal = ptr[ lastPc ];
+              // if the last piece is a string, and the value we're setting is an array
+              // then assume we're setting a collection nested models
+              var setArrayOfObjects = false;
+              if (isNaN(+lastPc) && _.isArray(value)) {
+                setArrayOfObjects = true;
+                // transform the value to an array of objects
+                value = _.map(value, function (oneVal) {
+                  var toReturn = {};
+                  toReturn[ lastPc ] = oneVal;
+                  return toReturn;
+                });
+              }
+
+              var oldVal = this.get(attribute);
               if (_.isEqual(oldVal, value)) {
                 return;
               }
               triggerChange = true;
-              ptr[ lastPc ] = value;
+
+              if (setArrayOfObjects) {
+                // this means we are setting an array in the top leve
+                if (lastPtr === toSet) {
+                  toSet = value;
+                } else {
+                  // otherwise, set the previous piece in the ptr chain to the value
+                  lastPtr[ lastSetPc ] = value;
+                }
+              } else {
+                ptr[ lastPc ] = value;
+              }
+
               oldSet.call(this, firstPc, toSet, silentOptions);
               this.trigger("change:" + attribute, this, value, options);
             } else {

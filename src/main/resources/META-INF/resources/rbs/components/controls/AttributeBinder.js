@@ -15,7 +15,14 @@ define([ "react", "underscore", "../mixins/Events" ], function (React, _, events
       formatFunction: React.PropTypes.func,
       attribute: React.PropTypes.string
     },
+
     mixins: [ events ],
+
+    componentDidMount: function () {
+      if (this.props.attribute !== null) {
+        this.listenTo(this.props.model, "change:" + this.props.attribute, this.update);
+      }
+    },
 
     getDefaultProps: function () {
       return {
