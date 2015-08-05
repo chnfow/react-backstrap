@@ -109,9 +109,9 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
           navbarHeader,
           TTG({
             key: "ttg",
-            transitionName: "fade",
-            enterTimeout: 500,
-            leaveTimeout: 500
+            transitionName: "slide-down",
+            enterTimeout: 250,
+            leaveTimeout: 250
           }, navbarLinks),
           alwaysShowLinks
         ]));

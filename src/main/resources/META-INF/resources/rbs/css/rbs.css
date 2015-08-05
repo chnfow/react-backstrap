@@ -467,6 +467,29 @@ so they're removed from the DOM when they're not
     opacity: 0;
 }
 
+/* a slide-down transition */
+.slide-down-enter {
+    max-height: 0;
+    visibility: hidden;
+}
+
+.slide-down-enter-active {
+    transition: max-height 0.25s ease-out, visibility 0.25s ease-out;
+    visibility: visible;
+    max-height: 500px;
+}
+
+.slide-down-leave {
+    max-height: 500px;
+    visibility: visible;
+}
+
+.slide-down-leave-active {
+    transition: max-height 0.25s ease-out, visibility 0.25s ease-out;
+    visibility: hidden;
+    max-height: 0;
+}
+
 /* faster version of the classic fade */
 .fade-fast-enter {
     opacity: 0;
