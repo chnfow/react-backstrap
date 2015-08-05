@@ -9,7 +9,7 @@ define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore" ],
       mixins: [ model, formGroup ],
 
       propTypes: {
-        size: React.PropTypes.oneOf([ "xs", "sm", "md", "lg", "xl" ])
+        size: React.PropTypes.oneOf([ "xs", "sm", "md", "lg" ])
       },
 
       getDefaultProps: function () {
