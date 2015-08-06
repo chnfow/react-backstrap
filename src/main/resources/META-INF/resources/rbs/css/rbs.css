@@ -4,7 +4,6 @@
 /* apply font smoothing everywhere */
 body {
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
 
@@ -358,6 +357,8 @@ so they're removed from the DOM when they're not
     background-color: white;
     padding: 0.5em;
     z-index: 1000;
+    -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     border-bottom-left-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
@@ -436,6 +437,8 @@ so they're removed from the DOM when they're not
     background-color: white;
     padding: 0.5em;
     z-index: 1000;
+    -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     border-bottom-left-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
@@ -507,15 +510,43 @@ so they're removed from the DOM when they're not
 }
 
 /* fade in/out by sliding down and up respectively named fade-in-down */
-@keyframes fadeInDown {
+@-webkit-keyframes fadeInDown {
     0% {
         opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
         transform: translate3d(0, -100%, 0);
     }
 
     100% {
         opacity: 1;
+        -webkit-transform: none;
         transform: none;
+    }
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@-webkit-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
     }
 }
 
@@ -526,18 +557,23 @@ so they're removed from the DOM when they're not
 
     100% {
         opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
         transform: translate3d(0, -100%, 0);
     }
 }
 
 .fade-in-down-enter {
     opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
 }
 
 .fade-in-down-enter.fade-in-down-enter-active {
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-animation-name: fadeInDown;
     animation-name: fadeInDown;
 }
 
@@ -546,21 +582,52 @@ so they're removed from the DOM when they're not
 }
 
 .fade-in-down-leave.fade-in-down-leave-active {
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-animation-name: fadeOutUp;
     animation-name: fadeOutUp;
 }
 
 /* a much smaller version of the above for full screen elements*/
-@keyframes fadeInDownSmall {
+@-webkit-keyframes fadeInDownSmall {
     0% {
         opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
         transform: translate3d(0, -1%, 0);
     }
 
     100% {
         opacity: 1;
+        -webkit-transform: none;
         transform: none;
+    }
+}
+
+@keyframes fadeInDownSmall {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
+        transform: translate3d(0, -1%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@-webkit-keyframes fadeOutUpSmall {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
+        transform: translate3d(0, -1%, 0);
     }
 }
 
@@ -571,18 +638,23 @@ so they're removed from the DOM when they're not
 
     100% {
         opacity: 0;
+        -webkit-transform: translate3d(0, -1%, 0);
         transform: translate3d(0, -1%, 0);
     }
 }
 
 .fade-in-down-small-enter {
     opacity: 0;
+    -webkit-transform: translate3d(0, -1%, 0);
     transform: translate3d(0, -1%, 0);
 }
 
 .fade-in-down-small-enter.fade-in-down-small-enter-active {
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-animation-name: fadeInDownSmall;
     animation-name: fadeInDownSmall;
 }
 
@@ -591,95 +663,116 @@ so they're removed from the DOM when they're not
 }
 
 .fade-in-down-small-leave.fade-in-down-small-leave-active {
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-animation-name: fadeOutUpSmall;
     animation-name: fadeOutUpSmall;
 }
 
-/* element pops in */
-@keyframes popIn {
-    0% {
-        opacity: 0;
-        transform: scale3d(.8, .8, .8);
-    }
-
-    100% {
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
-    }
-}
-
-@keyframes popOut {
-    0% {
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
-    }
-
-    100% {
-        opacity: 0;
-        transform: scale3d(.8, .8, .8);
-    }
-}
-
-.pop-in-enter {
-    opacity: 0;
-}
-
-.pop-in-enter.pop-in-enter-active {
-    animation-duration: 0.25s;
-    animation-fill-mode: both;
-    animation-name: popIn;
-}
-
-.pop-in-leave {
-    opacity: 1;
-}
-
-.pop-in-leave.pop-in-leave-active {
-    animation-duration: 0.25s;
-    animation-fill-mode: both;
-    animation-name: popOut;
-}
-
 /* flip in and out on the x axis, named flip-in-x */
-@keyframes flipInX {
+@-webkit-keyframes flipInX {
     0% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
         transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        -webkit-animation-timing-function: ease-in;
         animation-timing-function: ease-in;
         opacity: 0;
     }
 
     40% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
         transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        -webkit-animation-timing-function: ease-in;
         animation-timing-function: ease-in;
     }
 
     60% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
         transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
         opacity: 1;
     }
 
     80% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
         transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
     }
 
     100% {
+        -webkit-transform: perspective(400px);
         transform: perspective(400px);
     }
 }
 
-@keyframes flipOutX {
+@keyframes flipInX {
     0% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+    }
+}
+
+@-webkit-keyframes flipOutX {
+    0% {
+        -webkit-transform: perspective(400px);
         transform: perspective(400px);
         opacity: 1;
     }
 
     30% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
         transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
         opacity: 1;
     }
 
     100% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        opacity: 0;
+    }
+}
+
+@keyframes flipOutX {
+    0% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+        opacity: 1;
+    }
+
+    30% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        opacity: 1;
+    }
+
+    100% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
         transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
         opacity: 0;
     }
@@ -690,9 +783,13 @@ so they're removed from the DOM when they're not
 }
 
 .flip-in-x-enter.flip-in-x-enter-active {
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-backface-visibility: visible !important;
     backface-visibility: visible !important;
+    -webkit-animation-name: flipInX;
     animation-name: flipInX;
     opacity: 1;
 }
@@ -702,9 +799,13 @@ so they're removed from the DOM when they're not
 }
 
 .flip-in-x-leave.flip-in-x-leave-active {
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+    -webkit-animation-name: flipOutX;
     animation-name: flipOutX;
+    -webkit-backface-visibility: visible !important;
     backface-visibility: visible !important;
     opacity: 0;
 }

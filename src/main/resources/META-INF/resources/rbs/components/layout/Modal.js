@@ -94,9 +94,9 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup" ]
         TTG({
           key: "modal",
           component: "div",
-          transitionName: "pop-in",
-          enterTimeout: 250,
-          leaveTimeout: 250
+          transitionName: "fade-in-down-small",
+          enterTimeout: 500,
+          leaveTimeout: 500
         }, modal)
       ]);
     }
