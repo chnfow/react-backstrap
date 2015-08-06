@@ -193,13 +193,9 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
           return this.server;
         },
 
-        sort: function () {
-          if (this.isServerSide()) {
-            // TO-DO check if the sorts have changed since the last fetch and do another fetch if they have
-            return this;
-          }
-          return oldCollection.prototype.sort.apply(this, arguments);
-        },
+        //sort: function () {
+        //  return oldCollection.prototype.sort.apply(this, arguments);
+        //},
 
         size: function () {
           if (this.server) {
@@ -262,6 +258,14 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
           } else {
             this._totalRecords = response.length;
           }
+          if (_.isArray(response)) {
+            var i = 0;
+            _.each(response, function (onePiece) {
+              if (_.isObject(onePiece)) {
+                onePiece._serverSortOrder = i++;
+              }
+            });
+          }
           // use the JSOG library to decode whatever the response is
           return _.isObject(response) ? JSOG.decode(response) : response;
         },
@@ -287,7 +291,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
         comparator: function (m1, m2) {
           if (this.server) {
             // if the collection is server side, don't do any sorting
-            return 0;
+            return (m1.get("_serverSortOrder") < m2.get("_serverSortOrder")) ? -1 : 1;
           }
           if (this.sorts.length > 0) {
             for (var i = 0; i < this.sorts.length; i++) {
@@ -367,7 +371,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
         getSortParams: function () {
           var toReturn = {};
           toReturn[ this.sortParam ] = _.map(this.sorts, function (oneSort) {
-            return oneSort.attribute + "|" + (Boolean(oneSort.desc)).toString();
+            return (Boolean(oneSort.desc) ? "D" : "A") + "|" + oneSort.attribute;
           });
           return toReturn;
         },

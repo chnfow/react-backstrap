@@ -44,7 +44,11 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
             desc = !ls.desc;
           }
           this.props.collection.addSort(on, desc);
-          this.props.collection.sort();
+          if (this.props.collection.isServerSide()) {
+            this.props.collection.fetch();
+          } else {
+            this.props.collection.sort();
+          }
         }
       },
 
