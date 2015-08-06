@@ -94,9 +94,9 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup" ]
         TTG({
           key: "modal",
           component: "div",
-          transitionName: "fade-in-down-small",
-          enterTimeout: 500,
-          leaveTimeout: 500
+          transitionName: "fade-scale",
+          enterTimeout: 300,
+          leaveTimeout: 300
         }, modal)
       ]);
     }
