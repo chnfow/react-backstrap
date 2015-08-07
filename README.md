@@ -1,5 +1,5 @@
 # react-backstrap
-![Travis Build Status](https://travis-ci.org/moodysalem/react-backstrap.svg?branch=master)
+[![Build Status](https://travis-ci.org/moodysalem/react-backstrap.svg?branch=master)](https://travis-ci.org/moodysalem/react-backstrap)
 
 This repository is a group of React components and libraries useful for building single page applications. It builds to a webjar deployed to the central repository as com.leaguekit.react-backstrap, and is meant to be included as a POM dependency of a WAR. See [webjars.org](webjars.org) documentation for information about why this works.
 
