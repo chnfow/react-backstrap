@@ -252,10 +252,11 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
         parse: function (response, options) {
           var responseHeaderCount = (options && options.xhr && options.xhr.getResponseHeader ) ?
             parseInt(options.xhr.getResponseHeader(this.totalRecordsHeader)) : 0;
-          if (!isNaN(responseHeaderCount)) {
+          if (!isNaN(responseHeaderCount) && responseHeaderCount > response.length) {
             this.server = true;
             this._totalRecords = Math.max(response.length, responseHeaderCount);
           } else {
+            this.server = false;
             this._totalRecords = response.length;
           }
           if (_.isArray(response)) {
