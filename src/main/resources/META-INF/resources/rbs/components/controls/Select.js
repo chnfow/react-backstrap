@@ -313,10 +313,13 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         }
       },
 
-      // handle a click of the select field
-      handleSelectClick: function (e) {
+      preventDefault: function (e) {
         e.preventDefault();
         e.stopPropagation();
+      },
+
+      // handle a click of the select field
+      handleSelectClick: function (e) {
         this.refs.search.focus();
       },
 
@@ -415,7 +418,8 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         var fakeInputProps = _.omit(_.extend({}, this.props, {
           ref: "fakeInput",
           key: "fake-input",
-          onMouseDown: this.handleSelectClick,
+          onMouseDown: this.preventDefault,
+          onClick: this.handleSelectClick,
           className: "react-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");
 
