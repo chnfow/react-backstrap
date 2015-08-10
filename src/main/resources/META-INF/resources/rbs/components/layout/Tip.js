@@ -9,19 +9,18 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,
-      placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ])
+      //placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ])
     },
 
     getDefaultProps: function () {
       return {
-        placement: "right"
+        //placement: "top"
       };
     },
 
     getInitialState: function () {
       return {
-        open: false,
-        toggled: false
+        open: false
       };
     },
 
@@ -44,32 +43,25 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
     },
 
     render: function () {
-      var info = null;
-      if (this.state.open || this.state.toggled) {
-        info = React.DOM.span({
-          className: "tip-" + this.props.placement,
-          key: "tip"
-        }, [
-          React.DOM.div({ className: "tip", key: "t" }, this.props.tip),
-          React.DOM.span({ className: "arrow", key: "a" })
-        ]);
+      var className = [ "tip-container" ];
+
+      if (this.state.open) {
+        className.push("tip-container-open");
       }
 
       return React.DOM.span({
-        className: "tip-container"
+        className: className.join(" ")
       }, [
         React.DOM.span(_.extend(_.omit(this.props, "placement"), {
           key: "content",
           onMouseEnter: _.bind(this.setTipState, this, true),
           onMouseLeave: _.bind(this.setTipState, this, false),
-          onMouseDown: _.bind(this.toggleTipState, this)
+          onClick: _.bind(this.toggleTipState, this)
         }), this.props.children),
-        TTG({
-          key: "info",
-          transitionName: "fade-fast",
-          leaveTimeout: 250,
-          enterTimeout: 250
-        }, info)
+        React.DOM.span({
+          className: "tip tip-" + this.props.placement,
+          key: "tip"
+        }, this.props.tip)
       ]);
     }
 

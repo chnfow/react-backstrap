@@ -143,122 +143,60 @@ so they're removed from the DOM when they're not
 
 /* Tooltips */
 .tip-container {
-    z-index: 1;
-    margin-left: 0.3em;
-    display: inline-block;
     position: relative;
+    cursor: pointer;
 }
 
-/* the actual tip */
-.tip-container .tip {
-    z-index: 0;
-    width: 11em;
+.tip-container:before {
+    content: "";
     position: absolute;
-    padding: 0.3em;
-    box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 0.2em;
-    background-color: white;
-}
-
-.tip-container .arrow {
-    z-index: 1;
-    position: absolute;
-    top: 50%;
+    left: 50%;
+    margin-left: -0.25em;
     width: 0;
     height: 0;
-}
-
-/* this is true for left and right tips */
-.tip-container .tip-right .tip, .tip-container .tip-left .tip {
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-
-.tip-container .tip-right .arrow, .tip-container .tip-left .arrow {
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-
-/* tip is off to the right */
-.tip-container .tip-right .tip {
-    left: 100%;
-    margin-left: 0.45em;
-}
-
-.tip-container .tip-right .arrow {
-    left: 100%;
-    border-top: 0.5em solid transparent;
-    border-bottom: 0.5em solid transparent;
-    border-right: 0.5em solid rgba(0, 0, 0, 0.2);
-}
-
-/* tip is off to the left */
-.tip-container .tip-left .tip {
-    right: 100%;
-    margin-right: 0.45em;
-}
-
-.tip-container .tip-left .arrow {
-    right: 100%;
-    border-top: 0.5em solid transparent;
-    border-bottom: 0.5em solid transparent;
-    border-left: 0.5em solid rgba(0, 0, 0, 0.2);
-}
-
-/* this is true for top and bottom tips */
-.tip-container .tip-top .tip, .tip-container .tip-bottom .tip {
-    margin-left: 50%;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-}
-
-.tip-container .tip-top .arrow, .tip-container .tip-bottom .arrow {
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-}
-
-/* for top tips */
-.tip-container .tip-top .tip {
+    border: 0.25em solid transparent;
+    border-top-color: rgba(33, 37, 41, 0.9);
     bottom: 100%;
-    margin-bottom: 0.45em;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: opacity 250ms, visibility 250ms;
+    -moz-transition: opacity 250ms, visibility 250ms;
+    -ms-transition: opacity 250ms, visibility 250ms;
+    -o-transition: opacity 250ms, visibility 250ms;
+    transition: opacity 250ms, visibility 250ms;
 }
 
-.tip-container .tip-top .arrow {
-    /*these don't work for some reason*/
-    display: none;
-    border-left: 0.5em solid transparent;
-    border-right: 0.5em solid transparent;
-    border-top: 0.5em solid rgba(0, 0, 0, 0.2);
-    bottom: 100%;
+.tip-container.tip-container-open:before {
+    opacity: 1;
+    visibility: visible;
 }
 
-/* for bottom tips */
-.tip-container .tip-bottom .tip {
-    top: 100%;
-    margin-top: 0.45em;
+.tip-container .tip {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    text-align: center;
+    left: 50%;
+    position: absolute;
+    background-color: rgba(33, 37, 41, 0.9);
+    color: white;
+    padding: 0.4em;
+    border-radius: 0.2em;
+    bottom: -webkit-calc(100% + 0.5em);
+    bottom: calc(100% + 0.5em);
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: opacity 250ms, visibility 250ms;
+    -moz-transition: opacity 250ms, visibility 250ms;
+    -ms-transition: opacity 250ms, visibility 250ms;
+    -o-transition: opacity 250ms, visibility 250ms;
+    transition: opacity 250ms, visibility 250ms;
 }
 
-.tip-container .tip-bottom .arrow {
-    /*these don't work for some reason*/
-    display: none;
-    border-left: 0.5em solid transparent;
-    border-right: 0.5em solid transparent;
-    border-bottom: 0.5em solid rgba(0, 0, 0, 0.2);
-    top: 100%;
+.tip-container.tip-container-open .tip {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Since these can be clicked, they should have a pointer */

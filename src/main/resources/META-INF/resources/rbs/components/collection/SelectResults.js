@@ -76,11 +76,12 @@ define([ "react", "underscore", "../mixins/Collection" ],
         }
       },
 
-      handleSelect: function (model, e) {
+      preventDefault: function (e) {
         e.preventDefault();
-        if (this.props.onSelect) {
-          this.props.onSelect(model, e);
-        }
+      },
+
+      handleSelect: function (model, e) {
+        this.props.onSelect(model, e);
       },
 
       getHilitedModel: function () {
@@ -110,7 +111,8 @@ define([ "react", "underscore", "../mixins/Collection" ],
             model: oneResultComponent.props.model,
             key: "model-result-" + oneResultComponent.props.model.cid,
             onMouseOver: _.bind(this.setHilite, this, myIndex),
-            onMouseDown: _.bind(this.handleSelect, this, oneResultComponent.props.model)
+            onMouseDown: this.preventDefault,
+            onClick: _.bind(this.handleSelect, this, oneResultComponent.props.model)
           }, oneResultComponent);
         }, this);
 
