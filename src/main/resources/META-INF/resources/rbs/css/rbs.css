@@ -78,7 +78,13 @@ so they're removed from the DOM when they're not
 .modal {
     display: block !important;
     overflow-y: auto !important;
-    opacity: 1;
+    -webkit-overflow-scrolling: auto !important;
+}
+
+.modal .modal-dialog .modal-title {
+    overflow-x: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 .Modal-backdrop {
@@ -475,6 +481,7 @@ so they're removed from the DOM when they're not
     transform: scale(0.7);
     opacity: 0;
 }
+
 .fade-scale-enter.fade-scale-enter-active {
     -webkit-transform: scale(1);
     -moz-transform: scale(1);
@@ -485,6 +492,7 @@ so they're removed from the DOM when they're not
     -moz-transition: all 0.3s;
     transition: all 0.3s;
 }
+
 .fade-scale-leave {
     -webkit-transform: scale(1);
     -moz-transform: scale(1);
@@ -492,6 +500,7 @@ so they're removed from the DOM when they're not
     transform: scale(1);
     opacity: 1;
 }
+
 .fade-scale-leave.fade-scale-leave-active {
     -webkit-transform: scale(0.7);
     -moz-transform: scale(0.7);
