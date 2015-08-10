@@ -9,12 +9,12 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,
-      //placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ])
+      placement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ])
     },
 
     getDefaultProps: function () {
       return {
-        //placement: "top"
+        placement: "top"
       };
     },
 
@@ -43,7 +43,7 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
     },
 
     render: function () {
-      var className = [ "tip-container" ];
+      var className = [ "tip-container", ("tip-" + this.props.placement) ];
 
       if (this.state.open) {
         className.push("tip-container-open");
@@ -59,7 +59,7 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
           onClick: _.bind(this.toggleTipState, this)
         }), this.props.children),
         React.DOM.span({
-          className: "tip tip-" + this.props.placement,
+          className: "tip",
           key: "tip"
         }, this.props.tip)
       ]);
