@@ -26,38 +26,24 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
 
       getInitialState: function () {
         return {
-          collapsed: true
+          open: false
         };
       },
 
       componentDidMount: function () {
         if (this.props.collapseOnNavigate) {
-          this.listenTo(Backbone.history, "route", this.collapse);
+          this.listenTo(Backbone.history, "route", _.bind(this.setOpen, this, false));
         }
       },
 
-      collapse: function () {
+      setOpen: function (open) {
         if (this.isMounted()) {
           this.setState({
-            collapsed: true
+            open: open
           });
         }
       },
-
-      open: function () {
-        if (this.isMounted()) {
-          this.setState({
-            collapsed: false
-          });
-        }
-      },
-
-      toggleCollapsed: function () {
-        this.setState({
-          collapsed: !this.state.collapsed
-        });
-      },
-
+      
       render: function () {
         var navbarHeader = React.DOM.div({
           className: "navbar-header",
@@ -66,7 +52,7 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
           React.DOM.button({
             key: "navbar-toggle-collapsed",
             className: "navbar-toggle",
-            onClick: _.bind(this.toggleCollapsed, this)
+            onClick: _.bind(this.setOpen, this, !this.state.open)
           }, icon({ name: "bars" })),
           React.DOM.a({
             key: "brand",
@@ -77,7 +63,7 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
 
         // this is the collapsible navbar-it only displays on xs screens
         var navbarLinks = null;
-        if (!this.state.collapsed) {
+        if (this.state.open) {
           navbarLinks = React.DOM.div({
             className: "navbar-collapse in visible-xs",
             key: "navbar-links-collapsible"
