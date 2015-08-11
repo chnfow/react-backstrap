@@ -76,8 +76,9 @@ define([ "react", "underscore", "../mixins/Collection" ],
         }
       },
 
-      preventDefault: function (e) {
+      doNothing: function (e) {
         e.preventDefault();
+        e.stopPropagation();
       },
 
       handleSelect: function (model, e) {
@@ -98,7 +99,7 @@ define([ "react", "underscore", "../mixins/Collection" ],
 
       render: function () {
         var i = 0;
-        // take the models and turn them into model components, then wrap each one in a search result div
+        // wrap each result in a div
         var results = _.map(this.getModels(), function (oneResultComponent) {
           var myIndex = i++;
           var optionClass = "react-select-search-result";
@@ -111,11 +112,12 @@ define([ "react", "underscore", "../mixins/Collection" ],
             model: oneResultComponent.props.model,
             key: "model-result-" + oneResultComponent.props.model.cid,
             onMouseOver: _.bind(this.setHilite, this, myIndex),
-            onMouseDown: this.preventDefault,
+            onMouseDown: this.doNothing,
             onClick: _.bind(this.handleSelect, this, oneResultComponent.props.model)
           }, oneResultComponent);
         }, this);
 
+        // empty message
         if (results.length === 0) {
           results.push(React.DOM.div({
             className: "react-select-search-result",

@@ -35,7 +35,6 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
       },
 
       sortCollection: function (on, e) {
-        e.preventDefault();
         if (typeof on === "string") {
           // sort the collection
           var ls = this.getLastSort();
@@ -67,7 +66,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
           }
           return React.DOM.th({
             key: i++,
-            onMouseDown: _.bind(this.sortCollection, this, so),
+            onClick: _.bind(this.sortCollection, this, so),
             className: hasSort ? "sortable-column-header" : ""
           }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
         }, this);

@@ -120,6 +120,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
         }
       },
 
+
       getHeader: function () {
         return React.DOM.div({
           key: "datepickerheader",
@@ -127,7 +128,8 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
         }, [
           React.DOM.div({
             key: "prev",
-            onMouseDown: _.bind(this.moveMonth, this, -1),
+            onMouseDown: this.doNothing,
+            onClick: _.bind(this.moveMonth, this, -1),
             className: "datepicker-header-prev"
           }, icon({
             name: "chevron-left"
@@ -138,7 +140,8 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
           }, MONTHS[ this.state.currentMonth ] + " " + this.state.currentYear),
           React.DOM.div({
             key: "next",
-            onMouseDown: _.bind(this.moveMonth, this, 1),
+            onMouseDown: this.doNothing,
+            onClick: _.bind(this.moveMonth, this, 1),
             className: "datepicker-header-next"
           }, icon({
             name: "chevron-right"
@@ -244,10 +247,12 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
         if (!valid) {
           classes.push("invalid-day-option");
         }
+        var fn = (valid) ? _.bind(this.setDate, this, year, month, day) : this.doNothing;
         return React.DOM.span({
           key: "calendar-day-" + year + "-" + month + "-" + day,
           className: classes.join(" "),
-          onMouseDown: (valid) ? _.bind(this.setDate, this, year, month, day) : this.doNothing
+          onMouseDown: this.doNothing,
+          onClick: fn
         }, day);
       },
 
@@ -259,7 +264,8 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
         return (t >= min && t <= max);
       },
 
-      setDate: function (year, month, day, cp) {
+      setDate: function (year, month, day, e) {
+        this.doNothing(e);
         var m = moment(new Date(year, month, day));
         if (m.isAfter(this.props.max)) {
           m = moment(this.props.max);
@@ -326,9 +332,11 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
       clearValue: function (e) {
         this.doNothing(e);
         this.props.onChange(null);
-        this.setState({
-          transientValue: null
-        });
+        if (this.isMounted()) {
+          this.setState({
+            transientValue: null
+          });
+        }
       },
 
       render: function () {
@@ -341,7 +349,8 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
           datepicker = React.DOM.div({
             key: "dp",
             className: "datepicker-calendar",
-            onMouseDown: this.doNothing
+            onMouseDown: this.doNothing,
+            onClick: this.doNothing
           }, [
             this.getHeader(),
             this.getBody()
@@ -363,7 +372,8 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
           clearButton = React.DOM.div({
             key: "clear",
             className: "datepicker-clear-button",
-            onMouseDown: this.clearValue
+            onMouseDown: this.doNothing,
+            onClick: this.clearValue
           }, icon({ name: "remove" }));
         }
 

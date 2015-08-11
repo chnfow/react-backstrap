@@ -313,7 +313,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         }
       },
 
-      preventDefault: function (e) {
+      doNothing: function (e) {
         e.preventDefault();
         e.stopPropagation();
       },
@@ -418,7 +418,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         var fakeInputProps = _.omit(_.extend({}, this.props, {
           ref: "fakeInput",
           key: "fake-input",
-          onMouseDown: this.preventDefault,
+          onMouseDown: this.doNothing,
           onClick: this.handleSelectClick,
           className: "react-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");

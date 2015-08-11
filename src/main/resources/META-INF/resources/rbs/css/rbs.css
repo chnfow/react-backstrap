@@ -249,6 +249,9 @@ so they're removed from the DOM when they're not
 
 .tip-container.tip-top .tip {
     -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
     transform: translateX(-50%);
     left: 50%;
     bottom: -webkit-calc(100% + 0.5em);
@@ -260,11 +263,17 @@ so they're removed from the DOM when they're not
     left: calc(100% + 0.5em);
     top: 50%;
     -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
     transform: translateY(-50%);
 }
 
 .tip-container.tip-bottom .tip {
     -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
     transform: translateX(-50%);
     left: 50%;
     top: -webkit-calc(100% + 0.5em);
@@ -276,6 +285,9 @@ so they're removed from the DOM when they're not
     right: calc(100% + 0.5em);
     top: 50%;
     -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
     transform: translateY(-50%);
 }
 
@@ -392,6 +404,10 @@ so they're removed from the DOM when they're not
     position: absolute;
     cursor: pointer;
     top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
     transform: translateY(-50%);
     right: 0.5em;
     opacity: 0.4;
@@ -577,12 +593,18 @@ so they're removed from the DOM when they're not
     0% {
         opacity: 0;
         -webkit-transform: translate3d(0, -100%, 0);
+        -moz-transform: translate3d(0, -100%, 0);
+        -ms-transform: translate3d(0, -100%, 0);
+        -o-transform: translate3d(0, -100%, 0);
         transform: translate3d(0, -100%, 0);
     }
 
     100% {
         opacity: 1;
         -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
         transform: none;
     }
 }
@@ -591,12 +613,18 @@ so they're removed from the DOM when they're not
     0% {
         opacity: 0;
         -webkit-transform: translate3d(0, -100%, 0);
+        -moz-transform: translate3d(0, -100%, 0);
+        -ms-transform: translate3d(0, -100%, 0);
+        -o-transform: translate3d(0, -100%, 0);
         transform: translate3d(0, -100%, 0);
     }
 
     100% {
         opacity: 1;
         -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
         transform: none;
     }
 }
@@ -609,6 +637,9 @@ so they're removed from the DOM when they're not
     100% {
         opacity: 0;
         -webkit-transform: translate3d(0, -100%, 0);
+        -moz-transform: translate3d(0, -100%, 0);
+        -ms-transform: translate3d(0, -100%, 0);
+        -o-transform: translate3d(0, -100%, 0);
         transform: translate3d(0, -100%, 0);
     }
 }
@@ -621,6 +652,9 @@ so they're removed from the DOM when they're not
     100% {
         opacity: 0;
         -webkit-transform: translate3d(0, -100%, 0);
+        -moz-transform: translate3d(0, -100%, 0);
+        -ms-transform: translate3d(0, -100%, 0);
+        -o-transform: translate3d(0, -100%, 0);
         transform: translate3d(0, -100%, 0);
     }
 }
@@ -628,6 +662,9 @@ so they're removed from the DOM when they're not
 .fade-in-down-enter {
     opacity: 0;
     -webkit-transform: translate3d(0, -100%, 0);
+    -moz-transform: translate3d(0, -100%, 0);
+    -ms-transform: translate3d(0, -100%, 0);
+    -o-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
 }
 
@@ -658,12 +695,18 @@ so they're removed from the DOM when they're not
     0% {
         opacity: 0;
         -webkit-transform: translate3d(0, -1%, 0);
+        -moz-transform: translate3d(0, -1%, 0);
+        -ms-transform: translate3d(0, -1%, 0);
+        -o-transform: translate3d(0, -1%, 0);
         transform: translate3d(0, -1%, 0);
     }
 
     100% {
         opacity: 1;
         -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
         transform: none;
     }
 }
@@ -672,12 +715,18 @@ so they're removed from the DOM when they're not
     0% {
         opacity: 0;
         -webkit-transform: translate3d(0, -1%, 0);
+        -moz-transform: translate3d(0, -1%, 0);
+        -ms-transform: translate3d(0, -1%, 0);
+        -o-transform: translate3d(0, -1%, 0);
         transform: translate3d(0, -1%, 0);
     }
 
     100% {
         opacity: 1;
         -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
         transform: none;
     }
 }
@@ -690,6 +739,9 @@ so they're removed from the DOM when they're not
     100% {
         opacity: 0;
         -webkit-transform: translate3d(0, -1%, 0);
+        -moz-transform: translate3d(0, -1%, 0);
+        -ms-transform: translate3d(0, -1%, 0);
+        -o-transform: translate3d(0, -1%, 0);
         transform: translate3d(0, -1%, 0);
     }
 }
@@ -702,6 +754,9 @@ so they're removed from the DOM when they're not
     100% {
         opacity: 0;
         -webkit-transform: translate3d(0, -1%, 0);
+        -moz-transform: translate3d(0, -1%, 0);
+        -ms-transform: translate3d(0, -1%, 0);
+        -o-transform: translate3d(0, -1%, 0);
         transform: translate3d(0, -1%, 0);
     }
 }
@@ -709,6 +764,9 @@ so they're removed from the DOM when they're not
 .fade-in-down-small-enter {
     opacity: 0;
     -webkit-transform: translate3d(0, -1%, 0);
+    -moz-transform: translate3d(0, -1%, 0);
+    -ms-transform: translate3d(0, -1%, 0);
+    -o-transform: translate3d(0, -1%, 0);
     transform: translate3d(0, -1%, 0);
 }
 

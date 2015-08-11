@@ -1,11 +1,13 @@
 /**
  * React Component that renders a question sign and a tooltip when hovered over
  */
-define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function (React, _, TTG) {
+define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _, occ) {
   "use strict";
 
   return _.rf({
     displayName: "Tip",
+
+    mixins: [ occ ],
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,
@@ -32,14 +34,14 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
       }
     },
 
+    onClickOutside: function () {
+      this.setTipState(false);
+    },
+
     toggleTipState: function (e) {
       e.preventDefault();
       e.stopPropagation();
-      if (this.isMounted()) {
-        this.setState({
-          open: !this.state.open
-        });
-      }
+      this.setTipState(!this.state.open);
     },
 
     render: function () {
@@ -60,7 +62,8 @@ define([ "react", "underscore", "../controls/TimeoutTransitionGroup" ], function
         }), this.props.children),
         React.DOM.span({
           className: "tip",
-          key: "tip"
+          key: "tip",
+          onClick: _.bind(this.setTipState, this, false)
         }, this.props.tip)
       ]);
     }
