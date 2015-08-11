@@ -29,7 +29,7 @@ define([ "react", "underscore", "../layout/Tip", "../layout/Icon" ], function (R
             key: "tip",
             tip: newComponent.props.tip,
             placement: newComponent.props.placement
-          }, icon({ name: "question-circle" })));
+          }, icon({ className: "sm-margin-left", name: "question-circle" })));
         }
         formGroupChildren.unshift(React.DOM.label({
           key: "attribute-label",
