@@ -29,8 +29,9 @@ define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _
     },
 
     componentDidMount: function () {
-      this._setPlacement = _.bind(this.setPlacement, this);
       this.setPlacement();
+
+      this._setPlacement = _.debounce(_.bind(this.setPlacement, this), 50);
       $(window).on("resize", this._setPlacement);
     },
 
@@ -54,10 +55,12 @@ define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _
       var ht = jqTip.outerHeight() + 8;
       var wd = jqTip.outerWidth() + 8;
       var jqAnchor = $(React.findDOMNode(this.refs.container));
-      var x = jqAnchor.offset().left;
-      var y = jqAnchor.offset().top;
-      var windowHeight = $(window).height();
-      var windowWidth = $(window).width();
+      // the coordinates of the element relative to the window
+      var w = $(window);
+      var x = jqAnchor.offset().left - w.scrollLeft();
+      var y = jqAnchor.offset().top - w.scrollTop();
+      var windowHeight = w.height();
+      var windowWidth = w.width();
       var placement = this.props.defaultPlacement;
       if (y - ht < 0 && placement === "top") {
         placement = "right";
