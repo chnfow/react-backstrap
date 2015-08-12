@@ -33,6 +33,12 @@ define([ "react", "underscore", "jquery", "../controls/Button", "../controls/Tim
         }, this.scrollIntoView);
       },
 
+      scrollTo: function (x, y) {
+        $("body, html").animate({
+          scrollTop: y + "px",
+          scrollLeft: x + "px"
+        });
+      },
       scrollIntoView: function () {
         if (this.state.open && this.isMounted()) {
           var menu = $(React.findDOMNode(this.refs.mnu));
@@ -46,20 +52,25 @@ define([ "react", "underscore", "jquery", "../controls/Button", "../controls/Tim
           var windowHeight = $(window).height();
           var windowScrollLeft = $(window).scrollLeft();
           var windowWidth = $(window).width();
+          // what we'll scroll to at the end
+          var scrollTop = windowScrollTop, scrollLeft = windowScrollLeft;
           if (this.props.dropup) {
             if (menuTop < windowScrollTop) {
-              $(window).scrollTop(menuTop);
+              scrollTop = menuTop;
             }
           } else {
             if (menuBottom > (windowScrollTop + windowHeight)) {
-              $(window).scrollTop(menuBottom - windowHeight);
+              scrollTop = menuBottom - windowHeight;
             }
           }
           if ((windowScrollLeft + windowWidth) < menuRight) {
-            $(window).scrollLeft(menuRight - windowWidth);
+            scrollLeft = menuRight - windowWidth;
           }
           if (windowScrollLeft > menuLeft) {
-            $(window).scrollLeft(menuLeft);
+            scrollLeft = menuLeft;
+          }
+          if (scrollTop !== windowScrollTop || scrollLeft !== windowScrollLeft) {
+            this.scrollTo(scrollLeft, scrollTop);
           }
         }
       },
