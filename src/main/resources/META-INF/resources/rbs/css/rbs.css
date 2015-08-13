@@ -255,11 +255,13 @@ so they're removed from the DOM when they're not
     transform: translateX(-50%);
     left: 50%;
     bottom: -webkit-calc(100% + 0.5em);
+    bottom: -moz-calc(100% + 0.5em);
     bottom: calc(100% + 0.5em);
 }
 
 .tip-container.tip-right .tip {
     left: -webkit-calc(100% + 0.5em);
+    left: -moz-calc(100% + 0.5em);
     left: calc(100% + 0.5em);
     top: 50%;
     -webkit-transform: translateY(-50%);
@@ -277,11 +279,13 @@ so they're removed from the DOM when they're not
     transform: translateX(-50%);
     left: 50%;
     top: -webkit-calc(100% + 0.5em);
+    top: -moz-calc(100% + 0.5em);
     top: calc(100% + 0.5em);
 }
 
 .tip-container.tip-left .tip {
     right: -webkit-calc(100% + 0.5em);
+    right: -moz-calc(100% + 0.5em);
     right: calc(100% + 0.5em);
     top: 50%;
     -webkit-transform: translateY(-50%);
