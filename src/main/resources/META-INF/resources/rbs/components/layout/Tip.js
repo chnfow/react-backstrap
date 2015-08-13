@@ -110,7 +110,7 @@ define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _
           onClick: _.bind(this.handleClick, this)
         }), this.props.children),
         React.DOM.span({
-          className: "tip",
+          className: "tip no-select",
           key: "tip",
           ref: "tip",
           onClick: _.bind(this.setTipState, this, false)
