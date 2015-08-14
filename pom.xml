@@ -38,6 +38,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <skip.js.build>false</skip.js.build>
   </properties>
 
   <distributionManagement>
@@ -79,6 +80,10 @@
           <filterConfig>
             true
           </filterConfig>
+
+          <skip>
+            ${skip.js.build}
+          </skip>
         </configuration>
       </plugin>
     </plugins>
