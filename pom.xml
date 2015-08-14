@@ -79,10 +79,6 @@
           <filterConfig>
             true
           </filterConfig>
-          <!-- Skip requirejs optimization if true -->
-          <skip>
-            false
-          </skip>
         </configuration>
       </plugin>
     </plugins>
