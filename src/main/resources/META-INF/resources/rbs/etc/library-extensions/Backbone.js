@@ -193,6 +193,24 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
           return this.server;
         },
 
+        unsetParam: function (key) {
+          if (typeof key === "string") {
+            this.params = _.omit(this.params, key);
+            return this;
+          }
+        },
+
+        setParam: function (key, value) {
+          if (typeof key === "object") {
+            this.params = _.extend({}, this.params, key);
+          } else if (typeof key === "string") {
+            var setObj = {};
+            setObj[ key ] = value;
+            this.params = _.extend({}, this.params, setObj);
+          }
+          return this;
+        },
+
         //sort: function () {
         //  return oldCollection.prototype.sort.apply(this, arguments);
         //},

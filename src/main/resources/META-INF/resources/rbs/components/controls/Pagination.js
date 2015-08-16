@@ -52,7 +52,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         return React.DOM.li({
           key: "page-" + pageObject.key,
           className: classes.join(" "),
-          onClick: _.bind(this.handlePageClick, this, pageObject.page)
+          onClick: (pageObject.disabled) ? null : _.bind(this.handlePageClick, this, pageObject.page)
         }, React.DOM.a({
           href: "#"
         }, pageObject.text));
