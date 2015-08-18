@@ -193,6 +193,7 @@ so they're removed from the DOM when they're not
 .tip-container {
     position: relative;
     cursor: pointer;
+    z-index: 1;
 }
 
 /* the arrow */

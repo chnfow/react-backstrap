@@ -1,9 +1,14 @@
 /**
  * React Component that renders a question sign and a tooltip when hovered over
  */
-define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _, occ) {
+define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function (React, $, _, occ) {
   "use strict";
 
+  var TOP = "top";
+  var LEFT = "left";
+  var RIGHT = "right";
+  var BOTTOM = "bottom";
+  var placements = [ TOP, LEFT, RIGHT, BOTTOM ];
   return _.rf({
     displayName: "Tip",
 
@@ -11,7 +16,7 @@ define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,
-      defaultPlacement: React.PropTypes.oneOf([ "top", "right", "left", "bottom" ]),
+      defaultPlacement: React.PropTypes.oneOf(placements),
       auto: React.PropTypes.bool
     },
 
@@ -32,11 +37,11 @@ define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _
       this.setPlacement();
 
       this._setPlacement = _.debounce(_.bind(this.setPlacement, this), 50);
-      $(window).on("resize", this._setPlacement);
+      $(window).on("resize scroll", this._setPlacement);
     },
 
     componentWillUnmount: function () {
-      $(window).off("resize", this._setPlacement);
+      $(window).off("resize scroll", this._setPlacement);
     },
 
     setPlacement: function () {
@@ -51,27 +56,45 @@ define([ "react", "underscore", "../mixins/OnClickOutside" ], function (React, _
       if (!this.props.auto || !this.isMounted()) {
         return this.props.defaultPlacement;
       }
+      // where the actual tip popup is located
       var jqTip = $(React.findDOMNode(this.refs.tip));
+      // where the tip is anchored to
+      var jqAnchor = $(React.findDOMNode(this.refs.container));
       var ht = jqTip.outerHeight() + 8;
       var wd = jqTip.outerWidth() + 8;
-      var jqAnchor = $(React.findDOMNode(this.refs.container));
-      // the coordinates of the element relative to the window
+      // we will fill this with placements that fit the whole tip, then choose the best one
+      var validPlacements = [];
+      // the center position of the anchor relative to the viewport
       var w = $(window);
-      var x = jqAnchor.offset().left - w.scrollLeft();
-      var y = jqAnchor.offset().top - w.scrollTop();
-      var windowHeight = w.height();
-      var windowWidth = w.width();
-      var placement = this.props.defaultPlacement;
-      if (y - ht < 0 && placement === "top") {
-        placement = "right";
+      var x = jqAnchor.offset().left + (jqAnchor.outerWidth() / 2) - w.scrollLeft();
+      var y = jqAnchor.offset().top + (jqAnchor.outerHeight() / 2) - w.scrollTop();
+      // window width and height
+      var wWd = w.width();
+      var wHt = w.height();
+      var placement;
+      // first check top is valid
+      if ((x + (wd / 2) < wWd) && (x - (wd / 2) > 0) && (y - ht > 0)) {
+        validPlacements.push(TOP);
       }
-      if (x + wd > windowWidth && placement === "right") {
-        placement = "bottom";
+      if ((x + wd < wWd) && (y - (ht / 2) > 0) && (y + (ht / 2) < wHt)) {
+        validPlacements.push(RIGHT);
       }
-      if (y + ht > windowHeight && placement === "bottom") {
-        placement = "left";
+      if ((x + (wd / 2) < wWd) && (x - (wd / 2) > 0) && (y + ht < wHt)) {
+        validPlacements.push(BOTTOM);
       }
-      return placement;
+      if ((x - wd > 0) && (y - (ht / 2) > 0) && (y + (ht / 2) < wHt)) {
+        validPlacements.push(LEFT);
+      }
+      if (validPlacements.length === 0) {
+        return this.props.defaultPlacement;
+      }
+      if (validPlacements.length === 1) {
+        return validPlacements[ 0 ];
+      }
+      if (validPlacements.indexOf(this.props.defaultPlacement) !== -1) {
+        return this.props.defaultPlacement;
+      }
+      return validPlacements[ 0 ];
     },
 
     setTipState: function (state) {
