@@ -1,5 +1,5 @@
 /**
- * Calls onClick when a "tap" happens
+ * Calls onClick when a "tap" happens and prevents the simulated click events from happening
  */
 define([ "react", "underscore" ], function (React, _) {
   "use strict";
@@ -18,8 +18,6 @@ define([ "react", "underscore" ], function (React, _) {
 
     getInitialState: function () {
       return {
-        // when we trigger a click by touchend, this is set to true so the click event is not triggered twice
-        clickEventTriggered: false,
         touchId: null,
         touchX: null,
         touchY: null
@@ -27,19 +25,19 @@ define([ "react", "underscore" ], function (React, _) {
     },
 
     // clear the touch data we've gathered
-    clearTouchData: function () {
+    clearTouchData: function (callback) {
       if (this.isMounted()) {
         this.setState({
           touchId: null,
           touchX: null,
           touchY: null
-        });
+        }, callback);
       }
     },
 
     handleTouchStart: function (e) {
-      // not exactly one finger touching the element
-      if (e.touches.length !== 1) {
+      // one+ touches means the user isn't trying to tap this element
+      if (e.touches.length !== 1 || e.targetTouches.length !== 1) {
         this.clearTouchData();
         return;
       }
@@ -51,9 +49,10 @@ define([ "react", "underscore" ], function (React, _) {
       if (this.state.touchId === null) {
         return;
       }
-      // prevent the click event
+      // prevent the simulated mouse events
       e.preventDefault();
-      this.setState({ touchId: null, touchX: null, touchY: null, clickEventTriggered: true }, function () {
+      // clear the data and then trigger the click
+      this.clearTouchData(function () {
         this.triggerClick();
       });
     },
@@ -62,17 +61,22 @@ define([ "react", "underscore" ], function (React, _) {
       if (this.state.touchId === null) {
         return;
       }
-      // find the touch
+      if (e.touches.length !== 1) {
+        this.clearTouchData();
+        return;
+      }
+      // find the touch of the changed touches
       var tch = _.find(e.changedTouches, function (oneT) {
-        return oneT.identifier === this.state.touchId
+        return oneT.identifier === this.state.touchId;
       }, this);
-      // didn't find the touch
+
+      // this shouldn't ever happen
       if (!tch) {
         return;
       }
-      // the touch was moved
+      // calculate how far it was moved
       var dist = Math.sqrt(Math.pow(tch.screenX - this.state.touchX, 2) + Math.pow(tch.screenY - this.state.touchY, 2));
-      // check the distance from the original touch
+      // if it was moved farther than the allowed amount, then we should cancel the touch
       if (dist > this.props.threshold) {
         this.clearTouchData();
       }
@@ -82,12 +86,8 @@ define([ "react", "underscore" ], function (React, _) {
       this.clearTouchData();
     },
 
-    getChild: function () {
-      return React.Children.only(this.props.children);
-    },
-
     getOnClick: function () {
-      var c = this.getChild();
+      var c = React.Children.only(this.props.children);
       return c.props.onClick;
     },
 
@@ -98,19 +98,8 @@ define([ "react", "underscore" ], function (React, _) {
       }
     },
 
-    handleClick: function (e) {
-      if (this.state.clickEventTriggered) {
-        this.setState({
-          clickEventTriggered: false
-        });
-        return false;
-      }
-      this.triggerClick(e);
-    },
-
     render: function () {
       return React.cloneElement(React.Children.only(this.props.children), {
-        onClick: this.handleClick,
         onTouchStart: this.handleTouchStart,
         onTouchEnd: this.handleTouchEnd,
         onTouchMove: this.handleTouchMove,

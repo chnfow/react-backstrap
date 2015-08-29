@@ -2,8 +2,8 @@
  * React Component
  */
 define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside",
-    "../mixins/Events", "backbone" ],
-  function (React, $, _, icon, TTG, onClickOutside, events, Backbone) {
+    "../mixins/Events", "backbone", "../controls/Tappable" ],
+  function (React, $, _, icon, TTG, onClickOutside, events, Backbone, tp) {
     "use strict";
 
     return _.rf({
@@ -69,8 +69,7 @@ define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransiti
 
       render: function () {
         // the first child is the actual toggle button
-        var toggle = React.DOM.a({
-          key: "dropdown-toggle-link",
+        var toggle = tp({ key: "dropdown-toggle-link" }, React.DOM.a({
           href: "#",
           className: "dropdown-toggle",
           onClick: _.bind(this.toggleOpen, this)
@@ -78,7 +77,7 @@ define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransiti
           icon({ name: this.props.icon, key: "toggle-icon" }),
           React.DOM.span({ key: "navbar-dropdown-text-label" }, this.props.text),
           React.DOM.span({ key: "caret", className: "caret" })
-        ]);
+        ]));
 
         // if open is specified as a property, then use it to determine whether to show a menu
         var menu = null;

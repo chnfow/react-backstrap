@@ -6,19 +6,22 @@
 define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], function (React, _, icon, $, tp) {
   "use strict";
 
+  var rpt = React.PropTypes;
+
   return _.rf({
     displayName: "RBS Button",
 
     propTypes: {
-      icon: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.node ]),
-      caption: React.PropTypes.string,
-      size: React.PropTypes.oneOf([ "xs", "sm", "lg" ]),
-      block: React.PropTypes.bool,
-      type: React.PropTypes.string,
-      ajax: React.PropTypes.bool,
-      submit: React.PropTypes.bool,
+      icon: rpt.oneOfType([ rpt.string, rpt.node ]),
+      caption: rpt.string,
+      size: rpt.oneOf([ "xs", "sm", "lg" ]),
+      block: rpt.bool,
+      type: rpt.string,
+      ajax: rpt.bool,
+      submit: rpt.bool,
+      newWindow: rpt.bool,
       // milliseconds after clicking that the onclick event can again be triggered
-      clickDelay: React.PropTypes.number
+      clickDelay: rpt.number
     },
 
     getDefaultProps: function () {
@@ -27,7 +30,8 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
         block: false,
         type: "default",
         submit: false,
-        clickDelay: 200
+        clickDelay: 200,
+        newWindow: false
       };
     },
 
@@ -93,14 +97,20 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
     },
 
     beforeOnClick: function (e) {
-      // don't do anything out of the ordinary if it's a link
-      if (typeof this.props.href === "string") {
-        return;
-      }
       // if this isn't a submit button, then prevent the default action of submitting the form
       if (e && !this.props.submit) {
         e.preventDefault();
       }
+
+      if (typeof this.props.href === "string") {
+        if (this.props.newWindow) {
+          window.open(this.props.href, "_blank");
+        } else {
+          window.location.href = this.props.href;
+        }
+        return;
+      }
+
       var now = this.getNow();
       if (now - this.state.lastClick <= this.props.clickDelay) {
         return;
@@ -140,10 +150,6 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
         }
       }
 
-      var factory = React.DOM.button;
-      if (typeof this.props.href === "string") {
-        factory = React.DOM.a;
-      }
       var properties = _.extend({}, this.props, {
         onClick: this.beforeOnClick,
         className: this.getClassNames(),
@@ -152,7 +158,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
       });
       properties = _.omit(properties, [ "icon", "caption", "block", "size", "type", "ajax", "submit", "clickDelay" ]);
 
-      return tp({}, factory(properties, children));
+      return tp({}, React.DOM.button(properties, children));
     }
   });
 
