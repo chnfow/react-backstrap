@@ -156,7 +156,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
         disabled: this.props.disabled || this.state.loading,
         type: (this.props.submit) ? "submit" : "button"
       });
-      properties = _.omit(properties, [ "icon", "caption", "block", "size", "type", "ajax", "submit", "clickDelay" ]);
+      properties = _.omit(properties, [ "icon", "caption", "block", "size", "ajax", "submit", "clickDelay" ]);
 
       return tp({}, React.DOM.button(properties, children));
     }

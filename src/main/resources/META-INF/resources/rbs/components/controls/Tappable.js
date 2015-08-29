@@ -1,7 +1,8 @@
 /**
- * Calls onClick when a "tap" happens and prevents the simulated click events from happening
+ * Calls onClick or focuses the element when a "tap" happens and prevents the simulated click events from happening
+ * Essentially a port of the functionality in FastClick
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "jquery", "underscore" ], function (React, $, _) {
   "use strict";
 
   return _.rf({
@@ -95,11 +96,17 @@ define([ "react", "underscore" ], function (React, _) {
       var oc = this.getOnClick();
       if (typeof oc === "function") {
         oc(e);
+      } else {
+        var el = $(React.findDOMNode(this));
+        if (el.is(":input")) {
+          el.focus();
+        }
       }
     },
 
     render: function () {
       return React.cloneElement(React.Children.only(this.props.children), {
+        ref: "",
         onTouchStart: this.handleTouchStart,
         onTouchEnd: this.handleTouchEnd,
         onTouchMove: this.handleTouchMove,

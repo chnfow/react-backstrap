@@ -2,8 +2,9 @@
  * Provides methods for converting an array of objects and produces the appropriate component structure for a navbar
  * () indicates optional, object structure is {text, (icon), (href), (menu: [{text, (icon), (href)}, ...])}
  */
-define([ "react", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon", "../mixins/Events" ],
-  function (React, _, link, dropdown, icon, events) {
+define([ "react", "backbone", "underscore", "../layout/NavbarLink", "../layout/NavbarDropdown", "../layout/Icon",
+    "../mixins/Events" ],
+  function (React, Backbone, _, link, dropdown, icon, events) {
     "use strict";
 
     return React.createMixin({
