@@ -3,7 +3,7 @@
  * of time that should pass before another onClick call.)
  * Also can be disabled automatically when jquery $.ajax is used
  */
-define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _, icon, $) {
+define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], function (React, _, icon, $, tp) {
   "use strict";
 
   return _.rf({
@@ -94,7 +94,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
 
     beforeOnClick: function (e) {
       // don't submit a form by default when the button is part of a form and is clicked
-      if (this.props.submit === false && typeof this.props.href !== "string") {
+      if (e && this.props.submit === false && typeof this.props.href !== "string") {
         e.preventDefault();
       }
       var now = this.getNow();
@@ -148,7 +148,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
       });
       properties = _.omit(properties, [ "icon", "caption", "block", "size", "type", "ajax", "submit", "clickDelay" ]);
 
-      return factory(properties, children);
+      return tp({}, factory(properties, children));
     }
   });
 

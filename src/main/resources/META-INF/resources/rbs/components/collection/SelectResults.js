@@ -1,5 +1,5 @@
-define([ "react", "underscore", "../mixins/Collection" ],
-  function (React, _, collection) {
+define([ "react", "underscore", "../mixins/Collection", "../controls/Tappable" ],
+  function (React, _, collection, tp) {
     "use strict";
 
     // renders a collection of results as the results of a select dropdown
@@ -106,15 +106,14 @@ define([ "react", "underscore", "../mixins/Collection" ],
           if (myIndex === this.state.hilite) {
             optionClass += " hilited";
           }
-          return React.DOM.div({
+          return tp({ key: "model-result-" + oneResultComponent.props.model.cid }, React.DOM.div({
             className: optionClass,
             ref: "result-" + myIndex,
             model: oneResultComponent.props.model,
-            key: "model-result-" + oneResultComponent.props.model.cid,
             onMouseOver: _.bind(this.setHilite, this, myIndex),
             onMouseDown: this.doNothing,
             onClick: _.bind(this.handleSelect, this, oneResultComponent.props.model)
-          }, oneResultComponent);
+          }, oneResultComponent));
         }, this);
 
         // empty message

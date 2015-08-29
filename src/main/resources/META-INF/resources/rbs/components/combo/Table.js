@@ -1,5 +1,5 @@
 /**
- *
+ * Renders a table, which is a combination of the table header and table body views
  */
 define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", "../controls/TableHead" ],
   function (React, _, tr, tbody, thead) {
