@@ -93,8 +93,12 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
     },
 
     beforeOnClick: function (e) {
-      // don't submit a form by default when the button is part of a form and is clicked
-      if (e && this.props.submit === false && typeof this.props.href !== "string") {
+      // don't do anything out of the ordinary if it's a link
+      if (typeof this.props.href === "string") {
+        return;
+      }
+      // if this isn't a submit button, then prevent the default action of submitting the form
+      if (e && !this.props.submit) {
         e.preventDefault();
       }
       var now = this.getNow();
@@ -137,7 +141,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
       }
 
       var factory = React.DOM.button;
-      if (this.props.submit === false && typeof this.props.href === "string") {
+      if (typeof this.props.href === "string") {
         factory = React.DOM.a;
       }
       var properties = _.extend({}, this.props, {
