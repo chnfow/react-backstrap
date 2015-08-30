@@ -6,6 +6,8 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
   "use strict";
 
   return _.rf({
+    displayName: "Tappable Control",
+
     propTypes: {
       // the number of px that the finger can move before the touch should no longer trigger the click event at touch end
       threshold: React.PropTypes.number,

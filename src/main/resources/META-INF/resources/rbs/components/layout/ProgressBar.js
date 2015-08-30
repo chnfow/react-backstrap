@@ -5,6 +5,7 @@ define([ "react", "underscore" ], function (React, _) {
   "use strict";
 
   return _.rf({
+    displayName: "Progress Bar",
 
     propTypes: {
       progress: React.PropTypes.number,
