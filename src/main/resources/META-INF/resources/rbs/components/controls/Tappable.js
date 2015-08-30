@@ -15,7 +15,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
     getDefaultProps: function () {
       return {
         threshold: 15,
-        timeThreshold: 150
+        timeThreshold: null
       };
     },
 
@@ -59,10 +59,14 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       if (this.state.touchId === null) {
         return;
       }
-      // long press, don't do anything
-      if (((new Date()).getTime() - this.state.touchTime > this.props.timeThreshold)) {
-        this.clearTouchData();
-        return;
+
+      // by default, we don't care how long the press happened, only how much the finger has moved
+      if (this.props.timeThreshold !== null) {
+        // long press, don't do anything
+        if (((new Date()).getTime() - this.state.touchTime > this.props.timeThreshold)) {
+          this.clearTouchData();
+          return;
+        }
       }
 
       // still a touch remaining
@@ -122,7 +126,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
     triggerClick: function (target) {
       var el = $(target);
-      if (el.is("input") || el.is("textarea")) {
+      if ((el.is("input") && !el.is("[type=checkbox]")) || el.is("textarea")) {
         target.focus();
       } else {
         target.click();
