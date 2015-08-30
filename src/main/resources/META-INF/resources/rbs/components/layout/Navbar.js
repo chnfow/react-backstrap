@@ -1,9 +1,8 @@
 /**
  * React Component renders a bootstrap navbar
  */
-define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events", "../controls/TimeoutTransitionGroup",
-    "../controls/Tappable"],
-  function (React, $, _, icon, Backbone, events, TTG, tp) {
+define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events", "../controls/TimeoutTransitionGroup" ],
+  function (React, $, _, icon, Backbone, events, TTG) {
     "use strict";
 
     return _.rf({
@@ -44,16 +43,17 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
           });
         }
       },
-      
+
       render: function () {
         var navbarHeader = React.DOM.div({
           className: "navbar-header",
           key: "navbar-header"
         }, [
-          tp({ key: "navbar-toggle-collapsed" }, React.DOM.button({
+          React.DOM.button({
+            key: "navbar-toggle-collapsed",
             className: "navbar-toggle",
             onClick: _.bind(this.setOpen, this, !this.state.open)
-          }, icon({ name: "bars" }))),
+          }, icon({ name: "bars" })),
           React.DOM.a({
             key: "brand",
             className: "navbar-brand",

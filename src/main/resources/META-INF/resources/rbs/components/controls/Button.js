@@ -3,7 +3,7 @@
  * of time that should pass before another onClick call.)
  * Also can be disabled automatically when jquery $.ajax is used
  */
-define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], function (React, _, icon, $, tp) {
+define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _, icon, $) {
   "use strict";
 
   var rpt = React.PropTypes;
@@ -158,7 +158,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "./Tappable" ], func
       });
       properties = _.omit(properties, [ "icon", "caption", "block", "size", "ajax", "submit", "clickDelay" ]);
 
-      return tp({}, React.DOM.button(properties, children));
+      return React.DOM.button(properties, children);
     }
   });
 

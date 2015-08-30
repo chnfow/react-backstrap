@@ -2,8 +2,8 @@
  * A searchable dropdown
  */
 define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../collection/SelectResults",
-    "./DynamicInput", "./Tappable" ],
-  function (React, _, $, Backbone, events, selectResults, dynamicInput, tp) {
+    "./DynamicInput" ],
+  function (React, _, $, Backbone, events, selectResults, dynamicInput) {
     "use strict";
 
     var KEY_DOWN = 40;
@@ -416,13 +416,14 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         }
 
         var fakeInputProps = _.omit(_.extend({}, this.props, {
+          key: "fake-input",
           ref: "fakeInput",
           onMouseDown: this.doNothing,
           onClick: this.handleSelectClick,
           className: "react-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");
 
-        return tp({ key: "fake-input" }, React.DOM.div(fakeInputProps, insideInput));
+        return React.DOM.div(fakeInputProps, insideInput);
       },
 
       renderResults: function () {
