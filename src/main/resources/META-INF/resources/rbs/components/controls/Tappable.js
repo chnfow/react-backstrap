@@ -126,10 +126,11 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
     triggerClick: function (target) {
       var el = $(target);
+      // always trigger a click
+      target.click();
+      // since click doesn't focus a
       if ((el.is("input") && !el.is("[type=checkbox]")) || el.is("textarea")) {
         target.focus();
-      } else {
-        target.click();
       }
     },
 
