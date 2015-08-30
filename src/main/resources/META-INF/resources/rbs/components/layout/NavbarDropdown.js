@@ -41,9 +41,7 @@ define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransiti
         });
       },
 
-      toggleOpen: function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+      toggleOpen: function () {
         if (this.isMounted()) {
           this.setState({
             open: !this.state.open
@@ -73,7 +71,7 @@ define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransiti
           key: "dropdown-toggle-link",
           href: "#",
           className: "dropdown-toggle",
-          onClick: _.bind(this.toggleOpen, this)
+          onClick: this.toggleOpen
         }, [
           icon({ name: this.props.icon, key: "toggle-icon" }),
           React.DOM.span({ key: "navbar-dropdown-text-label" }, this.props.text),

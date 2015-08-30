@@ -193,6 +193,12 @@ define([ "original-underscore", "react" ], function (_, React) {
     return toReturn;
   };
 
+  util.loadImage = function (src, callback) {
+    var img = new Image();
+    img.onload = callback;
+    img.src = src;
+  };
+
   util.rf = _.compose(React.createFactory, React.createClass);
 
   _.mixin(util);

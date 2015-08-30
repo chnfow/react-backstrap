@@ -21,6 +21,7 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
       getDefaultProps: function () {
         return {
           showSuccess: true,
+          scrollOnShow: true,
           successMessage: "Request successfully processed.",
           defaults: {
             icon: "exclamation-triangle",

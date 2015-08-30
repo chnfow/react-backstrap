@@ -30,8 +30,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
         block: false,
         type: "default",
         submit: false,
-        clickDelay: 200,
-        newWindow: false
+        clickDelay: 200
       };
     },
 
@@ -98,17 +97,8 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
 
     beforeOnClick: function (e) {
       // if this isn't a submit button, then prevent the default action of submitting the form
-      if (e && !this.props.submit) {
+      if (e && !this.props.submit && typeof this.props.href !== "string") {
         e.preventDefault();
-      }
-
-      if (typeof this.props.href === "string") {
-        if (this.props.newWindow) {
-          window.open(this.props.href, "_blank");
-        } else {
-          window.location.href = this.props.href;
-        }
-        return;
       }
 
       var now = this.getNow();
@@ -150,6 +140,10 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
         }
       }
 
+      var factory = React.DOM.button;
+      if (typeof this.props.href === "string") {
+        factory = React.DOM.a;
+      }
       var properties = _.extend({}, this.props, {
         onClick: this.beforeOnClick,
         className: this.getClassNames(),
@@ -158,7 +152,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
       });
       properties = _.omit(properties, [ "icon", "caption", "block", "size", "ajax", "submit", "clickDelay" ]);
 
-      return React.DOM.button(properties, children);
+      return factory(properties, children);
     }
   });
 
