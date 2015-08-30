@@ -8,12 +8,14 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
   return _.rf({
     propTypes: {
       // the number of px that the finger can move before the touch should no longer trigger the click event at touch end
-      threshold: React.PropTypes.number
+      threshold: React.PropTypes.number,
+      timeThreshold: React.PropTypes.number
     },
 
     getDefaultProps: function () {
       return {
-        threshold: 20
+        threshold: 20,
+        timeThreshold: 300
       };
     },
 
@@ -21,7 +23,8 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       return {
         touchId: null,
         touchX: null,
-        touchY: null
+        touchY: null,
+        touchTime: null
       };
     },
 
@@ -31,7 +34,8 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
         this.setState({
           touchId: null,
           touchX: null,
-          touchY: null
+          touchY: null,
+          touchTime: null
         }, callback);
       }
     },
@@ -43,11 +47,21 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
         return;
       }
       var tch = e.targetTouches[ 0 ];
-      this.setState({ touchId: tch.identifier, touchX: tch.screenX, touchY: tch.screenY });
+      this.setState({
+        touchId: tch.identifier,
+        touchX: tch.screenX,
+        touchY: tch.screenY,
+        touchTime: (new Date()).getTime()
+      });
     },
 
     handleTouchEnd: function (e) {
       if (this.state.touchId === null) {
+        return;
+      }
+      // long press, don't do anything
+      if (((new Date()).getTime() - this.state.touchTime > this.props.timeThreshold)) {
+        this.clearTouchData();
         return;
       }
       // prevent the simulated mouse events
@@ -66,7 +80,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
         this.clearTouchData();
         return;
       }
-      // find the touch of the changed touches
+      // find the touch from the changed touches (should be the only one)
       var tch = _.find(e.changedTouches, function (oneT) {
         return oneT.identifier === this.state.touchId;
       }, this);
@@ -92,21 +106,22 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       return c.props.onClick;
     },
 
-    triggerClick: function (e) {
+    triggerClick: function () {
       var oc = this.getOnClick();
       if (typeof oc === "function") {
-        oc(e);
+        oc();
       } else {
         var el = $(React.findDOMNode(this));
         if (el.is(":input")) {
           el.focus();
+        } else {
+          el.click();
         }
       }
     },
 
     render: function () {
       return React.cloneElement(React.Children.only(this.props.children), {
-        ref: "",
         onTouchStart: this.handleTouchStart,
         onTouchEnd: this.handleTouchEnd,
         onTouchMove: this.handleTouchMove,
