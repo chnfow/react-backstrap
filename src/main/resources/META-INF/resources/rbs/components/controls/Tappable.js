@@ -64,11 +64,30 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
         this.clearTouchData();
         return;
       }
+
+      // still a touch remaining
+      if (e.touches.length !== 0) {
+        this.clearTouchData();
+        return;
+      }
+
+      // get the touch from the list of changed touches
+      var tch = _.find(e.changedTouches, function (oneTouch) {
+        return oneTouch.identifier === this.state.touchId;
+      }, this);
+
+      if (!tch) {
+        this.clearTouchData();
+        return;
+      }
+
+      var target = tch.target;
+
       // prevent the simulated mouse events
       e.preventDefault();
       // clear the data and then trigger the click
       this.clearTouchData(function () {
-        this.triggerClick();
+        this.triggerClick(target);
       });
     },
 
@@ -101,22 +120,12 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       this.clearTouchData();
     },
 
-    getOnClick: function () {
-      var c = React.Children.only(this.props.children);
-      return c.props.onClick;
-    },
-
-    triggerClick: function () {
-      var oc = this.getOnClick();
-      if (typeof oc === "function") {
-        oc();
+    triggerClick: function (target) {
+      var el = $(target);
+      if (el.is("input")) {
+        el.focus();
       } else {
-        var el = $(React.findDOMNode(this));
-        if (el.is(":input")) {
-          el.focus();
-        } else {
-          el.click();
-        }
+        el.click();
       }
     },
 
