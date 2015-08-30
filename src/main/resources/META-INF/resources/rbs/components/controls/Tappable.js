@@ -122,10 +122,10 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
     triggerClick: function (target) {
       var el = $(target);
-      if (el.is("input")) {
-        el.focus();
+      if (el.is("input") || el.is("textarea")) {
+        target.focus();
       } else {
-        el.click();
+        target.click();
       }
     },
 
