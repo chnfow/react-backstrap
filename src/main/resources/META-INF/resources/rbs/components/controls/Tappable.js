@@ -14,8 +14,8 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
     getDefaultProps: function () {
       return {
-        threshold: 20,
-        timeThreshold: 300
+        threshold: 15,
+        timeThreshold: 150
       };
     },
 
