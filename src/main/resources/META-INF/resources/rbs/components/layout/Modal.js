@@ -74,9 +74,7 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup" ]
         );
         modal = React.DOM.div({
           className: "modal"
-        }, React.DOM.div({
-          className: "modal__scroll"
-        }, dialog));
+        }, dialog);
         if (this.props.backdrop !== false) {
           backdrop = React.DOM.div({
             className: "Modal-backdrop",

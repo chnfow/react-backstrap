@@ -138,13 +138,6 @@ so they're removed from the DOM when they're not
     z-index: 1040;
 }
 
-/* fix iOS 8.X scrolling issue: https://github.com/twbs/bootstrap/issues/14839 */
-.modal__scroll {
-    max-height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
 /* dropdown menus display always, using transition groups to manage whether they're visible */
 .dropdown-menu {
     display: block !important;
