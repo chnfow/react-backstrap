@@ -21,6 +21,10 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       };
     },
 
+    shouldComponentUpdate: function (nextProps) {
+      return this.props.children !== nextProps.children;
+    },
+
     getInitialState: function () {
       return {
         touchId: null,
