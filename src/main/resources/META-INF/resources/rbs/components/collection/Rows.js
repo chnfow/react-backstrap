@@ -16,7 +16,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
   return _.rf({
     displayName: "Rows Collection",
 
-    mixins: [ collection ],
+    mixins: [ collection, React.addons.PureRenderMixin ],
 
     propTypes: {
       xs: validSizes, sm: validSizes, md: validSizes, lg: validSizes

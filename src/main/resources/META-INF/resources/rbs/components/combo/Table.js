@@ -10,6 +10,8 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
     return _.rf({
       displayName: "Collection Table",
 
+      mixins: [ React.addons.PureRenderMixin ],
+
       propTypes: {
         // bootstrap classes
         striped: rpt.bool,
@@ -44,6 +46,10 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         var attrs = props.attributes;
 
         return _.rf({
+          displayName: "Generated Model Table Row",
+          shouldComponentUpdate: function () {
+            return false;
+          },
           render: function () {
             return tr({ model: this.props.model, attributes: attrs })
           }
@@ -52,9 +58,11 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
 
       componentWillReceiveProps: function (nextProps) {
         if (this.isMounted()) {
-          this.setState({
-            modelComponent: this.getModelComponent(nextProps)
-          });
+          if (!_.isEqual(nextProps.attributes, this.props.attributes)) {
+            this.setState({
+              modelComponent: this.getModelComponent(nextProps)
+            });
+          }
         }
       },
 

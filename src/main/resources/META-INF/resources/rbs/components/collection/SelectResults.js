@@ -7,7 +7,7 @@ define([ "react", "underscore", "../mixins/Collection" ],
     return _.rf({
       displayName: "Select Results",
 
-      mixins: [ collection ],
+      mixins: [ collection, React.addons.PureRenderMixin ],
 
       propTypes: {
         onSelect: React.PropTypes.func.isRequired,

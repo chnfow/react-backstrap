@@ -11,6 +11,8 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
   return _.rf({
     displayName: "RBS Button",
 
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       icon: rpt.oneOfType([ rpt.string, rpt.node ]),
       caption: rpt.string,
@@ -19,8 +21,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _
       type: rpt.string,
       ajax: rpt.bool,
       submit: rpt.bool,
-      newWindow: rpt.bool,
-      // milliseconds after clicking that the onclick event can again be triggered
+      // minimum delay between onClick firings in milliseconds
       clickDelay: rpt.number
     },
 

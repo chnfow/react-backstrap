@@ -1,9 +1,8 @@
 /**
- * Takes a model, an attribute, and a component, and renders the component with the value set to the model attribute value
- * and sets the value of that attribute on change event of the component
- * i.e. 2-way binds the value and children to the model attribute
+ * This component binds the value of an input or span to a model's attribute
+ * Note this is one-way from the DOM to the model, so changing
  */
-define([ "react", "underscore", "../mixins/Events" ], function (React, _, events) {
+define([ "react", "underscore" ], function (React, _) {
   "use strict";
 
   return _.rf({
@@ -16,13 +15,8 @@ define([ "react", "underscore", "../mixins/Events" ], function (React, _, events
       attribute: React.PropTypes.string
     },
 
-    mixins: [ events ],
-
-    componentDidMount: function () {
-      if (this.props.attribute !== null) {
-        this.listenTo(this.props.model, "change:" + this.props.attribute, this.update);
-      }
-    },
+    // changes to the model trigger updates to the model component so we don't need to worry about
+    mixins: [ React.addons.PureRenderMixin ],
 
     getDefaultProps: function () {
       return {

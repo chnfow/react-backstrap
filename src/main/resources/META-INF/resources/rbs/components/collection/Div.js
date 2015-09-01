@@ -7,7 +7,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
   return _.rf({
     displayName: "Div Collection View",
 
-    mixins: [ collection ],
+    mixins: [ collection, React.addons.PureRenderMixin ],
 
     propTypes: {},
 

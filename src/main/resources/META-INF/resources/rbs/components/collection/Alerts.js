@@ -2,13 +2,13 @@
  * Watches a model or collection for errors or success, and presents the appropriate Alerts for the errors
  */
 define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Div" ],
-  function (React, _, Backbone, events, alert, dCol) {
+  function (React, _, Backbone, events, alert, cDiv) {
     "use strict";
 
     return _.rf({
       displayName: "Alerts Collection",
 
-      mixins: [ events, React.addons.PureRenderMixin ],
+      mixins: [ events ],
 
       propTypes: {
         watch: React.PropTypes.object.isRequired,
@@ -110,7 +110,7 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
       },
 
       render: function () {
-        return dCol(_.extend({}, this.props, {
+        return cDiv(_.extend({}, this.props, {
           modelComponent: alert,
           collection: this.state.errors
         }));

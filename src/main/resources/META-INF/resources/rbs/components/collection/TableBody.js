@@ -7,7 +7,7 @@ define([ "react", "underscore", "../mixins/Collection" ],
     return _.rf({
       displayName: "Collection Table Body",
 
-      mixins: [ collection ],
+      mixins: [ collection, React.addons.PureRenderMixin ],
 
       render: function () {
         return React.DOM.tbody(_.omit(this.props, "collection", "modelComponent", "emptyNode"), this.getModels());
