@@ -8,7 +8,7 @@ define([ "react", "../mixins/Model", "underscore" ],
     return _.rf({
       displayName: "Model Table Row",
 
-      mixins: [ model ],
+      mixins: [ model, React.addons.PureRenderMixin ],
 
       render: function () {
         // wrap all the children attributes in table cells

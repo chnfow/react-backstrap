@@ -18,6 +18,8 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon" ], funct
       polyfillOnly: React.PropTypes.bool
     },
 
+    mixins: [ React.addons.PureRenderMixin ],
+
     getDefaultProps: function () {
       return {
         allowedFormats: [ "HH:mm", "H:mm", "hh:mma", "h:mma", "hh:mmA", "h:mmA", "hh:mm A", "h:mm A" ],

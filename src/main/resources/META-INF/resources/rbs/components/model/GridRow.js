@@ -6,7 +6,7 @@ define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore" ],
     "use strict";
     return _.rf({
       displayName: "Model Grid Row",
-      mixins: [ model, formGroup ],
+      mixins: [ model, formGroup, React.addons.PureRenderMixin ],
 
       propTypes: {
         size: React.PropTypes.oneOf([ "xs", "sm", "md", "lg" ])

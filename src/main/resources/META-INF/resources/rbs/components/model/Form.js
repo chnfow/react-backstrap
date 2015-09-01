@@ -8,7 +8,7 @@ define([ "react", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
     return _.rf({
       displayName: "Model Form",
 
-      mixins: [ model, formGroup ],
+      mixins: [ model, formGroup, React.addons.PureRenderMixin ],
 
       getInitialState: function () {
         return {

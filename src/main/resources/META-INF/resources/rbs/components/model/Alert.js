@@ -2,50 +2,54 @@
  * Renders a model representing an alert into a bootstrap alert
  */
 define([ "react", "underscore", "../mixins/Model" ], function (React, _, model) {
-    "use strict";
+  "use strict";
 
-    return _.rf({
-        displayName: "Model Alert",
+  var defaultAttributes = [
+    {
+      key: "icon",
+      attribute: "icon",
+      component: "icon"
+    },
+    {
+      key: "strong",
+      attribute: "strong",
+      component: React.DOM.strong
+    },
+    {
+      key: "message",
+      attribute: "message",
+      component: React.DOM.span
+    }
+  ];
 
-        getDefaultProps: function () {
-            return {
-                attributes: [
-                    {
-                        key: "icon",
-                        attribute: "icon",
-                        component: "icon"
-                    },
-                    {
-                        key: "strong",
-                        attribute: "strong",
-                        component: React.DOM.strong
-                    },
-                    {
-                        key: "message",
-                        attribute: "message",
-                        component: React.DOM.span
-                    }
-                ]
-            }
-        },
+  return _.rf({
+    displayName: "Model Alert",
 
-        mixins: [ model ],
+    getDefaultProps: function () {
+      return {
+        attributes: defaultAttributes
+      };
+    },
 
-        render: function () {
-            var level = this.state.model.level;
-            if (!level) {
-                level = "info";
-            }
+    mixins: [ model, React.addons.PureRenderMixin ],
 
-            var className = "alert alert-" + level;
-            if (this.props.className) {
-                className += " " + this.props.className;
-            }
+    render: function () {
+      var cn = [ "alert" ];
 
-            return React.DOM.div(_.extend({}, this.props, {
-                className: className,
-                role: "alert"
-            }), this.getAttributes(this.props.attributes));
-        }
-    });
+      if (this.state.model.level) {
+        cn.push("alert-" + this.state.model.level);
+      } else {
+        cn.push("alert-info");
+      }
+
+      if (typeof this.props.className === "string") {
+        cn.push(this.props.className);
+      }
+
+      return React.DOM.div(_.extend({}, this.props, {
+        className: cn.join(" "),
+        role: "alert"
+      }), this.getAttributes(this.props.attributes));
+    }
+  });
 });
