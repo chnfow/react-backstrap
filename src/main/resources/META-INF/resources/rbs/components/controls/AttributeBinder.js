@@ -2,7 +2,7 @@
  * This component binds the value of an input or span to a model's attribute
  * Note this is one-way from the DOM to the model, so changing
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "underscore", "" ], function (React, _) {
   "use strict";
 
   return _.rf({
@@ -14,9 +14,6 @@ define([ "react", "underscore" ], function (React, _) {
       formatFunction: React.PropTypes.func,
       attribute: React.PropTypes.string
     },
-
-    // changes to the model trigger updates to the model component so we don't need to worry about
-    mixins: [ React.addons.PureRenderMixin ],
 
     getDefaultProps: function () {
       return {

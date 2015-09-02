@@ -201,6 +201,22 @@ define([ "original-underscore", "react" ], function (_, React) {
 
   util.rf = _.compose(React.createFactory, React.createClass);
 
+  util.concatWS = function concatWS(separator) {
+    if (typeof separator !== "string") {
+      _.debug("Invalid separator passed to _.concatWS");
+      return null;
+    }
+    var validValues = [];
+    for (var i = 1; i < arguments.length; i++) {
+      if (typeof arguments[ i ] === "string" && arguments[ i ].length > 0) {
+        validValues.push(arguments[ i ]);
+      } else {
+        _.debug("Invalid or empty value passed to concatWS will be skipped", arguments[ i ]);
+      }
+    }
+    return validValues.join(separator);
+  };
+
   _.mixin(util);
   return _;
 });
