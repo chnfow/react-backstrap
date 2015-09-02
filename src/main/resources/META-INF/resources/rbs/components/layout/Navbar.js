@@ -19,7 +19,7 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
         return {
           fullWidth: true,
           inverse: false,
-          static: true,
+          staticTop: true,
           collapseOnNavigate: true
         };
       },
@@ -82,7 +82,7 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
 
         var className = "navbar" +
           (this.props.inverse ? " navbar-inverse" : " navbar-default") +
-          (this.props.static ? " navbar-static-top" : "");
+          (this.props.staticTop ? " navbar-static-top" : "");
         if (this.props.className) {
           className += " " + this.props.className;
         }
