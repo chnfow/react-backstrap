@@ -73,7 +73,7 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
         model: rpt.object.isRequired,
         attributes: rpt.arrayOf(
           rpt.shape({
-            component: rpt.oneOfType([ rpt.string, rpt.func ]),
+            component: rpt.oneOfType([ rpt.string, rpt.func ]).isRequired,
             attribute: rpt.string,
             key: rpt.string
           })
