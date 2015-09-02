@@ -37,11 +37,13 @@ define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function
       this.setPlacement();
 
       this._setPlacement = _.debounce(_.bind(this.setPlacement, this), 50);
-      $(window).on("resize scroll", this._setPlacement);
+      $(window).on("resize", this._setPlacement);
+      $(React.findDOMNode(this.refs.tip)).scrollParent().on("scroll", this._setPlacement);
     },
 
     componentWillUnmount: function () {
-      $(window).off("resize scroll", this._setPlacement);
+      $(window).off("resize", this._setPlacement);
+      $(React.findDOMNode(this.refs.tip)).scrollParent().off("scroll", this._setPlacement);
     },
 
     setPlacement: function () {
@@ -65,12 +67,12 @@ define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function
       // we will fill this with placements that fit the whole tip, then choose the best one
       var validPlacements = [];
       // the center position of the anchor relative to the viewport
-      var w = $(window);
-      var x = jqAnchor.offset().left + (jqAnchor.outerWidth() / 2) - w.scrollLeft();
-      var y = jqAnchor.offset().top + (jqAnchor.outerHeight() / 2) - w.scrollTop();
+      var p = jqTip.scrollParent();
+      var x = (jqAnchor.offset().left - p.offset().left) + (jqAnchor.outerWidth() / 2) - p.scrollLeft();
+      var y = (jqAnchor.offset().top - p.offset().top) + (jqAnchor.outerHeight() / 2) - p.scrollTop();
       // window width and height
-      var wWd = w.width();
-      var wHt = w.height();
+      var wWd = p.width();
+      var wHt = p.height();
       var placement;
       // first check top is valid
       if ((x + (wd / 2) < wWd) && (x - (wd / 2) > 0) && (y - ht > 0)) {

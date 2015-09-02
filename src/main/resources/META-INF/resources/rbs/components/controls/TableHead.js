@@ -64,10 +64,14 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
               sortIcon = lastSort.desc ? "sort-amount-desc" : "sort-amount-asc";
             }
           }
+          var cn = [ "no-select" ];
+          if (hasSort) {
+            cn.push("sortable-column-header");
+          }
           return React.DOM.th({
             key: i++,
             onClick: _.bind(this.sortCollection, this, so),
-            className: hasSort ? "sortable-column-header" : ""
+            className: cn.join(" ")
           }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
         }, this);
 

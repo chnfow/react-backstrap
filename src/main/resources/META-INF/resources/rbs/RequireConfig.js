@@ -16,6 +16,7 @@ define([], function () {
     paths: {
       "backbone": "rbs/etc/library-extensions/Backbone",
       "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
+      "jquery": "rbs/etc/library-extensions/jQueryExtras",
       "jsog": "rbs/vendor/jsog/JSOG",
       "raf": "rbs/vendor/polyfill/rAF",
       "fb": "//connect.facebook.net/en_US/sdk",
@@ -25,7 +26,7 @@ define([], function () {
       "modernizr": "//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr" + dotMin,
       "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons" + dotMin,
       "original-backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone" + dashMin,
-      "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery" + dotMin,
+      "original-jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery" + dotMin,
       "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales" + dotMin,
       "moment-tz": "//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data" + dotMin
     },
@@ -36,6 +37,9 @@ define([], function () {
       },
       "jsog": {
         exports: "JSOG"
+      },
+      "original-jquery": {
+        exports: "$"
       },
       "original-backbone": {
         deps: [ "jquery", "original-underscore" ]
