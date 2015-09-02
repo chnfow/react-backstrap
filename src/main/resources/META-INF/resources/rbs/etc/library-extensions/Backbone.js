@@ -193,6 +193,11 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
           return this.server;
         },
 
+        resetParams: function () {
+          this.params = {};
+          return this;
+        },
+
         unsetParam: function (key) {
           if (typeof key === "string") {
             this.params = _.omit(this.params, key);
