@@ -66,7 +66,7 @@ define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" 
             }
             var pcs = attribute.split(".");
             var firstPc = pcs.shift();
-            var topLevelValue = this.get(firstPc);
+            var topLevelValue = _.clone(this.get(firstPc));
 
             if (pcs.length > 0) {
               var toSet = topLevelValue;
