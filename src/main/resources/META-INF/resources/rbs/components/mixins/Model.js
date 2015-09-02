@@ -12,36 +12,42 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
     attributeComponentMap.select = select;
     attributeComponentMap.time = timepicker;
     attributeComponentMap.text = _.rf({
+      displayName: "Text Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "text" }), null);
       }
     });
 
     attributeComponentMap.textarea = _.rf({
+      displayName: "TextArea Attribute Wrapper",
       render: function () {
         return React.DOM.textarea(_.omit(this.props, "children"));
       }
     });
 
     attributeComponentMap.number = _.rf({
+      displayName: "Number Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "number" }), null);
       }
     });
 
     attributeComponentMap.email = _.rf({
+      displayName: "Email Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "email" }), null);
       }
     });
 
     attributeComponentMap.password = _.rf({
+      displayName: "Password Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "password" }), null);
       }
     });
 
     attributeComponentMap.checkbox = _.rf({
+      displayName: "Checkbox Attribute Wrapper",
       transformChangeEvent: function (e) {
         if (typeof this.props.onChange === "function") {
           var checked = Boolean(e.target.checked);
@@ -59,6 +65,7 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
     });
 
     attributeComponentMap.icon = _.rf({
+      displayName: "Icon Attribute Wrapper",
       render: function () {
         return icon(_.extend({}, this.props, { name: this.props.value }), null);
       }
