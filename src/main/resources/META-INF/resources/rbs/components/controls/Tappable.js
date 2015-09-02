@@ -126,10 +126,19 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
     },
 
     triggerClick: function (target) {
+      while (target && typeof target.click !== "function") {
+        target = target.parentNode;
+      }
+
+      if (!target) {
+        _.debug("click function not found on target node nor its parent nodes");
+        return;
+      }
+
       _.debug("triggering click on", target);
-      var el = $(target);
-      // always trigger a click
       target.click();
+
+      var el = $(target);
       // since click doesn't focus a
       if ((el.is("input") && !el.is("[type=checkbox]")) || el.is("textarea")) {
         target.focus();
