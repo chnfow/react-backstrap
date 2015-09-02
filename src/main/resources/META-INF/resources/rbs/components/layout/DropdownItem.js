@@ -6,6 +6,10 @@ define([ "react", "underscore", "./Icon" ],
     "use strict";
     var rpt = React.PropTypes;
     return _.rf({
+      displayName: "Dropdown Item",
+
+      mixins: [ React.addons.PureRenderMixin ],
+
       propTypes: {
         icon: rpt.node,
         caption: rpt.node,
@@ -42,7 +46,10 @@ define([ "react", "underscore", "./Icon" ],
         if (this.props.children) {
           children = children.concat(this.props.children);
         }
-        return React.DOM.li({ onClick: this.handleClick }, React.DOM.a({ onClick: this.doNothing, href: "#" }, children));
+        return React.DOM.li({ onClick: this.handleClick }, React.DOM.a({
+          onClick: this.doNothing,
+          href: "#"
+        }, children));
       }
     });
   });

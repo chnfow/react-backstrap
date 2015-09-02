@@ -7,6 +7,8 @@ define([ "react", "underscore" ], function (React, _) {
   return _.rf({
     displayName: "Progress Bar",
 
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       progress: React.PropTypes.number,
       striped: React.PropTypes.bool,

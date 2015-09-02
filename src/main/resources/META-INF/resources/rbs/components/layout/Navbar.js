@@ -8,7 +8,7 @@ define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Event
     return _.rf({
       displayName: "Navbar",
 
-      mixins: [ events ],
+      mixins: [ events, React.addons.PureRenderMixin ],
 
       propTypes: {
         brand: React.PropTypes.node.isRequired,

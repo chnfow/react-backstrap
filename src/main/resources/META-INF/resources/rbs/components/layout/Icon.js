@@ -4,6 +4,9 @@ define([ "react", "underscore" ], function (React, _) {
   // renders an icon with the name property
   return _.rf({
     displayName: "Icon",
+
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       name: React.PropTypes.string,
       size: React.PropTypes.oneOf([ "lg", "2x", "3x", "4x", "5x" ]),
@@ -12,6 +15,7 @@ define([ "react", "underscore" ], function (React, _) {
       rotate: React.PropTypes.oneOf([ "90", "180", "270" ]),
       flip: React.PropTypes.oneOf([ "horizontal", "vertical" ])
     },
+
     render: function () {
       if (!this.props.name) {
         return null;

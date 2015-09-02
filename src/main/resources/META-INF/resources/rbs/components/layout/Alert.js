@@ -7,6 +7,8 @@ define([ "react", "underscore", "backbone", "../model/Alert" ], function (React,
   return _.rf({
     displayName: "Layout Alert",
 
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       level: React.PropTypes.oneOf([ "success", "info", "danger", "warning" ]),
       strong: React.PropTypes.node.isRequired,

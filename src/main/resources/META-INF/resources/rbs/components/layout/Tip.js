@@ -12,7 +12,7 @@ define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function
   return _.rf({
     displayName: "Tip",
 
-    mixins: [ occ ],
+    mixins: [ occ, React.addons.PureRenderMixin ],
 
     propTypes: {
       tip: React.PropTypes.node.isRequired,

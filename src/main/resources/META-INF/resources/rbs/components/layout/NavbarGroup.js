@@ -7,6 +7,8 @@ define([ "react", "underscore" ], function (React, _) {
   return _.rf({
     displayName: "Navbar Group",
 
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       right: React.PropTypes.bool
     },

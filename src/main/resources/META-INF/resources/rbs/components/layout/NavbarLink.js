@@ -7,6 +7,8 @@ define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React,
   return _.rf({
     displayName: "Navbar Link",
 
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       active: React.PropTypes.bool,
       href: React.PropTypes.string.isRequired,

@@ -7,6 +7,9 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup" ]
   // renders an icon with the name property
   return _.rf({
     displayName: "Modal",
+
+    mixins: [ React.addons.PureRenderMixin ],
+
     propTypes: {
       open: React.PropTypes.bool.isRequired,
       onClose: React.PropTypes.func,
