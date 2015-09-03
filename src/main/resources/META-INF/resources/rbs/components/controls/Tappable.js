@@ -64,6 +64,34 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       });
     },
 
+    handleTouchMove: function (e) {
+      if (this.state.touchId === null) {
+        _.debug("received touch move but not tracking touch");
+        return;
+      }
+
+      if (e.touches.length !== 1 || e.targetTouches.length !== 1) {
+        _.debug("touch moved in multi-touch scenario");
+        this.clearTouchData();
+        return;
+      }
+
+      var tch = e.targetTouches[0];
+      if (this.state.touchId !== tch.identifier) {
+        _.debug("touch identifier changed");
+        this.clearTouchData();
+        return;
+      }
+
+      // verify that the touch did not move outside the threshold
+      var dist = Math.sqrt(Math.pow(tch.screenX - this.state.touchX, 2) + Math.pow(tch.screenY - this.state.touchY, 2));
+      // if it was moved farther than the allowed amount, then we should cancel the touch
+      if (dist > this.props.threshold) {
+        _.debug("touch moved too far to count as tap");
+        this.clearTouchData();
+      }
+    },
+
     handleTouchEnd: function (e) {
       if (this.state.touchId === null) {
         _.debug("touch ended but no touch is being tracked");
@@ -94,15 +122,6 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
       if (!tch) {
         _.debug("no touch found with the identifier", this.state.touchId, "touch end skipped.");
-        this.clearTouchData();
-        return;
-      }
-
-      // verify that the touch did not move too far
-      var dist = Math.sqrt(Math.pow(tch.screenX - this.state.touchX, 2) + Math.pow(tch.screenY - this.state.touchY, 2));
-      // if it was moved farther than the allowed amount, then we should cancel the touch
-      if (dist > this.props.threshold) {
-        _.debug("touch moved too far to count as tap");
         this.clearTouchData();
         return;
       }
@@ -148,6 +167,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
     render: function () {
       return React.cloneElement(React.Children.only(this.props.children), {
         onTouchStart: this.handleTouchStart,
+        onTouchMove: this.handleTouchMove,
         onTouchEnd: this.handleTouchEnd,
         onTouchCancel: this.handleTouchCancel
       });
