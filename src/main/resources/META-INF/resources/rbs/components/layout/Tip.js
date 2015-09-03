@@ -68,8 +68,9 @@ define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function
       var validPlacements = [];
       // the center position of the anchor relative to the viewport
       var p = jqTip.scrollParent();
-      var x = (jqAnchor.offset().left - p.offset().left) + (jqAnchor.outerWidth() / 2) - p.scrollLeft();
-      var y = (jqAnchor.offset().top - p.offset().top) + (jqAnchor.outerHeight() / 2) - p.scrollTop();
+      var pOff = p.offset() || { top: 0, left: 0 };
+      var x = (jqAnchor.offset().left - pOff.left) + (jqAnchor.outerWidth() / 2) - p.scrollLeft();
+      var y = (jqAnchor.offset().top - pOff.top) + (jqAnchor.outerHeight() / 2) - p.scrollTop();
       // window width and height
       var wWd = p.width();
       var wHt = p.height();
