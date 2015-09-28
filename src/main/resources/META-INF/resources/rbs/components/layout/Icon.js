@@ -1,7 +1,9 @@
+/**
+ * Renders a FontAwesome icon. Be sure to include the rbs.css file to use fontawesome.
+ */
 define([ "react", "underscore" ], function (React, _) {
   "use strict";
 
-  // renders an icon with the name property
   return _.rf({
     displayName: "Icon",
 

@@ -176,11 +176,15 @@ define([ "original-underscore", "react" ], function (_, React) {
       if (!isNaN(+value)) {
         value = +value;
       }
-      if (value.toLowerCase() === "false") {
-        value = false;
+      if (typeof value === "string") {
+        if (value.toLowerCase() === "false") {
+          value = false;
+        }
       }
-      if (value.toLowerCase() === "true") {
-        value = true;
+      if (typeof value === "string") {
+        if (value.toLowerCase() === "true") {
+          value = true;
+        }
       }
       if (isArray) {
         attribute = attribute.substr(0, attribute.length - 2);
