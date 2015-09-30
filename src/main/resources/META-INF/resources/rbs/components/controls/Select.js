@@ -337,6 +337,11 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
           _.debug("updating filtered collection on receiving a new value");
           this.updateFilteredCollection(this.state.searchText, nextProps.value);
         }
+        // re-listen
+        if (nextProps.collection !== this.props.collection) {
+          this.stopListening(this.props.collection);
+          this.listenTo(nextProps.collection);
+        }
       },
 
       renderFakeInput: function () {

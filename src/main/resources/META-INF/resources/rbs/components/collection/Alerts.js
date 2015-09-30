@@ -71,10 +71,21 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
       },
 
       componentDidMount: function () {
-        this.listenTo(this.props.watch, "request", this.clearErrors);
-        this.listenTo(this.props.watch, "sync", this.showSuccess);
-        this.listenTo(this.props.watch, "error", this.showErrors);
-        this.listenTo(this.props.watch, "invalid", this.showValidationErrors);
+
+      },
+
+      listenToWatch: function (watch) {
+        this.listenTo(watch, "request", this.clearErrors);
+        this.listenTo(watch, "sync", this.showSuccess);
+        this.listenTo(watch, "error", this.showErrors);
+        this.listenTo(watch, "invalid", this.showValidationErrors);
+      },
+
+      componentWillReceiveProps: function (nextProps) {
+        if (nextProps.watch !== this.props.watch) {
+          this.stopListening(this.props.watch);
+          this.listenToWatch(nextProps.watch);
+        }
       },
 
       showErrors: function (model_or_collection, resp, options) {

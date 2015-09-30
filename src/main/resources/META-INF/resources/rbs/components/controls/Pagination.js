@@ -19,6 +19,13 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         this.listenTo(this.props.collection, "update reset sync", this.update);
       },
 
+      componentWillReceiveProps: function (nextProps) {
+        if (nextProps.collection !== this.props.collection) {
+          this.stopListening(this.props.collection);
+          this.listenTo(nextProps.collection);
+        }
+      },
+
       getDefaultProps: function () {
         return {
           previousPage: icon({ name: "chevron-left" }),

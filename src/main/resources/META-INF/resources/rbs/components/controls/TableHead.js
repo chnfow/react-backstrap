@@ -26,6 +26,13 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         this.listenTo(this.props.collection, "sort", this.update);
       },
 
+      componentWillReceiveProps: function (nextProps) {
+        if (nextProps.collection !== this.props.collection) {
+          this.stopListening(this.props.collection);
+          this.listenTo(nextProps.collection);
+        }
+      },
+
       // get the last sort applied to the collection
       getLastSort: function () {
         if (this.props.collection.sorts && this.props.collection.sorts.length > 0) {

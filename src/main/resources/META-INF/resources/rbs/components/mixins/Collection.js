@@ -28,8 +28,15 @@ define([ "react", "./Events", "underscore" ],
         };
       },
 
-      componentWillMount: function () {
+      componentDidMount: function () {
         this.listenTo(this.props.collection, "update reset sort sync", this.copyCollectionToState);
+      },
+
+      componentWillReceiveProps: function (nextProps) {
+        if (nextProps.collection !== this.props.collection) {
+          this.stopListening(this.props.collection);
+          this.listenTo(nextProps.collection, "update reset sort sync", this.copyCollectionToState);
+        }
       },
 
       copyCollectionToState: function () {
