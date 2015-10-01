@@ -10,7 +10,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
   return _.rf({
     displayName: "Loading Wrapper",
 
-    mixins: [ events ],
+    mixins: [ events, React.addons.PureRenderMixin ],
 
     propTypes: {
       watch: rpt.oneOfType([
@@ -36,10 +36,9 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
       };
     },
 
-
     getInitialState: function () {
       return {
-        loading: 0
+        loading: false
       };
     },
 
@@ -61,16 +60,19 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
     },
 
     _setLoading: function (loading) {
-      if (!this.isMounted()) {
-        return;
+      if (typeof this._loadingCounter !== "number") {
+        this._loadingCounter = 0;
       }
+      _.debug("Loading Counter", this._loadingCounter);
       if (loading) {
+        this._loadingCounter = this._loadingCounter + 1;
         this.setState({
-          loading: this.state.loading + 1
+          loading: this._loadingCounter > 0
         });
       } else {
+        this._loadingCounter = Math.max(this._loadingCounter - 1, 0);
         this.setState({
-          loading: Math.max(this.state.loading - 1, 0)
+          loading: this._loadingCounter > 0
         });
       }
     },
@@ -78,7 +80,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
     render: function () {
       var loadingIndicator = null;
       var loadingBackdrop = null;
-      if (this.state.loading > 0 || this.props.loading) {
+      if (this.state.loading || this.props.loading) {
         if (this.props.backdrop) {
           loadingBackdrop = React.DOM.div({
             key: "loading-indicator-backdrop",
@@ -92,11 +94,11 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
       }
 
       var className = "loading-indicator-container";
-      if (this.props.className && this.props.className.length > 0) {
+      if (typeof this.props.className === "string") {
         className += " " + this.props.className;
       }
 
-      var toAdd = (this.props.hideWhileLoading && this.state.loading > 0) ? [] : this.props.children;
+      var toAdd = (this.props.hideWhileLoading && this.state.loading) ? [] : this.props.children;
       return React.DOM.div(_.extend({}, this.props, {
         className: className
       }), _.addToArray(toAdd, [ loadingBackdrop, loadingIndicator ]));
