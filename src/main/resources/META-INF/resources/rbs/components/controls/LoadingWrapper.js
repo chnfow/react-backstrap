@@ -52,6 +52,30 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
       }
     },
 
+
+    componentWillReceiveProps: function (nextProps) {
+      if (nextProps !== this.props.watch) {
+        if (this.props.watch !== null) {
+          // stop listening to all the existing watched objects
+          if (_.isArray(this.props.watch)) {
+            _.each(this.props.watch, _.bind(this.stopListening, this));
+          } else {
+            this.stopListening(this.props.watch);
+          }
+          // clear the counter
+          this._loadingCounter = 0;
+          // listen to the next watched objects
+          if (nextProps.watch !== null) {
+            if (_.isArray(nextProps.watch)) {
+              _.each(nextProps.watch, this._listenToObject, this);
+            } else {
+              this._listenToObject(nextProps.watch);
+            }
+          }
+        }
+      }
+    },
+
     _listenToObject: function (object) {
       var incrementLoading = _.bind(this._setLoading, this, true);
       var decrementLoading = _.bind(this._setLoading, this, false);
@@ -63,7 +87,6 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
       if (typeof this._loadingCounter !== "number") {
         this._loadingCounter = 0;
       }
-      _.debug("Loading Counter", this._loadingCounter);
       if (loading) {
         this._loadingCounter = this._loadingCounter + 1;
         this.setState({
