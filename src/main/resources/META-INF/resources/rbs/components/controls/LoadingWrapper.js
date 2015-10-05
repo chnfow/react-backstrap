@@ -80,7 +80,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ], function
       var incrementLoading = _.bind(this._setLoading, this, true);
       var decrementLoading = _.bind(this._setLoading, this, false);
       this.listenTo(object, "request", incrementLoading);
-      this.listenTo(object, "sync error", decrementLoading);
+      this.listenTo(object, "sync error destroy", decrementLoading);
     },
 
     _setLoading: function (loading) {
