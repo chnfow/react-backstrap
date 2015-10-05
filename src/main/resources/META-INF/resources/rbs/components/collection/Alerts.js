@@ -71,10 +71,18 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
       },
 
       componentDidMount: function () {
-
+        this.listenToWatch(this.props.watch);
       },
 
       listenToWatch: function (watch) {
+        if (_.isArray(watch)) {
+          _.each(watch, this._listenToSingleWatch, this);
+        } else {
+          this._listenToSingleWatch(watch);
+        }
+      },
+
+      _listenToSingleWatch: function (watch) {
         this.listenTo(watch, "request", this.clearErrors);
         this.listenTo(watch, "sync", this.showSuccess);
         this.listenTo(watch, "error", this.showErrors);
