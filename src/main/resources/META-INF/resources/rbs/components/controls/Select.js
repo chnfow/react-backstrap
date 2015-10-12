@@ -282,6 +282,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
             break;
           // handle key selection of a result
           case KEY_ENTER:
+            e.preventDefault();
             this.handleSelect(this.refs.results.getHilitedModel());
             break;
         }
