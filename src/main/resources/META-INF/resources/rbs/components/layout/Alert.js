@@ -40,8 +40,8 @@ define([ "react", "underscore", "./Icon" ], function (React, _, icon) {
     render: function () {
       return React.DOM.div(_.extend({}, this.props, { className: this.getClass(), role: "alert" }), [
         this.getIcon(),
-        React.DOM.strong({ key: "strong" }, this.props.strong),
-        this.props.message
+        React.DOM.strong({ key: "strong", className: "alert-strong" }, this.props.strong),
+        React.DOM.span({ key:"at", className: "alert-text" }, this.props.message)
       ]);
     }
   });

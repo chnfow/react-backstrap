@@ -43,6 +43,12 @@
     margin-bottom: 0.6em;
 }
 
+/* fix spacing between the alert strong and alert text */
+.alert > .alert-strong + .alert-text {
+    margin-left: 0.3em;
+}
+
+
 /* apply font smoothing everywhere */
 body {
     -webkit-font-smoothing: antialiased;
