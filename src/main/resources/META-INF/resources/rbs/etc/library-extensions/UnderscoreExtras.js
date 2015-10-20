@@ -56,6 +56,7 @@ define([ "original-underscore", "react" ], function (_, React) {
       }
       if (typeof toAdd !== "string" || toAdd.length === 0) {
         console.error("invalid or empty argument passed to _.path", arguments[ i ]);
+        continue;
       }
       if (toReturn.length === 0) {
         toReturn = toAdd;
