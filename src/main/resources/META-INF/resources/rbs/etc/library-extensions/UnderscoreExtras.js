@@ -134,6 +134,9 @@ define([ "original-underscore", "react" ], function (_, React) {
     if (link.indexOf("//") !== -1) {
       return false;
     }
+    if (link.toLowerCase().indexOf("mailto:") === 0) {
+      return false;
+    }
     return link;
   };
 
