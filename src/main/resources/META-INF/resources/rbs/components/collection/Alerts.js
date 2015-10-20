@@ -98,7 +98,11 @@ define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert"
 
       showErrors: function (model_or_collection, resp, options) {
         var errors = this.props.parseErrors.apply(this, arguments);
-        this.state.errors.set(this.setDefaults(errors));
+        this.setErrors(errors);
+      },
+
+      setErrors: function (errorArray) {
+        this.state.errors.set(this.setDefaults(errorArray));
       },
 
       showSuccess: function (model_or_collection, resp, options) {
