@@ -4,22 +4,34 @@
 define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React, _, icon) {
   "use strict";
 
+  var rpt = React.PropTypes;
+
   return _.rf({
     displayName: "Navbar Link",
 
     mixins: [ React.addons.PureRenderMixin ],
 
     propTypes: {
-      active: React.PropTypes.bool,
-      href: React.PropTypes.string.isRequired,
-      icon: React.PropTypes.string.isRequired,
-      text: React.PropTypes.node.isRequired
+      href: rpt.string.isRequired,
+      text: rpt.node.isRequired,
+      active: rpt.bool,
+      icon: rpt.oneOfType([ rpt.string, rpt.node ])
     },
 
     getDefaultProps: function () {
       return {
-        active: false
+        active: false,
+        icon: null
       };
+    },
+
+    getIcon: function () {
+      if (typeof this.props.icon === "string") {
+        icon({ key: "link-icon", name: this.props.icon })
+      } else if (this.props.icon !== null) {
+        return React.DOM.span({ key: "link-icon" }, this.props.icon);
+      }
+      return null;
     },
 
     render: function () {
@@ -29,7 +41,7 @@ define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React,
       }
       // children of the anchor tag
       var children = [
-        icon({ key: "link-icon", name: this.props.icon }),
+        this.getIcon(),
         this.props.text
       ];
       // add any children to the anchor tag
