@@ -27,7 +27,7 @@ define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React,
 
     getIcon: function () {
       if (typeof this.props.icon === "string") {
-        icon({ key: "link-icon", name: this.props.icon })
+        return icon({ key: "link-icon", name: this.props.icon });
       } else if (this.props.icon !== null) {
         return React.DOM.span({ key: "link-icon" }, this.props.icon);
       }
