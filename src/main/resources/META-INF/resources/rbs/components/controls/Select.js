@@ -76,7 +76,12 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
       },
 
       componentDidMount: function () {
-        this.listenTo(this.props.collection, "update reset", this.update);
+        this.listenTo(this.props.collection, "update reset", this.handleCollectionChange);
+      },
+
+      handleCollectionChange: function () {
+        this.updateResults();
+        this.update();
       },
 
       handleChange: function (e) {
@@ -324,11 +329,15 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         this.refs.search.focus();
       },
 
+      updateResults: function () {
+        this.updateFilteredCollection(this.state.searchText, this.props.value);
+      },
+
       setOpen: function (open) {
         this.setState({ open: open, searchText: "" }, function () {
           if (this.state.open) {
             _.debug("updating filtered collection on open");
-            this.updateFilteredCollection(this.state.searchText, this.props.value);
+            this.updateResults();
           }
         });
       },
