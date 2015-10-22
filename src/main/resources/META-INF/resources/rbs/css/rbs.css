@@ -343,18 +343,17 @@ so they're removed from the DOM when they're not
     width: 100%;
     position: absolute;
     overflow-y: auto;
-    max-height: 20em;
     background-color: white;
     z-index: 10;
     border-radius: 0 0 0.2em 0.2em;
     box-shadow: inset 0 0.1em 0.3em rgba(0, 0, 0, 0.075);
     border: 0.1em solid #dddddd;
     border-top-width: 0;
-    display: none;
+    visibility: hidden;
 }
 
 .react-select-search-results.react-select-search-results-open {
-    display: block;
+    visibility: visible;
 }
 
 .react-select-search-focus-on-select {
