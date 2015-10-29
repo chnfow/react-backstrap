@@ -1,5 +1,5 @@
-define([ "react", "underscore", "jquery", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
-  function (React, _, $, Button, TTG, onClickOutside) {
+define([ "react", "react-dom", "underscore", "jquery", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
+  function (React, dom, _, $, Button, TTG, onClickOutside) {
     "use strict";
 
     return _.rf({
@@ -41,7 +41,7 @@ define([ "react", "underscore", "jquery", "../controls/Button", "../controls/Tim
       },
       scrollIntoView: function () {
         if (this.state.open && this.isMounted()) {
-          var menu = $(React.findDOMNode(this.refs.mnu));
+          var menu = $(dom.findDOMNode(this.refs.mnu));
           var menuOffset = menu.offset();
           var menuTop = menuOffset.top;
           var menuLeft = menuOffset.left;

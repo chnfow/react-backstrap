@@ -1,8 +1,8 @@
 /**
  * Renders a model's attributes into a form
  */
-define([ "react", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
-  function (React, _, model, formGroup) {
+define([ "react", "react-dom", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
+  function (React, dom, _, model, formGroup) {
     "use strict";
 
     return _.rf({
@@ -47,7 +47,7 @@ define([ "react", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
               submitting: true
             }, function () {
               if (this.isMounted()) {
-                var btn = React.findDOMNode(this.refs._tempSubmitBtn);
+                var btn = dom.findDOMNode(this.refs._tempSubmitBtn);
                 btn.click();
                 this.setState({
                   submitting: false

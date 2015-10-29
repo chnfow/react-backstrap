@@ -1,7 +1,7 @@
 /**
  * Calls this.onClickOutside if a click event occurs outside of the react component
  */
-define([ "react", "underscore", "jquery" ], function (React, _, $) {
+define([ "react", "react-dom", "underscore", "jquery" ], function (React, dom, _, $) {
   "use strict";
 
   return React.createMixin({
@@ -14,7 +14,7 @@ define([ "react", "underscore", "jquery" ], function (React, _, $) {
       if (!this.isMounted()) {
         return;
       }
-      var thisNode = React.findDOMNode(this);
+      var thisNode = dom.findDOMNode(this);
       var inside = thisNode === e.target || $.contains(thisNode, e.target);
       if (!inside && typeof this.onClickOutside === "function") {
         this.onClickOutside.apply(this, arguments);

@@ -13,7 +13,7 @@
  * This is adapted from Facebook's CSSTransitionGroup which is in the React
  * addons and under the Apache 2.0 License.
  */
-define([ "react", "underscore", "raf" ], function (React, _) {
+define([ "react", "react-dom", "underscore", "raf" ], function (React, dom, _) {
   "use strict";
   var ReactTransitionGroup = React.createFactory(React.addons.TransitionGroup);
 
@@ -118,7 +118,7 @@ define([ "react", "underscore", "raf" ], function (React, _) {
     displayName: "TimeoutTransitionGroupChild",
 
     transition: function (animationType, finishCallback) {
-      var node = React.findDOMNode(this);
+      var node = dom.findDOMNode(this);
       var className = this.props.name + '-' + animationType;
       var activeClassName = className + '-active';
 
@@ -143,7 +143,7 @@ define([ "react", "underscore", "raf" ], function (React, _) {
         }
       }
 
-      addClass(React.findDOMNode(this), className);
+      addClass(dom.findDOMNode(this), className);
 
       this.queueClass(activeClassName);
     },
@@ -160,7 +160,7 @@ define([ "react", "underscore", "raf" ], function (React, _) {
       this.timeout = null;
       if (this.classNameQueue.length > 0) {
         var nextClass = this.classNameQueue.shift();
-        addClass(React.findDOMNode(this), nextClass);
+        addClass(dom.findDOMNode(this), nextClass);
         this.timeout = window.requestAnimationFrame(this.flushClassNameQueue);
       }
     },

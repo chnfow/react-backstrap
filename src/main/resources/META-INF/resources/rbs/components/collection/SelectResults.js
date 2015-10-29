@@ -1,5 +1,5 @@
-define([ "react", "underscore", "../mixins/Collection" ],
-  function (React, _, collection) {
+define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
+  function (React, dom, _, collection) {
     "use strict";
 
 
@@ -69,8 +69,8 @@ define([ "react", "underscore", "../mixins/Collection" ],
       },
 
       scrollHiliteIntoView: function () {
-        var resultsNode = React.findDOMNode(this.refs.results);
-        var hilitedNode = React.findDOMNode(this.refs[ "result-" + this.state.hilite ]);
+        var resultsNode = dom.findDOMNode(this.refs.results);
+        var hilitedNode = dom.findDOMNode(this.refs[ "result-" + this.state.hilite ]);
         if (hilitedNode === null) {
           return;
         }
@@ -117,7 +117,7 @@ define([ "react", "underscore", "../mixins/Collection" ],
       _calculateMaxHeight: function () {
         if (this.isMounted()) {
           var wind = $(window);
-          var resultsDiv = $(React.findDOMNode(this.refs.results));
+          var resultsDiv = $(dom.findDOMNode(this.refs.results));
           var windowScrollTop = wind.scrollTop();
           // how far from the top of the window the select results are
           var divDistanceFromTop = resultsDiv.offset().top - windowScrollTop;

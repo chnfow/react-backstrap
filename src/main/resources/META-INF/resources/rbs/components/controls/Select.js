@@ -1,9 +1,9 @@
 /**
  * A searchable dropdown
  */
-define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../collection/SelectResults",
+define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Events", "../collection/SelectResults",
     "./DynamicInput" ],
-  function (React, _, $, Backbone, events, selectResults, dynamicInput) {
+  function (React, dom, _, $, Backbone, events, selectResults, dynamicInput) {
     "use strict";
 
     var KEY_DOWN = 40;
@@ -301,7 +301,7 @@ define([ "react", "underscore", "jquery", "backbone", "../mixins/Events", "../co
         var modelVal = selectedModel.get(this.props.valueAttribute);
         if (!this.props.multiple) {
           this.props.onChange(modelVal);
-          React.findDOMNode(this.refs.toFocus).focus();
+          dom.findDOMNode(this.refs.toFocus).focus();
         } else {
           var currentValue = this.props.value;
           var newValue;

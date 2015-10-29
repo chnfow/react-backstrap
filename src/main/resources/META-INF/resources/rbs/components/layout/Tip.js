@@ -1,7 +1,7 @@
 /**
  * React Component that renders a question sign and a tooltip when hovered over
  */
-define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function (React, $, _, occ) {
+define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside" ], function (React, dom, $, _, occ) {
   "use strict";
 
   var TOP = "top";
@@ -38,12 +38,12 @@ define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function
 
       this._setPlacement = _.debounce(_.bind(this.setPlacement, this), 50);
       $(window).on("resize", this._setPlacement);
-      $(React.findDOMNode(this.refs.tip)).scrollParent().on("scroll", this._setPlacement);
+      $(dom.findDOMNode(this.refs.tip)).scrollParent().on("scroll", this._setPlacement);
     },
 
     componentWillUnmount: function () {
       $(window).off("resize", this._setPlacement);
-      $(React.findDOMNode(this.refs.tip)).scrollParent().off("scroll", this._setPlacement);
+      $(dom.findDOMNode(this.refs.tip)).scrollParent().off("scroll", this._setPlacement);
     },
 
     setPlacement: function () {
@@ -59,9 +59,9 @@ define([ "react", "jquery", "underscore", "../mixins/OnClickOutside" ], function
         return this.props.defaultPlacement;
       }
       // where the actual tip popup is located
-      var jqTip = $(React.findDOMNode(this.refs.tip));
+      var jqTip = $(dom.findDOMNode(this.refs.tip));
       // where the tip is anchored to
-      var jqAnchor = $(React.findDOMNode(this.refs.container));
+      var jqAnchor = $(dom.findDOMNode(this.refs.container));
       var ht = jqTip.outerHeight() + 8;
       var wd = jqTip.outerWidth() + 8;
       // we will fill this with placements that fit the whole tip, then choose the best one

@@ -1,5 +1,5 @@
 // defines an input whose width is always the size of its content
-define([ "react", "underscore", "jquery" ], function (React, _, $) {
+define([ "react", "react-dom", "underscore", "jquery" ], function (React, dom, _, $) {
   "use strict";
 
   var widthCalculatorStyle = {
@@ -23,7 +23,7 @@ define([ "react", "underscore", "jquery" ], function (React, _, $) {
     },
 
     getInput: function () {
-      return React.findDOMNode(this.refs.input);
+      return dom.findDOMNode(this.refs.input);
     },
 
     getInitialState: function () {
@@ -57,14 +57,14 @@ define([ "react", "underscore", "jquery" ], function (React, _, $) {
     },
 
     isVisible: function () {
-      return (this.isMounted() && $(React.findDOMNode(this)).is(":visible"));
+      return (this.isMounted() && $(dom.findDOMNode(this)).is(":visible"));
     },
 
     copyStylesToCalculators: function () {
-      var input = React.findDOMNode(this.refs.input);
-      this.copyStyle(input, React.findDOMNode(this.refs.valueCalculator));
+      var input = dom.findDOMNode(this.refs.input);
+      this.copyStyle(input, dom.findDOMNode(this.refs.valueCalculator));
       if (this.props.placeholder) {
-        this.copyStyle(input, React.findDOMNode(this.refs.placeholderCalculator));
+        this.copyStyle(input, dom.findDOMNode(this.refs.placeholderCalculator));
       }
     },
 
@@ -74,11 +74,11 @@ define([ "react", "underscore", "jquery" ], function (React, _, $) {
         setTimeout(_.bind(this.updateWidth, this), this.props.inputWidthRetryDelay);
         return;
       }
-      var newWidth = React.findDOMNode(this.refs.valueCalculator).offsetWidth + 2;
+      var newWidth = dom.findDOMNode(this.refs.valueCalculator).offsetWidth + 2;
       if (this.props.placeholder) {
-        newWidth = Math.max(newWidth, React.findDOMNode(this.refs.placeholderCalculator).offsetWidth + 2);
+        newWidth = Math.max(newWidth, dom.findDOMNode(this.refs.placeholderCalculator).offsetWidth + 2);
       }
-      var container = React.findDOMNode(this.refs.container);
+      var container = dom.findDOMNode(this.refs.container);
       if (container.parentNode) {
         var parentStyle = this.getStyle(container.parentNode);
         newWidth = Math.min(newWidth, container.parentNode.clientWidth - (parseFloat(parentStyle.paddingLeft) + parseFloat(parentStyle.paddingRight)));
@@ -92,11 +92,11 @@ define([ "react", "underscore", "jquery" ], function (React, _, $) {
     },
 
     focus: function () {
-      React.findDOMNode(this.refs.input).focus();
+      dom.findDOMNode(this.refs.input).focus();
     },
 
     blur: function () {
-      React.findDOMNode(this.refs.input).blur();
+      dom.findDOMNode(this.refs.input).blur();
     },
 
     getCalculator: function (text, ref) {

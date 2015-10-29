@@ -82,7 +82,8 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
           }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
         }, this);
 
-        return React.DOM.thead(_.omit(this.props, "columns", "collection"), ths);
+        return React.DOM.thead(_.omit(this.props, "columns", "collection"),
+          React.DOM.tr({}, ths));
       }
 
     });
