@@ -148,33 +148,26 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
         return {};
       },
 
-      render: function () {
-        var i = 0;
-        // wrap each result in a div
-        var results = _.map(this.getModels(), function (oneResultComponent) {
-          var myIndex = i++;
-          var optionClass = "react-select-search-result";
-          if (myIndex === this.state.hilite) {
-            optionClass += " hilited";
-          }
-          return React.DOM.div({
-            key: "model-result-" + oneResultComponent.props.model.cid,
-            className: optionClass,
-            ref: "result-" + myIndex,
-            model: oneResultComponent.props.model,
-            onMouseOver: _.bind(this.setHilite, this, myIndex),
-            onMouseDown: this.doNothing,
-            onClick: _.bind(this.handleSelect, this, oneResultComponent.props.model)
-          }, oneResultComponent);
-        }, this);
+      wrapperFunction: function (reactEl, oneModel, index) {
+        var optionClass = "react-select-search-result";
 
-        // empty message
-        if (results.length === 0) {
-          results.push(React.DOM.div({
-            className: "react-select-search-result",
-            key: "no-results"
-          }, this.props.emptyMessage));
+        _.debug("wrapping el");
+        if (myIndex === this.state.hilite) {
+          optionClass += " hilited";
         }
+
+        return React.DOM.div({
+          key: "model-result-" + oneModel.cid,
+          className: optionClass,
+          ref: "result-" + index,
+          onMouseOver: _.bind(this.setHilite, this, index),
+          onMouseDown: this.doNothing,
+          onClick: _.bind(this.handleSelect, this, oneModel)
+        }, reactEl);
+      },
+
+      render: function () {
+        var results = this.getModels();
 
         var style = this.calculateStyle();
 

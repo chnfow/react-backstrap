@@ -47,7 +47,10 @@ define([ "react", "./Events", "underscore" ],
 
       getModels: function () {
         if (this.state.collection.length > 0) {
-          return _.map(this.state.collection, this.getSingleModelView, this);
+          var i = 0;
+          return _.map(this.state.collection, function (model) {
+            return this.getSingleModelView(model, i++);
+          }, this);
         } else {
           if (this.props.emptyNode) {
             return [ this.props.emptyNode ];
@@ -56,15 +59,19 @@ define([ "react", "./Events", "underscore" ],
       },
 
       // returns an instance of the modelComponent for the model
-      getSingleModelView: function (oneModel) {
+      getSingleModelView: function (oneModel, index) {
         if (typeof this.props.modelComponent !== "function") {
           _.debug("Model component not passed to collection component");
           return null;
         }
-        return this.props.modelComponent({
+        var toReturn = this.props.modelComponent({
           key: oneModel.cid,
           model: oneModel
         });
+        if (typeof this.wrapperFunction === "function") {
+          toReturn = this.wrapperFunction(toReturn, oneModel, index);
+        }
+        return toReturn;
       }
 
     });
