@@ -41,7 +41,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
         return null;
       },
 
-      sortCollection: function (on, e) {
+      sortCollection: function (on) {
         if (typeof on === "string") {
           // sort the collection
           var ls = this.getLastSort();

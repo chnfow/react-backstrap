@@ -224,7 +224,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           return;
         }
         var newValue = _.clone(currentValue);
-        var removing = newValue.splice(realIndex, 1);
+        newValue.splice(realIndex, 1);
 
         this.props.onChange(newValue);
 
@@ -325,7 +325,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       // handle a click of the select field
-      handleSelectClick: function (e) {
+      handleSelectClick: function () {
         this.refs.search.focus();
       },
 

@@ -74,7 +74,6 @@ define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside
       // window width and height
       var wWd = p.width();
       var wHt = p.height();
-      var placement;
       // first check top is valid
       if ((x + (wd / 2) < wWd) && (x - (wd / 2) > 0) && (y - ht > 0)) {
         validPlacements.push(TOP);
