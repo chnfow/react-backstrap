@@ -97,9 +97,9 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
       },
 
       getHilitedModel: function () {
-        var hilited = this.refs[ "result-" + this.state.hilite ];
-        if (hilited) {
-          return hilited.props.model;
+        var hl = this.state.hilite;
+        if (hl < this.state.collection.length && hl >= 0) {
+          return this.state.collection[ hl ];
         }
         return null;
       },
@@ -152,7 +152,7 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
         var optionClass = "react-select-search-result";
 
         _.debug("wrapping el");
-        if (myIndex === this.state.hilite) {
+        if (index === this.state.hilite) {
           optionClass += " hilited";
         }
 

@@ -9,6 +9,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
     var KEY_DOWN = 40;
     var KEY_UP = 38;
     var KEY_ENTER = 13;
+    var KEY_TAB = 9;
 
     var KEY_ESCAPE = 27;
     var KEY_PAGE_UP = 33;
@@ -289,6 +290,15 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           case KEY_ENTER:
             e.preventDefault();
             this.handleSelect(this.refs.results.getHilitedModel());
+            break;
+          case KEY_TAB:
+            if (this.state.filteredCollection.size() === 1) {
+              var hm = this.refs.results.getHilitedModel();
+              if (hm !== null) {
+                e.preventDefault();
+                this.handleSelect(hm);
+              }
+            }
             break;
         }
       },
