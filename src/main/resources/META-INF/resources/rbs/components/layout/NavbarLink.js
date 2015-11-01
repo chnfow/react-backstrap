@@ -15,6 +15,7 @@ define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React,
       href: rpt.string.isRequired,
       text: rpt.node.isRequired,
       active: rpt.bool,
+      onClick: rpt.func,
       icon: rpt.oneOfType([ rpt.string, rpt.node ])
     },
 

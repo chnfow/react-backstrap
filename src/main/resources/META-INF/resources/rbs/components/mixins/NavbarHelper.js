@@ -28,7 +28,7 @@ define([ "react", "backbone", "underscore", "../layout/NavbarLink", "../layout/N
       _buildSingleLink: function (linkObject) {
         var keys = _.keys(linkObject);
         var isDropdown = _.contains(keys, "menu");
-        var isNavbarText = !_.contains(keys, "href") && !isDropdown;
+        var isNavbarText = !_.contains(keys, "href") && !_.contains(keys, "onClick") && !isDropdown;
         if (isNavbarText) {
           return React.DOM.p({
             key: linkObject.text,
@@ -49,14 +49,19 @@ define([ "react", "backbone", "underscore", "../layout/NavbarLink", "../layout/N
           }, this.buildLinks(linkObject.menu));
         }
         var href = linkObject.href;
-        if (href[ 0 ] !== "/") {
-          href = "/" + href;
+        if (typeof href !== "string" || href.length === 0) {
+          href = "#";
+        } else {
+          if (href[ 0 ] !== "/") {
+            href = "/" + href;
+          }
         }
         return link({
           key: (linkObject.key) || ("link-" + linkObject.href),
           icon: linkObject.icon,
           text: linkObject.text,
           href: linkObject.href,
+          onClick: linkObject.onClick,
           active: (window.location.pathname === href)
         });
       }
