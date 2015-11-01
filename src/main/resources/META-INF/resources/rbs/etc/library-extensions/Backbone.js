@@ -1,4 +1,4 @@
-define([ "original-backbone", "jsog", "jquery", "original-underscore", "moment" ],
+define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
   function (Backbone, JSOG, $, _, moment) {
     "use strict";
 

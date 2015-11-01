@@ -29,7 +29,8 @@ define([], function () {
       "original-backbone": "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone" + dashMin,
       "original-jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery" + dotMin,
       "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales" + dotMin,
-      "moment-tz": "//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data" + dotMin
+      "moment-tz": "//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data" + dotMin,
+      "promise-polyfill": "//cdnjs.cloudflare.com/ajax/libs/es6-promise/3.0.2/es6-promise" + dotMin
     },
 
     shim: {
