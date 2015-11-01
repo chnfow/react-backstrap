@@ -49,9 +49,7 @@ define([ "react", "backbone", "underscore", "../layout/NavbarLink", "../layout/N
           }, this.buildLinks(linkObject.menu));
         }
         var href = linkObject.href;
-        if (typeof href !== "string" || href.length === 0) {
-          href = "#";
-        } else {
+        if (typeof href === "string" && href.length > 0) {
           if (href[ 0 ] !== "/") {
             href = "/" + href;
           }

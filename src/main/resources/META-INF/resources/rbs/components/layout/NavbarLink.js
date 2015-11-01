@@ -12,8 +12,8 @@ define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React,
     mixins: [ React.addons.PureRenderMixin ],
 
     propTypes: {
-      href: rpt.string.isRequired,
       text: rpt.node.isRequired,
+      href: rpt.string,
       active: rpt.bool,
       onClick: rpt.func,
       icon: rpt.oneOfType([ rpt.string, rpt.node ])
@@ -21,6 +21,7 @@ define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React,
 
     getDefaultProps: function () {
       return {
+        href: "#",
         active: false,
         icon: null
       };
