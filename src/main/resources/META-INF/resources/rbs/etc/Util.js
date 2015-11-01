@@ -1,4 +1,4 @@
-define([ "original-underscore", "react" ], function (_, React) {
+define([ "underscore", "react" ], function (_, React) {
   "use strict";
   var util = {};
 
@@ -55,7 +55,7 @@ define([ "original-underscore", "react" ], function (_, React) {
         toAdd = toAdd.toString();
       }
       if (typeof toAdd !== "string" || toAdd.length === 0) {
-        console.error("invalid or empty argument passed to _.path", arguments[ i ]);
+        console.error("invalid or empty argument passed to Util.path", arguments[ i ]);
         continue;
       }
       if (toReturn.length === 0) {
@@ -211,7 +211,7 @@ define([ "original-underscore", "react" ], function (_, React) {
 
   util.concatWS = function concatWS(separator) {
     if (typeof separator !== "string") {
-      _.debug("Invalid separator passed to _.concatWS");
+      util.debug("Invalid separator passed to Util.concatWS");
       return null;
     }
     var validValues = [];
@@ -219,7 +219,7 @@ define([ "original-underscore", "react" ], function (_, React) {
       if (typeof arguments[ i ] === "string" && arguments[ i ].length > 0) {
         validValues.push(arguments[ i ]);
       } else {
-        _.debug("Invalid or empty value passed to concatWS will be skipped", arguments[ i ]);
+        util.debug("Invalid or empty value passed to Util.concatWS will be skipped", arguments[ i ]);
       }
     }
     return validValues.join(separator);

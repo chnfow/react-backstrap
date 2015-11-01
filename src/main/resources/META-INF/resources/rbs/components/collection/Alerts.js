@@ -1,11 +1,11 @@
 /**
  * Watches a model or collection for errors or success, and presents the appropriate Alerts for the errors
  */
-define([ "react", "underscore", "backbone", "../mixins/Events", "../model/Alert", "./Div" ],
-  function (React, _, Backbone, events, alert, cDiv) {
+define([ "react", "underscore", "util", "backbone", "../mixins/Events", "../model/Alert", "./Div" ],
+  function (React, _, util, Backbone, events, alert, cDiv) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Alerts Collection",
 
       mixins: [ events ],

@@ -2,8 +2,8 @@
  * Copies the collection to the state when collection changes and provides a function that generates an array of components
  * from the collection and a component factory
  */
-define([ "react", "./Events", "underscore" ],
-  function (React, events, _) {
+define([ "react", "./Events", "underscore", "util" ],
+  function (React, events, _, util) {
     "use strict";
 
     return React.createMixin({
@@ -61,7 +61,7 @@ define([ "react", "./Events", "underscore" ],
       // returns an instance of the modelComponent for the model
       getSingleModelView: function (oneModel, index) {
         if (typeof this.props.modelComponent !== "function") {
-          _.debug("Model component not passed to collection component");
+          util.debug("Model component not passed to collection component");
           return null;
         }
         var toReturn = this.props.modelComponent({

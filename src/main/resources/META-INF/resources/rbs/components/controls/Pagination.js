@@ -1,8 +1,8 @@
-define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
-  function (React, _, events, icon) {
+define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ],
+  function (React, _, events, icon, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Pagination",
 
       mixins: [ events ],

@@ -2,7 +2,7 @@
  * A mixin that provides a function for wrapping a component in a form group, including help text in a tip component
  * if specified in that component's attributes
  */
-define([ "react", "underscore", "../layout/Tip", "../layout/Icon" ], function (React, _, tip, icon) {
+define([ "react", "underscore", "util", "../layout/Tip", "../layout/Icon" ], function (React, _, util, tip, icon) {
   "use strict";
   return React.createMixin({
     makeFormGroup: function (component) {
@@ -14,7 +14,7 @@ define([ "react", "underscore", "../layout/Tip", "../layout/Icon" ], function (R
         newClass += " " + oldClass;
       }
       // make sure the field has an ID
-      var fieldId = component.props.id || _.randomString(5);
+      var fieldId = component.props.id || util.randomString(5);
       var newComponent = React.cloneElement(component, {
         key: "attribute-component",
         className: newClass,

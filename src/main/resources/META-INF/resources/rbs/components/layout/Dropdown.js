@@ -1,8 +1,8 @@
-define([ "react", "react-dom", "underscore", "jquery", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside" ],
-  function (React, dom, _, $, Button, TTG, onClickOutside) {
+define([ "react", "react-dom", "underscore", "jquery", "../controls/Button", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside", "util" ],
+  function (React, dom, _, $, Button, TTG, onClickOutside, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Dropdown Button",
 
       propTypes: {

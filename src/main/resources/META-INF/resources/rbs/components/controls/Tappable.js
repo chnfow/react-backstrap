@@ -2,10 +2,10 @@
  * Calls onClick or focuses the element when a "tap" happens and prevents the simulated click events from happening
  * Essentially a port of the functionality in FastClick
  */
-define([ "react", "jquery", "underscore" ], function (React, $, _) {
+define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Tappable Control",
 
     propTypes: {
@@ -36,7 +36,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
     // clear the touch data we've gathered
     clearTouchData: function (callback) {
-      _.debug("clearing touch data");
+      util.debug("clearing touch data");
       if (this.isMounted()) {
         this.setState({
           touchId: null,
@@ -50,12 +50,12 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
     handleTouchStart: function (e) {
       // one+ touches means the user isn't trying to tap this element
       if (e.touches.length !== 1 || e.targetTouches.length !== 1) {
-        _.debug("multi-touch situation encountered on another touch start");
+        util.debug("multi-touch situation encountered on another touch start");
         this.clearTouchData();
         return;
       }
       var tch = e.targetTouches[ 0 ];
-      _.debug("touch with ID", tch.identifier, "started");
+      util.debug("touch with ID", tch.identifier, "started");
       this.setState({
         touchId: tch.identifier,
         touchX: tch.screenX,
@@ -66,19 +66,19 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
     handleTouchMove: function (e) {
       if (this.state.touchId === null) {
-        _.debug("received touch move but not tracking touch");
+        util.debug("received touch move but not tracking touch");
         return;
       }
 
       if (e.touches.length !== 1 || e.targetTouches.length !== 1) {
-        _.debug("touch moved in multi-touch scenario");
+        util.debug("touch moved in multi-touch scenario");
         this.clearTouchData();
         return;
       }
 
       var tch = e.targetTouches[0];
       if (this.state.touchId !== tch.identifier) {
-        _.debug("touch identifier changed");
+        util.debug("touch identifier changed");
         this.clearTouchData();
         return;
       }
@@ -87,14 +87,14 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       var dist = Math.sqrt(Math.pow(tch.screenX - this.state.touchX, 2) + Math.pow(tch.screenY - this.state.touchY, 2));
       // if it was moved farther than the allowed amount, then we should cancel the touch
       if (dist > this.props.threshold) {
-        _.debug("touch moved too far to count as tap");
+        util.debug("touch moved too far to count as tap");
         this.clearTouchData();
       }
     },
 
     handleTouchEnd: function (e) {
       if (this.state.touchId === null) {
-        _.debug("touch ended but no touch is being tracked");
+        util.debug("touch ended but no touch is being tracked");
         return;
       }
 
@@ -102,7 +102,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       if (this.props.timeThreshold !== null) {
         // long press, don't do anything
         if (((new Date()).getTime() - this.state.touchTime > this.props.timeThreshold)) {
-          _.debug("touch was for too long to be a tap");
+          util.debug("touch was for too long to be a tap");
           this.clearTouchData();
           return;
         }
@@ -110,7 +110,7 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
 
       // still a touch remaining
       if (e.touches.length !== 0) {
-        _.debug("still touches remaining, not a tap.");
+        util.debug("still touches remaining, not a tap.");
         this.clearTouchData();
         return;
       }
@@ -121,12 +121,12 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       }, this);
 
       if (!tch) {
-        _.debug("no touch found with the identifier", this.state.touchId, "touch end skipped.");
+        util.debug("no touch found with the identifier", this.state.touchId, "touch end skipped.");
         this.clearTouchData();
         return;
       }
 
-      _.debug("touch with ID", tch.identifier, "ended");
+      util.debug("touch with ID", tch.identifier, "ended");
 
       var target = tch.target;
 
@@ -150,11 +150,11 @@ define([ "react", "jquery", "underscore" ], function (React, $, _) {
       }
 
       if (!target) {
-        _.debug("click function not found on target node nor its parent nodes");
+        util.debug("click function not found on target node nor its parent nodes");
         return;
       }
 
-      _.debug("triggering click on", target);
+      util.debug("triggering click on", target);
       target.click();
 
       var el = $(target);

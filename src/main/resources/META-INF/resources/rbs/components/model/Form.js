@@ -1,11 +1,11 @@
 /**
  * Renders a model's attributes into a form
  */
-define([ "react", "react-dom", "underscore", "../mixins/Model", "../mixins/FormGroup" ],
-  function (React, dom, _, model, formGroup) {
+define([ "react", "react-dom", "underscore", "../mixins/Model", "../mixins/FormGroup", "util" ],
+  function (React, dom, _, model, formGroup, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Model Form",
 
       mixins: [ model, formGroup, React.addons.PureRenderMixin ],

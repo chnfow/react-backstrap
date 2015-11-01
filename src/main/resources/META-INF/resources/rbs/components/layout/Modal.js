@@ -1,12 +1,12 @@
 /**
  * We are not using bootstrap's modals because it's styling is too mixed in with the rest of the css
  */
-define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", "../layout/Icon" ],
-  function (React, $, _, TTG, icon) {
+define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", "../layout/Icon", "util" ],
+  function (React, $, _, TTG, icon, util) {
     "use strict";
 
     // renders an icon with the name property
-    return _.rf({
+    return util.rf({
       displayName: "Modal",
 
       mixins: [ React.addons.PureRenderMixin ],
@@ -78,7 +78,7 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
             ]))
           ];
           if (this.props.children) {
-            contentChildren = _.addToArray(contentChildren, this.props.children);
+            contentChildren = util.addToArray(contentChildren, this.props.children);
           }
           var dialog = React.DOM.div({
               className: "modal-dialog" + modalSizeClass

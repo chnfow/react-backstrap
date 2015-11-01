@@ -1,11 +1,11 @@
 /**
  * Renders model attributes into a div
  */
-define([ "react", "../mixins/Model", "underscore" ],
-  function (React, model, _) {
+define([ "react", "../mixins/Model", "underscore", "util" ],
+  function (React, model, _, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Generic Model View",
       mixins: [ model, React.addons.PureRenderMixin ],
       render: function () {

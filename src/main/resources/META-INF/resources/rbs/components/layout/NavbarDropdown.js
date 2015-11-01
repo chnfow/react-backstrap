@@ -2,11 +2,11 @@
  * React Component
  */
 define([ "react", "jquery", "underscore", "./Icon", "../controls/TimeoutTransitionGroup", "../mixins/OnClickOutside",
-    "../mixins/Events", "backbone" ],
-  function (React, $, _, icon, TTG, onClickOutside, events, Backbone) {
+    "../mixins/Events", "backbone", "util" ],
+  function (React, $, _, icon, TTG, onClickOutside, events, Backbone, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Navbar Dropdown",
 
       mixins: [ React.addons.PureRenderMixin, onClickOutside, events ],

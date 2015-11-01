@@ -1,12 +1,12 @@
 /**
  * React Component
  */
-define([ "react", "underscore", "rbs/components/layout/Icon" ], function (React, _, icon) {
+define([ "react", "underscore", "rbs/components/layout/Icon", "util" ], function (React, _, icon, util) {
   "use strict";
 
   var rpt = React.PropTypes;
 
-  return _.rf({
+  return util.rf({
     displayName: "Navbar Link",
 
     mixins: [ React.addons.PureRenderMixin ],

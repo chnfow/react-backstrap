@@ -2,10 +2,10 @@
  * This component binds the value of an input or span to a model's attribute
  * Note this is one-way from the DOM to the model, so changing
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "underscore", "util" ], function (React, _, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Attribute Binder",
 
     propTypes: {

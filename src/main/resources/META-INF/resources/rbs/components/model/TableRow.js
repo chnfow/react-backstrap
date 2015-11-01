@@ -1,11 +1,11 @@
 /**
  * Renders a table row of model attributes
  */
-define([ "react", "../mixins/Model", "underscore" ],
-  function (React, model, _) {
+define([ "react", "../mixins/Model", "underscore", "util" ],
+  function (React, model, _, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Model Table Row",
 
       mixins: [ model, React.addons.PureRenderMixin ],

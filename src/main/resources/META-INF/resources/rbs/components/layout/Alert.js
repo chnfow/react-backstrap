@@ -1,10 +1,10 @@
 /**
  * Renders a bootstrap alert
  */
-define([ "react", "underscore", "./Icon" ], function (React, _, icon) {
+define([ "react", "underscore", "./Icon", "util" ], function (React, _, icon, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Layout Alert",
 
     mixins: [ React.addons.PureRenderMixin ],

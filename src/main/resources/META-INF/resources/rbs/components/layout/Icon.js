@@ -1,10 +1,10 @@
 /**
  * Renders a FontAwesome icon. Be sure to include the rbs.css file to use fontawesome.
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "underscore", "util" ], function (React, _, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Icon",
 
     mixins: [ React.addons.PureRenderMixin ],

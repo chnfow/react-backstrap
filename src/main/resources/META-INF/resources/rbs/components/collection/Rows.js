@@ -1,7 +1,7 @@
 /**
  * React Component
  */
-define([ "react", "underscore", "../mixins/Collection" ], function (React, _, collection) {
+define([ "react", "underscore", "../mixins/Collection", "util" ], function (React, _, collection, util) {
   "use strict";
 
   var sizeUps = {
@@ -13,7 +13,7 @@ define([ "react", "underscore", "../mixins/Collection" ], function (React, _, co
   var sizes = _.keys(sizeUps);
   var validSizes = React.PropTypes.oneOf([ 1, 2, 3, 4, 6, 12 ]);
 
-  return _.rf({
+  return util.rf({
     displayName: "Rows Collection",
 
     mixins: [ collection, React.addons.PureRenderMixin ],

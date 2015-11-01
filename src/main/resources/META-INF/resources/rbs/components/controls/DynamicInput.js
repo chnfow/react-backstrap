@@ -1,5 +1,5 @@
 // defines an input whose width is always the size of its content
-define([ "react", "react-dom", "underscore", "jquery" ], function (React, dom, _, $) {
+define([ "react", "react-dom", "underscore", "jquery", "util" ], function (React, dom, _, $, util) {
   "use strict";
 
   var widthCalculatorStyle = {
@@ -10,7 +10,7 @@ define([ "react", "react-dom", "underscore", "jquery" ], function (React, dom, _
 
   var widthStyles = [ "font", "fontStyle", "fontVariant", "fontWeight", "fontSize", "fontFamily", "boxSizing", "padding", "margin", "border" ];
 
-  return _.rf({
+  return util.rf({
     displayName: "Dynamic Input",
 
     propTypes: {

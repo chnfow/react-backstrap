@@ -1,10 +1,10 @@
 /**
  * Renders a collection of models into a table body. Usually used with a table row model view
  */
-define([ "react", "underscore", "../mixins/Collection" ],
-  function (React, _, collection) {
+define([ "react", "underscore", "../mixins/Collection", "util" ],
+  function (React, _, collection, util) {
     "use strict";
-    return _.rf({
+    return util.rf({
       displayName: "Collection Table Body",
 
       mixins: [ collection, React.addons.PureRenderMixin ],

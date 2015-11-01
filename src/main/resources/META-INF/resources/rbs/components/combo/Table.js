@@ -1,13 +1,13 @@
 /**
  * Renders a table, which is a combination of the table header and table body views
  */
-define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", "../controls/TableHead" ],
-  function (React, _, tr, tbody, thead) {
+define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", "../controls/TableHead", "util" ],
+  function (React, _, tr, tbody, thead, util) {
     "use strict";
 
     var rpt = React.PropTypes;
 
-    return _.rf({
+    return util.rf({
       displayName: "Collection Table",
 
       mixins: [ React.addons.PureRenderMixin ],
@@ -45,7 +45,7 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
       getModelComponent: function (props) {
         var attrs = props.attributes;
 
-        return _.rf({
+        return util.rf({
           displayName: "Generated Model Table Row",
           shouldComponentUpdate: function () {
             return false;

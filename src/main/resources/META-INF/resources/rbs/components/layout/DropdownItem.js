@@ -1,11 +1,11 @@
 /**
  * Bootstrap item in a dropdown menu
  */
-define([ "react", "underscore", "./Icon" ],
-  function (React, _, icon) {
+define([ "react", "underscore", "./Icon", "util" ],
+  function (React, _, icon, util) {
     "use strict";
     var rpt = React.PropTypes;
-    return _.rf({
+    return util.rf({
       displayName: "Dropdown Item",
 
       mixins: [ React.addons.PureRenderMixin ],

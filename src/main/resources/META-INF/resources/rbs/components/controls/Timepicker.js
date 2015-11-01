@@ -1,14 +1,14 @@
 /**
  * React Component
  */
-define([ "react", "underscore", "modernizr", "moment", "../layout/Icon" ], function (React, _, Modernizr, moment, icon) {
+define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" ], function (React, _, Modernizr, moment, icon, util) {
   "use strict";
 
   var KEY_ENTER = 13;
   var KEY_N = 78;
   var KEY_T = 84;
 
-  return _.rf({
+  return util.rf({
     propTypes: {
       onChange: React.PropTypes.func.isRequired,
       value: React.PropTypes.string,

@@ -1,10 +1,10 @@
 /**
  * React Component
  */
-define([ "react", "underscore" ], function (React, _) {
+define([ "react", "underscore", "util" ], function (React, _, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Navbar Group",
 
     mixins: [ React.addons.PureRenderMixin ],

@@ -1,10 +1,10 @@
 /**
  * Renders a bootstrap grid row of model attributes in form groups
  */
-define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore" ],
-  function (React, model, formGroup, _) {
+define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore", "util" ],
+  function (React, model, formGroup, _, util) {
     "use strict";
-    return _.rf({
+    return util.rf({
       displayName: "Model Grid Row",
       mixins: [ model, formGroup, React.addons.PureRenderMixin ],
 

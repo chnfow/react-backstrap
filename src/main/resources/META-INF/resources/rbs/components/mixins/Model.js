@@ -3,50 +3,50 @@
  * Also provides a method for converting an array of attribute descriptions to an array of components
  */
 define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Timepicker",
-    "../controls/Select", "../layout/Icon" ],
-  function (React, _, events, binder, datepicker, timepicker, select, icon) {
+    "../controls/Select", "../layout/Icon", "util" ],
+  function (React, _, events, binder, datepicker, timepicker, select, icon, util) {
     "use strict";
 
     var attributeComponentMap = {};
     attributeComponentMap.date = datepicker;
     attributeComponentMap.select = select;
     attributeComponentMap.time = timepicker;
-    attributeComponentMap.text = _.rf({
+    attributeComponentMap.text = util.rf({
       displayName: "Text Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "text" }), null);
       }
     });
 
-    attributeComponentMap.textarea = _.rf({
+    attributeComponentMap.textarea = util.rf({
       displayName: "TextArea Attribute Wrapper",
       render: function () {
         return React.DOM.textarea(_.omit(this.props, "children"));
       }
     });
 
-    attributeComponentMap.number = _.rf({
+    attributeComponentMap.number = util.rf({
       displayName: "Number Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "number" }), null);
       }
     });
 
-    attributeComponentMap.email = _.rf({
+    attributeComponentMap.email = util.rf({
       displayName: "Email Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "email" }), null);
       }
     });
 
-    attributeComponentMap.password = _.rf({
+    attributeComponentMap.password = util.rf({
       displayName: "Password Attribute Wrapper",
       render: function () {
         return React.DOM.input(_.extend({}, this.props, { type: "password" }), null);
       }
     });
 
-    attributeComponentMap.checkbox = _.rf({
+    attributeComponentMap.checkbox = util.rf({
       displayName: "Checkbox Attribute Wrapper",
       transformChangeEvent: function (e) {
         if (typeof this.props.onChange === "function") {
@@ -64,7 +64,7 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
       }
     });
 
-    attributeComponentMap.icon = _.rf({
+    attributeComponentMap.icon = util.rf({
       displayName: "Icon Attribute Wrapper",
       render: function () {
         return icon(_.extend({}, this.props, { name: this.props.value }), null);
@@ -116,7 +116,7 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
             viewType = comp;
           }
           if (typeof viewType !== "function") {
-            _.debug("Valid component factory not passed for model attribute", oneAttribute);
+            util.debug("Valid component factory not passed for model attribute", oneAttribute);
             return null;
           }
           return binder(_.extend({}, oneAttribute, {

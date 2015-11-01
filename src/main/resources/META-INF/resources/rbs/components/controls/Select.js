@@ -2,8 +2,8 @@
  * A searchable dropdown
  */
 define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Events", "../collection/SelectResults",
-    "./DynamicInput" ],
-  function (React, dom, _, $, Backbone, events, selectResults, dynamicInput) {
+    "./DynamicInput", "util" ],
+  function (React, dom, _, $, Backbone, events, selectResults, dynamicInput, util) {
     "use strict";
 
     var KEY_DOWN = 40;
@@ -24,7 +24,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
     var rpt = React.PropTypes;
 
-    return _.rf({
+    return util.rf({
       displayName: "RBS Select",
 
       mixins: [ events ],
@@ -90,7 +90,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       doSearch: function (q) {
-        _.debug("updating filtered collection for a new search value", q);
+        util.debug("updating filtered collection for a new search value", q);
         this.updateFilteredCollection(q, this.props.value);
         this.setState({
           searchText: q,
@@ -346,7 +346,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       setOpen: function (open) {
         this.setState({ open: open, searchText: "" }, function () {
           if (this.state.open) {
-            _.debug("updating filtered collection on open");
+            util.debug("updating filtered collection on open");
             this.updateResults();
           }
         });
@@ -354,7 +354,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       componentWillReceiveProps: function (nextProps) {
         if (this.state.open && nextProps.value !== this.props.value) {
-          _.debug("updating filtered collection on receiving a new value");
+          util.debug("updating filtered collection on receiving a new value");
           this.updateFilteredCollection(this.state.searchText, nextProps.value);
         }
         // re-listen

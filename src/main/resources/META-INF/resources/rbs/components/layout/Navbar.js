@@ -1,11 +1,11 @@
 /**
  * React Component renders a bootstrap navbar
  */
-define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events", "../controls/TimeoutTransitionGroup" ],
-  function (React, $, _, icon, Backbone, events, TTG) {
+define([ "react", "jquery", "underscore", "./Icon", "backbone", "../mixins/Events", "../controls/TimeoutTransitionGroup", "util" ],
+  function (React, $, _, icon, Backbone, events, TTG, util) {
     "use strict";
 
-    return _.rf({
+    return util.rf({
       displayName: "Navbar",
 
       mixins: [ events, React.addons.PureRenderMixin ],

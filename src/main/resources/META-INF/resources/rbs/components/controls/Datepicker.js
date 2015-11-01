@@ -2,8 +2,8 @@
  * A controlled input that calls onChange(saveFormat formatted date) when a user selects a date, and takes
  * value: saveFormat for the currently selected value
  */
-define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
-  function (React, _, moment, icon, Modernizr) {
+define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" ],
+  function (React, _, moment, icon, Modernizr, util) {
     "use strict";
 
     var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
@@ -11,7 +11,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr" ],
 
     var KEY_ENTER = 13;
 
-    return _.rf({
+    return util.rf({
       displayName: "Datepicker Input",
 
       mixins: [ React.addons.PureRenderMixin ],

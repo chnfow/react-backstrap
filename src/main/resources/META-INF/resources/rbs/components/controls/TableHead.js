@@ -1,12 +1,12 @@
 /**
  * Renders a clickable table header that lets you sort the collection
  */
-define([ "react", "underscore", "../mixins/Events", "../layout/Icon" ],
-  function (React, _, events, icon) {
+define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ],
+  function (React, _, events, icon, util) {
     "use strict";
     var rpt = React.PropTypes;
 
-    return _.rf({
+    return util.rf({
       displayName: "Collection Table Header",
 
       propTypes: {

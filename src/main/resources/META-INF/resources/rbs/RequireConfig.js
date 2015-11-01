@@ -15,14 +15,14 @@ define([], function () {
 
     paths: {
       "backbone": "rbs/etc/library-extensions/Backbone",
-      "underscore": "rbs/etc/library-extensions/UnderscoreExtras",
+      "util": "rbs/etc/Util",
       "jquery": "rbs/etc/library-extensions/jQueryExtras",
       "jsog": "rbs/vendor/jsog/JSOG",
       "raf": "rbs/vendor/polyfill/rAF",
       "fb": "//connect.facebook.net/en_US/sdk",
       "ga": "//www.google-analytics.com/analytics",
       "jquery-cookie": "//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie" + dotMin,
-      "original-underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore" + dashMin,
+      "underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore" + dashMin,
       "modernizr": "//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr" + dotMin,
       "react": "//cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react-with-addons" + dotMin,
       "react-dom": "//cdnjs.cloudflare.com/ajax/libs/react/0.14.1/react-dom" + dotMin,
@@ -44,9 +44,9 @@ define([], function () {
         exports: "$"
       },
       "original-backbone": {
-        deps: [ "jquery", "original-underscore" ]
+        deps: [ "jquery", "underscore" ]
       },
-      "original-underscore": {
+      "underscore": {
         exports: "_"
       },
       "ga": {

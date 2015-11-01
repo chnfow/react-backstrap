@@ -13,7 +13,7 @@
  * This is adapted from Facebook's CSSTransitionGroup which is in the React
  * addons and under the Apache 2.0 License.
  */
-define([ "react", "react-dom", "underscore", "raf" ], function (React, dom, _) {
+define([ "react", "react-dom", "underscore", "util", "raf" ], function (React, dom, _, util) {
   "use strict";
   var ReactTransitionGroup = React.createFactory(React.addons.TransitionGroup);
 
@@ -114,7 +114,7 @@ define([ "react", "react-dom", "underscore", "raf" ], function (React, dom, _) {
     }
   }
 
-  var TimeoutTransitionGroupChild = _.rf({
+  var TimeoutTransitionGroupChild = util.rf({
     displayName: "TimeoutTransitionGroupChild",
 
     transition: function (animationType, finishCallback) {
@@ -199,7 +199,7 @@ define([ "react", "react-dom", "underscore", "raf" ], function (React, dom, _) {
     }
   });
 
-  return _.rf({
+  return util.rf({
     displayName: "TimeoutTransitionGroup",
 
     propTypes: {

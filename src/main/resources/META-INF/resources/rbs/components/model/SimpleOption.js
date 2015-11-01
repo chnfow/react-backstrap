@@ -1,10 +1,10 @@
 /**
  * React Component
  */
-define([ "react", "underscore", "./Div" ], function (React, _, model) {
+define([ "react", "underscore", "./Div", "util" ], function (React, _, model, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     mixins: [ React.addons.PureRenderMixin ],
 
     render: function () {

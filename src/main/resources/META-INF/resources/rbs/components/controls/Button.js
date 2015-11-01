@@ -3,12 +3,12 @@
  * of time that should pass before another onClick call.)
  * Also can be disabled automatically when jquery $.ajax is used
  */
-define([ "react", "underscore", "../layout/Icon", "jquery" ], function (React, _, icon, $) {
+define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (React, _, icon, $, util) {
   "use strict";
 
   var rpt = React.PropTypes;
 
-  return _.rf({
+  return util.rf({
     displayName: "RBS Button",
 
     mixins: [ React.addons.PureRenderMixin ],

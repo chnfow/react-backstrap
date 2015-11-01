@@ -3,10 +3,10 @@
  * animation before setting new children so as not to displace the existing children. Perfect for wrapping full page
  * elements that should fully transition before being replaced by new elements
  */
-define([ "react", "underscore", "./TimeoutTransitionGroup" ], function (React, _, TTG) {
+define([ "react", "underscore", "./TimeoutTransitionGroup", "util" ], function (React, _, TTG, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Waiting Transition Group",
 
     getInitialState: function () {

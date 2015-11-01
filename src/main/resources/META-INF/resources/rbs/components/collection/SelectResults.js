@@ -1,5 +1,5 @@
-define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
-  function (React, dom, _, collection) {
+define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
+  function (React, dom, _, collection, util) {
     "use strict";
 
 
@@ -10,7 +10,7 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
 
     // renders a collection of results as the results of a select dropdown
     // fires an onSelect(model) event for when an option is clicked
-    return _.rf({
+    return util.rf({
       displayName: "Select Results",
 
       mixins: [ collection, React.addons.PureRenderMixin ],
@@ -151,7 +151,7 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection" ],
       wrapperFunction: function (reactEl, oneModel, index) {
         var optionClass = "react-select-search-result";
 
-        _.debug("wrapping el");
+        util.debug("wrapping el");
         if (index === this.state.hilite) {
           optionClass += " hilited";
         }

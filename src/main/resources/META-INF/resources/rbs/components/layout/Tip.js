@@ -1,7 +1,7 @@
 /**
  * React Component that renders a question sign and a tooltip when hovered over
  */
-define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside" ], function (React, dom, $, _, occ) {
+define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside", "util" ], function (React, dom, $, _, occ, util) {
   "use strict";
 
   var TOP = "top";
@@ -9,7 +9,7 @@ define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside
   var RIGHT = "right";
   var BOTTOM = "bottom";
   var placements = [ TOP, LEFT, RIGHT, BOTTOM ];
-  return _.rf({
+  return util.rf({
     displayName: "Tip",
 
     mixins: [ occ, React.addons.PureRenderMixin ],

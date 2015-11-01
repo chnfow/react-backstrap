@@ -1,10 +1,10 @@
 /**
  * Renders a collection as the children of a div
  */
-define([ "react", "underscore", "../mixins/Collection" ], function (React, _, collection) {
+define([ "react", "underscore", "../mixins/Collection", "util" ], function (React, _, collection, util) {
   "use strict";
 
-  return _.rf({
+  return util.rf({
     displayName: "Div Collection View",
 
     mixins: [ collection, React.addons.PureRenderMixin ],
