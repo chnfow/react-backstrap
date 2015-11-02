@@ -225,6 +225,5 @@ define([ "underscore", "react" ], function (_, React) {
     return validValues.join(separator);
   };
 
-  _.mixin(util);
   return _;
 });
