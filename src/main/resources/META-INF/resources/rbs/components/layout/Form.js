@@ -1,9 +1,11 @@
 /**
  * a form element that exposes a submit function that triggers validation
  */
-define([ "react", "underscore", "util" ], function (React, _, util) {
+define([ "react", "underscore", "util", "react-dom" ], function (React, _, util, dom) {
   "use strict";
 
+  var d = React.DOM;
+  var noDisplay = { display: "none" };
   return util.rf({
     displayName: "Form",
 
@@ -19,7 +21,7 @@ define([ "react", "underscore", "util" ], function (React, _, util) {
 
       if (this.state.submitting) {
         children = children.concat([
-          React.DOM.input({
+          d.input({
             type: "submit",
             ref: "_tempSubmitBtn",
             key: "_tsb",
@@ -28,7 +30,14 @@ define([ "react", "underscore", "util" ], function (React, _, util) {
         ]);
       }
 
-      return React.DOM.form(_.extend({}, this.props, {
+      if (this.props.autoComplete === false) {
+        children = [
+          d.input({ key: "_chrome_autocomplete_text", type: "text", style: noDisplay }),
+          d.input({ key: "_chrome_autocomplete_pass", type: "password", style: noDisplay })
+        ].concat(children);
+      }
+
+      return d.form(_.extend({}, this.props, {
         onSubmit: this.beforeSubmit
       }), children);
     },
@@ -36,6 +45,8 @@ define([ "react", "underscore", "util" ], function (React, _, util) {
     beforeSubmit: function (e) {
       // form submission's default action of going to the URL is always prevented
       e.preventDefault();
+      e.stopPropagation();
+
       if (typeof this.props.onSubmit === "function") {
         this.props.onSubmit(e);
       }

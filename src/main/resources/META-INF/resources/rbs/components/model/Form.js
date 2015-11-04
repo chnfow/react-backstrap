@@ -1,8 +1,8 @@
 /**
  * Renders a model's attributes into a form
  */
-define([ "react", "react-dom", "underscore", "../mixins/Model", "../mixins/FormGroup", "../layout/Form", "util" ],
-  function (React, dom, _, model, formGroup, form, util) {
+define([ "react", "underscore", "../mixins/Model", "../mixins/FormGroup", "../layout/Form", "util" ],
+  function (React, _, model, formGroup, form, util) {
     "use strict";
 
     return util.rf({
