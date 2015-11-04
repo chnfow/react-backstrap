@@ -4,28 +4,27 @@
 define([ "react", "../mixins/Model", "../mixins/FormGroup", "underscore", "util" ],
   function (React, model, formGroup, _, util) {
     "use strict";
+    var bsSizes = [ "xs", "sm", "md", "lg" ];
+
     return util.rf({
       displayName: "Model Grid Row",
-      mixins: [ model, formGroup, React.addons.PureRenderMixin ],
 
-      propTypes: {
-        size: React.PropTypes.oneOf([ "xs", "sm", "md", "lg" ])
-      },
+      mixins: [ model, React.addons.PureRenderMixin ],
 
-      getDefaultProps: function () {
-        return {
-          size: "md"
-        };
+      wrapperFunction: function (component, attribute, index) {
+        var fg = formGroup.wrapperFunction.apply(this, arguments);
+        var classes = [];
+        _.each(bsSizes, function (oneSize) {
+          var nm = attribute[ oneSize ];
+          if (typeof nm === "number") {
+            classes.push([ "col", oneSize, nm ].join("-"));
+          }
+        });
+        return React.DOM.div({ key: ("col-" + index), className: classes.join(" ") }, fg);
       },
 
       render: function () {
-        var origChildren = this.getAttributes(this.props.attributes);
-        var i = 0;
-        var children = _.map(origChildren, function (oneChildComponent) {
-          var columns = oneChildComponent.props.columns || Math.floor((12 / (origChildren.length)));
-          var colClass = [ "col", this.props.size, columns ].join("-");
-          return React.DOM.div({ key: (i++).toString(), className: colClass }, this.makeFormGroup(oneChildComponent));
-        }, this);
+        var children = this.getAttributes(this.props.attributes);
 
         return React.DOM.div(_.extend({}, this.props, { className: "row" }), children);
       }

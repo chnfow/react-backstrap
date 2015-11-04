@@ -106,6 +106,7 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
 
       // this helper function takes an array of attribute descriptions and returns components for those children
       getAttributes: function (attributes) {
+        var i = 0;
         return _.map(attributes, function (oneAttribute) {
           var comp = oneAttribute.component;
           var viewType;
@@ -119,11 +120,17 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
             util.debug("Valid component factory not passed for model attribute", oneAttribute);
             return null;
           }
-          return binder(_.extend({}, oneAttribute, {
+
+          var toReturn = binder(_.extend({}, oneAttribute, {
             key: oneAttribute.key || ("attribute-" + oneAttribute.attribute),
             component: viewType,
             model: this.props.model
           }));
+
+          if (typeof this.wrapperFunction === "function") {
+            toReturn = this.wrapperFunction(toReturn, oneAttribute, i++);
+          }
+          return toReturn;
         }, this);
       },
 

@@ -5,16 +5,13 @@
 define([ "react", "underscore", "util", "../layout/Tip", "../layout/Icon" ], function (React, _, util, tip, icon) {
   "use strict";
   return React.createMixin({
-    makeFormGroup: function (component) {
+    wrapperFunction: function (component, attribute, index) {
       var formGroupChildren = [];
       // add the form-control class
-      var oldClass = component.props.className;
       var newClass = "form-control";
-      if (typeof oldClass === "string") {
-        newClass += " " + oldClass;
-      }
+
       // make sure the field has an ID
-      var fieldId = component.props.id || util.randomString(5);
+      var fieldId = attribute.id || util.randomString(5);
       var newComponent = React.cloneElement(component, {
         key: "attribute-component",
         className: newClass,
@@ -23,18 +20,18 @@ define([ "react", "underscore", "util", "../layout/Tip", "../layout/Icon" ], fun
 
       formGroupChildren.push(newComponent);
       // if the component has a label, point it at the new component
-      if (newComponent.props.label) {
-        if (newComponent.props.tip) {
+      if (attribute.label) {
+        if (attribute.tip) {
           formGroupChildren.unshift(tip({
             key: "tip",
-            tip: newComponent.props.tip
+            tip: attribute.tip
           }, icon({ key: "question-circle", name: "question-circle" })));
         }
         formGroupChildren.unshift(React.DOM.label({
           key: "attribute-label",
           className: "sm-margin-right",
-          htmlFor: newComponent.props.id
-        }, newComponent.props.label));
+          htmlFor: attribute.id
+        }, attribute.label));
       }
       return React.DOM.div({
         key: component.key,
