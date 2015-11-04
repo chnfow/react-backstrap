@@ -48,7 +48,6 @@
     margin-left: 0.3em;
 }
 
-
 /* apply font smoothing everywhere */
 body {
     -webkit-font-smoothing: antialiased;
@@ -581,6 +580,7 @@ so they're removed from the DOM when they're not
 
 .slide-down-enter-active {
     transition: max-height 0.25s ease-in, visibility 0.25s ease-in;
+    overflow-y: hidden !important;
     visibility: visible;
     max-height: 500px;
 }
@@ -593,6 +593,7 @@ so they're removed from the DOM when they're not
 .slide-down-leave-active {
     transition: max-height 0.25s ease-out, visibility 0.25s ease-out;
     visibility: hidden;
+    overflow-y: hidden !important;
     max-height: 0;
 }
 
