@@ -17,7 +17,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ], 
         rpt.arrayOf(rpt.object),
         rpt.object
       ]),
-      icon: rpt.string,
+      icon: rpt.oneOfType([ rpt.node, rpt.string ]),
       animate: rpt.string,
       size: rpt.string,
       backdrop: rpt.bool,
@@ -100,6 +100,14 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ], 
       }
     },
 
+    getIndicator: function () {
+      if (typeof this.props.icon === "string") {
+        return icon({ name: this.props.icon, size: this.props.size, animate: this.props.animate });
+      } else {
+        return this.props.icon;
+      }
+    },
+
     render: function () {
       var loadingIndicator = null;
       var loadingBackdrop = null;
@@ -113,7 +121,7 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ], 
         loadingIndicator = React.DOM.div({
           key: "loading-indicator",
           className: "loading-indicator"
-        }, icon({ name: this.props.icon, size: this.props.size, animate: this.props.animate }));
+        }, this.getIndicator());
       }
 
       var className = "loading-indicator-container";
