@@ -113,6 +113,10 @@ form-group checkboxes
     padding-left: 1em;
 }
 
+button.navbar-toggle {
+    padding: 0.3em 0.8em;
+}
+
 /**
 Modals display always. We use transition groups to manage whether they're visible,
 so they're removed from the DOM when they're not
