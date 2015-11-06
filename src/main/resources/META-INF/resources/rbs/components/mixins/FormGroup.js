@@ -30,7 +30,7 @@ define([ "react", "underscore", "util", "../layout/Tip", "../layout/Icon" ], fun
         formGroupChildren.unshift(React.DOM.label({
           key: "attribute-label",
           className: "sm-margin-right",
-          htmlFor: attribute.id
+          htmlFor: fieldId
         }, attribute.label));
       }
       return React.DOM.div({
