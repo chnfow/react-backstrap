@@ -153,25 +153,45 @@ so they're removed from the DOM when they're not
     white-space: nowrap;
 }
 
+/* these tables are responsive for smaller devices */
 @media (max-width: 768px) {
     table.table-responsive-horizontal {
         table-layout: fixed;
     }
 
+    /* draw borders around each row */
+    table.table-responsive-horizontal > tbody > tr {
+        border: 0.1em solid gray;
+    }
+
+    /* each of the cells has its own row in this layout */
+    table.table-responsive-horizontal > tbody > tr > td {
+        display: block;
+    }
+
+    /* hide the table header */
+    table.table-responsive-horizontal > thead {
+        display: none;
+    }
+
+    /* if there is a title on the row, then limit its width */
+    table.table-responsive-horizontal > tbody > tr > td[data-title] > * {
+        display: inline-block;
+        width: 80%;
+        vertical-align: middle;
+    }
+
+    /* special display attributes for spans */
     table.table-responsive-horizontal > tbody > tr > td > span {
         display: inline-block;
         overflow-x: hidden;
         -ms-text-overflow: ellipsis;
         text-overflow: ellipsis;
         vertical-align: middle;
-        width: 80%;
     }
 
-    table.table-responsive-horizontal > thead {
-        display: none;
-    }
-
-    table.table-responsive-horizontal > tbody > tr > td::before {
+    /* show the title */
+    table.table-responsive-horizontal > tbody > tr > td[data-title]::before {
         content: attr(data-title);
         display: inline-block;
         text-align: right;
@@ -182,14 +202,6 @@ so they're removed from the DOM when they're not
         overflow-x: hidden;
         -ms-text-overflow: ellipsis;
         text-overflow: ellipsis;
-    }
-
-    table.table-responsive-horizontal > tbody > tr {
-        border: 0.1em solid gray;
-    }
-
-    table.table-responsive-horizontal > tbody > tr > td {
-        display: block;
     }
 }
 

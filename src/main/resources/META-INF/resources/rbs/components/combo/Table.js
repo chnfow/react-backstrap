@@ -72,15 +72,6 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
         };
       },
 
-      getColumns: function () {
-        return _.map(this.props.attributes, function (oneAttribute) {
-          return {
-            label: oneAttribute.label,
-            sortOn: oneAttribute.sortOn
-          };
-        });
-      },
-
       render: function () {
         var cn = [ "table" ];
         if (this.props.striped) {
@@ -99,16 +90,14 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
           cn.push(this.props.className);
         }
 
-        var columns = this.getColumns();
-
         var properties = _.extend(_.omit(this.props, "attributes", "columns", "striped", "condensed", "hover", "bordered"), { className: cn.join(" ") });
         var table = React.DOM.table(properties, [
-          thead({ key: "thead", columns: columns, collection: this.props.collection }),
+          thead({ key: "thead", columns: this.props.attributes, collection: this.props.collection }),
           tbody({
             key: "tbody",
             collection: this.props.collection,
             modelComponent: this.state.modelComponent,
-            emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: columns.length }, this.props.emptyMessage))
+            emptyNode: React.DOM.tr({ key: "empty-row-name" }, React.DOM.td({ colSpan: this.props.attributes.length }, this.props.emptyMessage))
           })
         ]);
 

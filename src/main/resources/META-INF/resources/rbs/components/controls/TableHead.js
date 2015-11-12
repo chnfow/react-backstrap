@@ -1,10 +1,11 @@
 /**
  * Renders a clickable table header that lets you sort the collection
  */
-define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ],
-  function (React, _, events, icon, util) {
+define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util", "../layout/Tip" ],
+  function (React, _, events, icon, util, tip) {
     "use strict";
     var rpt = React.PropTypes;
+    var d = React.DOM;
 
     return util.rf({
       displayName: "Collection Table Header",
@@ -75,15 +76,26 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util" ],
           if (hasSort) {
             cn.push("sortable-column-header");
           }
-          return React.DOM.th({
+          var children = [
+            oneColumn.label,
+            icon({ key: "icon", name: sortIcon })
+          ];
+
+          if (oneColumn.tip) {
+            children = tip({
+              tip: oneColumn.tip
+            }, children);
+          }
+
+          return d.th({
             key: i++,
             onClick: _.bind(this.sortCollection, this, so),
             className: cn.join(" ")
-          }, [ oneColumn.label, icon({ key: "icon", name: sortIcon }) ]);
+          }, children);
         }, this);
 
-        return React.DOM.thead(_.omit(this.props, "columns", "collection"),
-          React.DOM.tr({}, ths));
+        return d.thead(_.omit(this.props, "columns", "collection"),
+          d.tr({}, ths));
       }
 
     });

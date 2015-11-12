@@ -5,20 +5,24 @@ define([ "react", "../mixins/Model", "underscore", "util" ],
   function (React, model, _, util) {
     "use strict";
 
+    var d = React.DOM;
+
     return util.rf({
       displayName: "Model Table Row",
 
       mixins: [ model, React.addons.PureRenderMixin ],
 
+      wrapperFunction: function (comp, attr, index) {
+        return d.td({
+          key: "td-" + index,
+          "data-title": attr.label
+        }, comp);
+      },
+
       render: function () {
-        // wrap all the children attributes in table cells
-        var children = _.map(this.getAttributes(this.props.attributes), function (oneChildElement) {
-          return React.DOM.td({
-            key: "td-" + oneChildElement.key,
-            "data-title": oneChildElement.props.label
-          }, oneChildElement);
-        });
-        return React.DOM.tr(_.extend({}, this.props), children);
+        var children = this.getAttributes(this.props.attributes);
+
+        return d.tr(_.extend({}, this.props), children);
       }
     });
 
