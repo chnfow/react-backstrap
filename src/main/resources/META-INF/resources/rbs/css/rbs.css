@@ -208,6 +208,8 @@ so they're removed from the DOM when they're not
 /* Tooltips */
 .tip-container {
     position: relative;
+    /* tips should overlap the navbar */
+    z-index: 1000;
     cursor: pointer;
 }
 
