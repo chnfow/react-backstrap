@@ -81,10 +81,12 @@ define([ "react", "underscore", "../mixins/Events", "../layout/Icon", "util", ".
             icon({ key: "icon", name: sortIcon })
           ];
 
+          // hold off on this until tips play more nicely with onclick events in the children (right now
+          // it prevents sorting when present
           if (oneColumn.tip) {
-            children = tip({
-              tip: oneColumn.tip
-            }, children);
+            //children = tip({
+            //  tip: oneColumn.tip
+            //}, children);
           }
 
           return d.th({
