@@ -7,7 +7,7 @@ This repository is a group of React components and libraries useful for building
 ####First, include the dependency in your POM
 
     <dependency>
-        <groupId>com.leaguekit</groupId>
+        <groupId>com.moodysalem.js</groupId>
         <artifactId>react-backstrap</artifactId>
         <version>***PROJECT VERSION***</version>
     </dependency>
