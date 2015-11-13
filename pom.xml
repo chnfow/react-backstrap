@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>react-backstrap</artifactId>
-  <groupId>com.leaguekit</groupId>
+  <groupId>com.moodysalem.js</groupId>
   <packaging>jar</packaging>
   <version>0.0.16-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
@@ -30,8 +30,7 @@
     <developer>
       <name>Moody Salem</name>
       <email>moody.salem@gmail.com</email>
-      <organization>LeagueKit</organization>
-      <organizationUrl>https://leaguekit.com</organizationUrl>
+      <url>http://moodysalem.com</url>
     </developer>
   </developers>
 
