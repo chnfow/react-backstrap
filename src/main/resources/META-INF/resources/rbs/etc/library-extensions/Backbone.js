@@ -405,6 +405,24 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
           toReturn[ this.startParam ] = this._pageNo * this._pageSize;
           toReturn[ this.countParam ] = this._pageSize;
           return toReturn;
+        },
+
+        save: function (options) {
+          options = options || {};
+          var oldSuccess = options.success;
+          var c = this;
+          return Backbone.sync("update", this, _.extend({}, options, {
+            success: function (response, text, jqxhr) {
+              c.set(response);
+              if (typeof oldSuccess === "function") {
+                oldSuccess.apply(this, arguments);
+              }
+              c.trigger("sync", c, response, options);
+            },
+            error: function (jqXhr, status, httpError) {
+              c.trigger("error", c, jqXhr, options);
+            }
+          }));
         }
 
       });
