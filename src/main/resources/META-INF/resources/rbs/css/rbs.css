@@ -126,8 +126,9 @@ so they're removed from the DOM when they're not
     overflow-y: inherit !important;
 }
 
-.modal-open {
+body.modal-open {
     position: fixed;
+    width: 100%;
 }
 
 .modal .modal-dialog .modal-title {

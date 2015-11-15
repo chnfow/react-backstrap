@@ -46,12 +46,13 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
           var st;
           if (nextProps.open && !this.props.open) {
             st = $(window).scrollTop();
-            $("body").addClass("modal-open").css("top", -st);
+            $("body").addClass("modal-open").css("top", st * -1);
           } else if (!nextProps.open && this.props.open) {
-            var body = $("body");
-            st = body.css("top");
-            body.css("top", "").removeClass("modal-open");
-            $(window).scrollTop(parseInt(st) * -1);
+            var body = $("body"), st = parseInt(body.css("top")) * -1;
+            body.removeClass("modal-open").css("top", "");
+            if (!isNaN(st)) {
+              $(window).scrollTop(st);
+            }
           }
         }
       },
