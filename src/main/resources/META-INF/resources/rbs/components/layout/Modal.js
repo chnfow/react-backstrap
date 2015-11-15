@@ -7,7 +7,7 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
 
     var rpt = React.PropTypes;
     var d = React.DOM;
-    var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+    var isSafari = navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1;
 
     // renders an icon with the name property
     return util.rf({
@@ -49,29 +49,17 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
         if (this.isMounted()) {
           var st;
           var body = $("body");
-          // this forces webkit to re-render because safari has bugs with painting this the first time around
-          var flickerBody = function () {
-            if (!is_safari) {
-              return;
-            }
-            setTimeout(function () {
-              body.css("display", "none");
-              window.requestAnimationFrame(function () {
-                body.css("display", "");
-              });
-            }, 300);
-          };
           if (nextProps.open && !this.props.open) {
             st = $(window).scrollTop();
             body.addClass("modal-open").css("top", st * -1);
-            flickerBody();
           } else if (!nextProps.open && this.props.open) {
             st = parseInt(body.css("top")) * -1;
             body.removeClass("modal-open").css("top", "");
             if (!isNaN(st)) {
-              $(window).scrollTop(st);
+              window.requestAnimationFrame(function () {
+                $(window).scrollTop(st);
+              });
             }
-            flickerBody();
           }
         }
       },
@@ -113,14 +101,24 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
             }, contentChildren)
           );
           modal = d.div({
+            key: "modal",
             className: "modal"
           }, dialog);
           if (this.props.backdrop !== false) {
             backdrop = d.div({
+              key: "backdrop",
               className: "Modal-backdrop",
               onClick: this.closeOnClick
             });
           }
+        }
+
+        // disable animation because of painting bugs
+        if (isSafari) {
+          return d.div({}, [
+            backdrop,
+            modal
+          ]);
         }
 
         return d.div({}, [
