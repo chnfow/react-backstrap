@@ -1,5 +1,5 @@
 /**
- * We are not using bootstrap's modals because it's styling is too mixed in with the rest of the css
+ *
  */
 define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", "../layout/Icon", "util", "raf" ],
   function (React, $, _, TTG, icon, util) {
