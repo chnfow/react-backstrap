@@ -17,7 +17,7 @@ define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util)
     getDefaultProps: function () {
       return {
         threshold: 15,
-        timeThreshold: null
+        timeThreshold: 125
       };
     },
 
@@ -76,7 +76,7 @@ define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util)
         return;
       }
 
-      var tch = e.targetTouches[0];
+      var tch = e.targetTouches[ 0 ];
       if (this.state.touchId !== tch.identifier) {
         util.debug("touch identifier changed");
         this.clearTouchData();
@@ -98,9 +98,8 @@ define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util)
         return;
       }
 
-      // by default, we don't care how long the press happened, only how much the finger has moved
       if (this.props.timeThreshold !== null) {
-        // long press, don't do anything
+        // length of press exceeds the amount of time that we are doing anything for
         if (((new Date()).getTime() - this.state.touchTime > this.props.timeThreshold)) {
           util.debug("touch was for too long to be a tap");
           this.clearTouchData();
@@ -158,8 +157,12 @@ define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util)
       target.click();
 
       var el = $(target);
+      var isCheckbox = el.is("[type=checkbox]");
+      var isInput = el.is("input");
+      var isSelect = el.is("select");
+      var isTextArea = el.is("textarea");
       // since click doesn't focus a
-      if ((el.is("input") && !el.is("[type=checkbox]")) || el.is("textarea")) {
+      if ((isInput && !isCheckbox) || isSelect || isTextArea) {
         target.focus();
       }
     },
