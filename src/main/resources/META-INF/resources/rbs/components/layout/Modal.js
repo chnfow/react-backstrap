@@ -1,5 +1,5 @@
 /**
- *
+ * Renders a bootstrap modal
  */
 define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", "../layout/Icon", "util", "raf" ],
   function (React, $, _, TTG, icon, util) {
@@ -9,7 +9,6 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
     var d = React.DOM;
     var isSafari = navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1;
 
-    // renders an icon with the name property
     return util.rf({
       displayName: "Modal",
 
@@ -40,7 +39,7 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
         this.close();
       },
 
-      // it's up to the owner to implement onClose since they trigger the open
+      // it's up to the owner to implement onClose since they trigger the open by passing open: true
       close: function () {
         this.props.onClose();
       },
