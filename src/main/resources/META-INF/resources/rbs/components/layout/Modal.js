@@ -43,10 +43,15 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
 
       componentWillReceiveProps: function (nextProps) {
         if (this.isMounted()) {
+          var st;
           if (nextProps.open && !this.props.open) {
-            $("body").addClass("modal-open");
+            st = $(window).scrollTop();
+            $("body").addClass("modal-open").css("top", -st);
           } else if (!nextProps.open && this.props.open) {
-            $("body").removeClass("modal-open");
+            var body = $("body");
+            st = body.css("top");
+            body.css("top", "").removeClass("modal-open");
+            $(window).scrollTop(parseInt(st) * -1);
           }
         }
       },

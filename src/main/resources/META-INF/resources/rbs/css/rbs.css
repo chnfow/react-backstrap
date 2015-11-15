@@ -126,6 +126,10 @@ so they're removed from the DOM when they're not
     overflow-y: inherit !important;
 }
 
+.modal-open {
+    position: fixed;
+}
+
 .modal .modal-dialog .modal-title {
     overflow-x: hidden;
     -ms-text-overflow: ellipsis;
