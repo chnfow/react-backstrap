@@ -1,9 +1,13 @@
 /**
  * We are not using bootstrap's modals because it's styling is too mixed in with the rest of the css
  */
-define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", "../layout/Icon", "util" ],
+define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", "../layout/Icon", "util", "raf" ],
   function (React, $, _, TTG, icon, util) {
     "use strict";
+
+    var rpt = React.PropTypes;
+    var d = React.DOM;
+    var is_safari = navigator.userAgent.indexOf("Safari") > -1;
 
     // renders an icon with the name property
     return util.rf({
@@ -12,12 +16,12 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
       mixins: [ React.addons.PureRenderMixin ],
 
       propTypes: {
-        open: React.PropTypes.bool.isRequired,
-        onClose: React.PropTypes.func,
-        showClose: React.PropTypes.bool,
-        size: React.PropTypes.oneOf([ "lg", "sm" ]),
-        backdrop: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.bool ]),
-        title: React.PropTypes.string.isRequired
+        open: rpt.bool.isRequired,
+        onClose: rpt.func,
+        showClose: rpt.bool,
+        size: rpt.oneOf([ "lg", "sm" ]),
+        backdrop: rpt.oneOfType([ rpt.string, rpt.bool ]),
+        title: rpt.string.isRequired
       },
 
       getDefaultProps: function () {
@@ -44,15 +48,30 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
       componentWillReceiveProps: function (nextProps) {
         if (this.isMounted()) {
           var st;
+          var body = $("body");
+          // this forces webkit to re-render because safari has bugs with painting this the first time around
+          var flickerBody = function () {
+            if (!is_safari) {
+              return;
+            }
+            setTimeout(function () {
+              body.css("display", "none");
+              window.requestAnimationFrame(function () {
+                body.css("display", "");
+              });
+            }, 300);
+          };
           if (nextProps.open && !this.props.open) {
             st = $(window).scrollTop();
-            $("body").addClass("modal-open").css("top", st * -1);
+            body.addClass("modal-open").css("top", st * -1);
+            flickerBody();
           } else if (!nextProps.open && this.props.open) {
-            var body = $("body"), st = parseInt(body.css("top")) * -1;
+            st = parseInt(body.css("top")) * -1;
             body.removeClass("modal-open").css("top", "");
             if (!isNaN(st)) {
               $(window).scrollTop(st);
             }
+            flickerBody();
           }
         }
       },
@@ -69,42 +88,42 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
         if (this.props.open) {
           var modalSizeClass = (this.props.size !== null) ? (" modal-" + this.props.size) : "";
           var contentChildren = [
-            React.DOM.div({
+            d.div({
               key: "modal-header",
               className: "modal-header"
-            }, React.DOM.h4({ className: "modal-title" }, [
-              (this.props.showClose) ? React.DOM.button({
+            }, d.h4({ className: "modal-title" }, [
+              (this.props.showClose) ? d.button({
                 type: "button",
                 key: "b",
                 className: "close",
                 ariaLabel: "Close",
                 onClick: this.close
-              }, React.DOM.span({ ariaHidden: true }, icon({ name: "times" }))) : null,
+              }, d.span({ ariaHidden: true }, icon({ name: "times" }))) : null,
               this.props.title
             ]))
           ];
           if (this.props.children) {
             contentChildren = util.addToArray(contentChildren, this.props.children);
           }
-          var dialog = React.DOM.div({
+          var dialog = d.div({
               className: "modal-dialog" + modalSizeClass
             },
-            React.DOM.div({
+            d.div({
               className: "modal-content"
             }, contentChildren)
           );
-          modal = React.DOM.div({
+          modal = d.div({
             className: "modal"
           }, dialog);
           if (this.props.backdrop !== false) {
-            backdrop = React.DOM.div({
+            backdrop = d.div({
               className: "Modal-backdrop",
               onClick: this.closeOnClick
             });
           }
         }
 
-        return React.DOM.div({}, [
+        return d.div({}, [
           TTG({
             key: "backdrop",
             component: "div",
@@ -115,7 +134,7 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
           TTG({
             key: "modal",
             component: "div",
-            transitionName: "fade-scale",
+            transitionName: "appear-from-top",
             enterTimeout: 300,
             leaveTimeout: 300
           }, modal)
