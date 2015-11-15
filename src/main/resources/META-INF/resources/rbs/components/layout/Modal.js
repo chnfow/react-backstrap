@@ -115,6 +115,15 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
 
         // disable animation because of painting bugs
         if (isSafari) {
+          if (this.props.open) {
+            var body = $("body");
+            window.requestAnimationFrame(function () {
+              body.css("display", "none");
+              window.requestAnimationFrame(function () {
+                body.css("display", "");
+              });
+            });
+          }
           return d.div({}, [
             backdrop,
             modal
