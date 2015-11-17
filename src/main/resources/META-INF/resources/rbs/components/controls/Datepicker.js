@@ -208,13 +208,13 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           nextYear++;
         }
         var isActive;
-        var lastMonthDays = _.numDays(lastMonth, lastYear);
+        var lastMonthDays = util.numDays(lastMonth, lastYear);
         while (firstDayOfMonth > 0) {
           var d = lastMonthDays - (--firstDayOfMonth);
           isActive = (lastYear === selectedYear && lastMonth === selectedMonth && d === selectedDay);
           days.push(this.getDaySpan(lastYear, lastMonth, d, isActive));
         }
-        var numDays = _.numDays(this.state.currentMonth, this.state.currentYear);
+        var numDays = util.numDays(this.state.currentMonth, this.state.currentYear);
         for (var x = 1; x <= numDays; x++) {
           isActive = (this.state.currentYear === selectedYear && this.state.currentMonth === selectedMonth && x === selectedDay);
           days.push(this.getDaySpan(this.state.currentYear, this.state.currentMonth, x, isActive, true));
