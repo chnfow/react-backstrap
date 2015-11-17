@@ -1,23 +1,44 @@
-define([], function () {
+(function (root, factory) {
+  // UMD module pattern
+
+  if (typeof define === "function" && define.amd) {
+    // AMD. Register as an anonymous module.
+    define([], factory);
+  } else if (typeof exports === "object") {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    // Browser globals (root is window)
+    root.JSOG = factory();
+  }
+
+}(this, function () {
   "use strict";
-  var JSOG, JSOG_OBJECT_ID, hasCustomJsonificaiton, isArray, nextId;
+
+  var JSOG, JSOG_OBJECT_ID, JSOG_OBJECT_DECODED, hasCustomJsonification, isArray, nullOrUndefined;
 
   JSOG = {};
 
-  nextId = 0;
-
   isArray = Array.isArray || function (obj) {
-      return Object.prototype.toString.call(obj) === '[object Array]';
+      return Object.prototype.toString.call(obj) === "[object Array]";
     };
 
-  hasCustomJsonificaiton = function (obj) {
-    return (typeof obj.toJSON === "function");
+  hasCustomJsonification = function (obj) {
+    return typeof obj.toJSON === "function";
   };
 
-  JSOG_OBJECT_ID = '__jsogObjectId';
+  nullOrUndefined = function (val) {
+    return typeof val === "undefined" || val === null;
+  };
+
+  JSOG_OBJECT_ID = "__jsogObjectId";
+  JSOG_OBJECT_DECODED = "__jsogObjectDecoded";
 
   JSOG.encode = function (original) {
-    var doEncode, idOf, sofar;
+    var doEncode, idOf, sofar, nextId;
+    nextId = 0;
     sofar = {};
     idOf = function (obj) {
       if (!obj[ JSOG_OBJECT_ID ]) {
@@ -32,14 +53,14 @@ define([], function () {
         id = idOf(original);
         if (sofar[ id ]) {
           return {
-            '@ref': id
+            "@ref": id
           };
         }
         result = sofar[ id ] = {
-          '@id': id
+          "@id": id
         };
         for (key in original) {
-          if (original.hasOwnProperty(key)) {
+          if (original.hasOwnProperty(key) && key !== JSOG_OBJECT_DECODED) {
             value = original[ key ];
             if (key !== JSOG_OBJECT_ID) {
               result[ key ] = doEncode(value);
@@ -60,13 +81,13 @@ define([], function () {
           return results;
         })();
       };
-      if (original === null || typeof original === "undefined") {
+      if (nullOrUndefined(original)) {
         return original;
-      } else if (hasCustomJsonificaiton(original)) {
+      } else if (hasCustomJsonification(original)) {
         return original;
       } else if (isArray(original)) {
         return encodeArray(original);
-      } else if (typeof original === 'object') {
+      } else if (typeof original === "object") {
         return encodeObject(original);
       } else {
         return original;
@@ -75,6 +96,7 @@ define([], function () {
     return doEncode(original);
   };
 
+
   JSOG.decode = function (encoded) {
     var doDecode, found;
     found = {};
@@ -82,16 +104,19 @@ define([], function () {
       var decodeArray, decodeObject;
       decodeObject = function (encoded) {
         var id, key, ref, result, value;
-        ref = encoded[ '@ref' ];
-        if (ref !== null && typeof ref !== "undefined") {
+        if (encoded[ JSOG_OBJECT_DECODED ] === true) {
+          return encoded;
+        }
+        ref = encoded[ "@ref" ];
+        if (ref != null) {
           ref = ref.toString();
         }
-        if (ref !== null && typeof ref !== "undefined") {
+        if (ref != null) {
           return found[ ref ];
         }
         result = {};
-        id = encoded[ '@id' ];
-        if (id !== null && typeof id !== "undefined") {
+        id = encoded[ "@id" ];
+        if (id != null) {
           id = id.toString();
         }
         if (id) {
@@ -100,11 +125,12 @@ define([], function () {
         for (key in encoded) {
           if (encoded.hasOwnProperty(key)) {
             value = encoded[ key ];
-            if (key !== '@id') {
+            if (key !== "@id") {
               result[ key ] = doDecode(value);
             }
           }
         }
+        result[ JSOG_OBJECT_DECODED ] = true;
         return result;
       };
       decodeArray = function (encoded) {
@@ -119,11 +145,11 @@ define([], function () {
           return results;
         })();
       };
-      if (encoded === null || typeof encoded === "undefined") {
+      if (nullOrUndefined(encoded)) {
         return encoded;
       } else if (isArray(encoded)) {
         return decodeArray(encoded);
-      } else if (typeof encoded === 'object') {
+      } else if (typeof encoded === "object") {
         return decodeObject(encoded);
       } else {
         return encoded;
@@ -141,4 +167,4 @@ define([], function () {
   };
 
   return JSOG;
-});
+}));

@@ -31,7 +31,7 @@ define([], function () {
       "backbone": "rbs/etc/library-extensions/Backbone",
       "util": "rbs/etc/Util",
       "jquery": "rbs/etc/library-extensions/jQueryExtras",
-      "jsog": "rbs/vendor/jsog/JSOG",
+      "jsog": "rbs/vendor/jsog/JSOG" + dotMin,
       "raf": "rbs/vendor/polyfill/rAF",
       "fb": "//connect.facebook.net/en_US/sdk",
       "ga": "//www.google-analytics.com/analytics",
