@@ -8,14 +8,20 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
   var KEY_N = 78;
   var KEY_T = 84;
 
+  var rpt = React.PropTypes;
+  var d = React.DOM;
+
+
   return util.rf({
+    displayName: "Time Input",
+
     propTypes: {
-      onChange: React.PropTypes.func.isRequired,
-      value: React.PropTypes.string,
-      allowedFormats: React.PropTypes.arrayOf(React.PropTypes.string),
-      saveFormat: React.PropTypes.string,
-      displayFormat: React.PropTypes.string,
-      polyfillOnly: React.PropTypes.bool
+      onChange: rpt.func.isRequired,
+      value: rpt.string,
+      allowedFormats: rpt.arrayOf(rpt.string),
+      saveFormat: rpt.string,
+      displayFormat: rpt.string,
+      polyfillOnly: rpt.bool
     },
 
     mixins: [ React.addons.PureRenderMixin ],
@@ -114,7 +120,7 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
     },
 
     getInput: function () {
-      return React.DOM.input(_.extend({}, this.props, {
+      return d.input(_.omit(_.extend({}, this.props, {
         key: "input",
         type: "text",
         value: this.state.transientValue,
@@ -122,7 +128,7 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
         onBlur: _.bind(this.handleBlur, this),
         onChange: _.bind(this.handleChange, this),
         onKeyDown: _.bind(this.handleKeyDown, this)
-      }));
+      }), "children"));
     },
 
     componentWillReceiveProps: function (nextProps) {
@@ -194,53 +200,53 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
 
       var mt = this.state.transientMoment;
 
-      return React.DOM.div({ key: "tp", className: "timepicker", onMouseDown: this.doNothing }, [
-        React.DOM.div({ key: "tub", className: "row timepicker-buttons" }, [
-          React.DOM.div({
+      return d.div({ key: "tp", className: "timepicker", onMouseDown: this.doNothing }, [
+        d.div({ key: "tub", className: "row timepicker-buttons" }, [
+          d.div({
             key: "hu",
             className: "col-xs-4 text-center",
             onClick: _.bind(this.moveHour, this, 1)
           }, icon({ name: "chevron-up" })),
-          React.DOM.div({
+          d.div({
             key: "mu",
             className: "col-xs-4 text-center",
             onClick: _.bind(this.moveMinute, this, 15)
           }, icon({ name: "chevron-up" })),
-          React.DOM.div({
+          d.div({
             key: "pu",
             className: "col-xs-4 text-center",
             onClick: _.bind(this.moveHour, this, 12)
           }, icon({ name: "chevron-up" }))
         ]),
-        React.DOM.div({ key: "ti", className: "row timepicker-inputs" }, [
-          React.DOM.div({ key: "h", className: "col-xs-4" }, React.DOM.input({
+        d.div({ key: "ti", className: "row timepicker-inputs" }, [
+          d.div({ key: "h", className: "col-xs-4" }, d.input({
             value: (mt !== null) ? mt.format("h") : "",
             readOnly: true,
             className: "form-control text-center"
           })),
-          React.DOM.div({ key: "m", className: "col-xs-4" }, React.DOM.input({
+          d.div({ key: "m", className: "col-xs-4" }, d.input({
             value: (mt !== null) ? mt.format("mm") : "",
             readOnly: true,
             className: "form-control text-center"
           })),
-          React.DOM.div({ key: "a", className: "col-xs-4" }, React.DOM.input({
+          d.div({ key: "a", className: "col-xs-4" }, d.input({
             value: (mt !== null) ? mt.format("A") : "",
             readOnly: true,
             className: "form-control text-center"
           }))
         ]),
-        React.DOM.div({ key: "tdb", className: "row timepicker-buttons" }, [
-          React.DOM.div({
+        d.div({ key: "tdb", className: "row timepicker-buttons" }, [
+          d.div({
             key: "hd",
             className: "col-xs-4 text-center",
             onClick: _.bind(this.moveHour, this, -1)
           }, icon({ name: "chevron-down" })),
-          React.DOM.div({
+          d.div({
             key: "md",
             className: "col-xs-4 text-center",
             onClick: _.bind(this.moveMinute, this, -15)
           }, icon({ name: "chevron-down" })),
-          React.DOM.div({
+          d.div({
             key: "pd",
             className: "col-xs-4 text-center",
             onClick: _.bind(this.moveHour, this, -12)
@@ -251,12 +257,12 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
 
     render: function () {
       if (Modernizr.inputtypes.time && this.props.polyfillOnly) {
-        return React.DOM.input(_.extend({}, this.props, {
+        return d.input(_.extend({}, this.props, {
           type: "time"
         }));
       }
 
-      return React.DOM.div({
+      return d.div({
         className: "timepicker-container"
       }, [
         this.getInput(),
