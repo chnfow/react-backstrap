@@ -5,6 +5,8 @@
 define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util) {
   "use strict";
 
+  var d = React.DOM;
+
   return util.rf({
     displayName: "Tappable Control",
 
@@ -168,12 +170,12 @@ define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util)
     },
 
     render: function () {
-      return React.cloneElement(React.Children.only(this.props.children), {
+      return d.span(_.extend({}, this.props, {
         onTouchStart: this.handleTouchStart,
         onTouchMove: this.handleTouchMove,
         onTouchEnd: this.handleTouchEnd,
         onTouchCancel: this.handleTouchCancel
-      });
+      }), this.props.children);
     }
   });
 });
