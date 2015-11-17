@@ -51,6 +51,15 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
           if (nextProps.open && !this.props.open) {
             st = $(window).scrollTop();
             body.addClass("modal-open").css("top", st * -1);
+
+            if (isSafari) {
+              window.requestAnimationFrame(function () {
+                body.css("display", "none");
+                window.requestAnimationFrame(function () {
+                  body.css("display", "");
+                });
+              });
+            }
           } else if (!nextProps.open && this.props.open) {
             st = parseInt(body.css("top")) * -1;
             body.removeClass("modal-open").css("top", "");
@@ -114,15 +123,6 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
 
         // disable animation because of painting bugs
         if (isSafari) {
-          if (this.props.open) {
-            var body = $("body");
-            window.requestAnimationFrame(function () {
-              body.css("display", "none");
-              window.requestAnimationFrame(function () {
-                body.css("display", "");
-              });
-            });
-          }
           return d.div({}, [
             backdrop,
             modal
