@@ -131,6 +131,14 @@ define([ "react", "jquery", "underscore", "util" ], function (React, $, _, util)
 
       var target = tch.target;
 
+      var jqT = $(target);
+      // if it's an input where typing is allowed and it's already focused,
+      // don't do anything. this is probably an attempt to move the cursor
+      if ((jqT.is("input:focus") || jqT.is("textarea:focus")) && !jqT.is("[type=checkbox]")) {
+        this.clearTouchData();
+        return;
+      }
+
       // prevent the simulated mouse events
       e.preventDefault();
       // we don't need this touch end event to be handled multiple times if it's interpreted as a click
