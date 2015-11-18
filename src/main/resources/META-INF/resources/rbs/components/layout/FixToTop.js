@@ -74,10 +74,16 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
     render: function () {
       var c = React.Children.only(this.props.children);
 
-      return d.div({
-        style: this.state.style,
+      var style = {};
+      if (this.props && this.props.style) {
+        _.extend(style, this.props.style);
+      }
+      _.extend(style, this.state.style);
+
+      return d.div(_.extend({}, this.props, {
+        style: style,
         ref: "wrapper"
-      }, c);
+      }), c);
     }
   });
 });
