@@ -7,6 +7,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
   "use strict";
 
   var rpt = React.PropTypes;
+  var d = React.DOM;
 
   return util.rf({
     displayName: "RBS Button",
@@ -15,7 +16,8 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
 
     propTypes: {
       icon: rpt.oneOfType([ rpt.string, rpt.node ]),
-      caption: rpt.string,
+      caption: rpt.node,
+      loadingCaption: rpt.node,
       size: rpt.oneOf([ "xs", "sm", "lg" ]),
       block: rpt.bool,
       type: rpt.string,
@@ -27,6 +29,9 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
 
     getDefaultProps: function () {
       return {
+        icon: null,
+        caption: null,
+        loadingCaption: null,
         ajax: false,
         block: false,
         type: "default",
@@ -43,19 +48,34 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
     },
 
     componentDidMount: function () {
+      this._toLoading = _.bind(this.setLoading, this, true);
+      this._fromLoading = _.bind(this.setLoading, this, false);
+
       if (this.props.ajax) {
-        this._toLoading = _.bind(this.setLoading, this, true);
-        $(document).ajaxStart(this._toLoading);
-        this._fromLoading = _.bind(this.setLoading, this, false);
-        $(document).ajaxStop(this._fromLoading);
+        this.bindAjax();
+      }
+    },
+
+    bindAjax: function () {
+      $(document).ajaxStart(this._toLoading);
+      $(document).ajaxStop(this._fromLoading);
+    },
+
+    unbindAjax: function () {
+      $(document).off("ajaxStart", this._toLoading);
+      $(document).off("ajaxStop", this._fromLoading);
+    },
+
+    componentDidUpdate: function (prevProps, prevState) {
+      if (prevProps.ajax && !this.props.ajax) {
+        this.unbindAjax();
+      } else if (!prevProps.ajax && this.props.ajax) {
+        this.bindAjax();
       }
     },
 
     componentWillUnmount: function () {
-      if (this.props.ajax) {
-        $(document).off("ajaxStart", this._toLoading);
-        $(document).off("ajaxStop", this._fromLoading);
-      }
+      this.unbindAjax();
     },
 
     setLoading: function (bool) {
@@ -67,29 +87,23 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
     },
 
     getIcon: function () {
+      if (this.props.icon === null) {
+        return null;
+      }
       if (typeof this.props.icon === "string") {
         return icon({ key: "icon", name: this.props.icon });
       }
-      if (typeof this.props.icon !== "undefined") {
-        return this.props.icon;
-      }
-      return null;
+      return this.props.icon;
     },
 
     getCaption: function () {
-      var text = null;
-      if (this.state.loading) {
-        if (this.props.loadingCaption) {
-          text = this.props.loadingCaption;
-        }
-      }
-      if (this.props.caption) {
-        text = this.props.caption;
-      }
-      if (text === null) {
+      if (this.props.caption === null) {
         return null;
       }
-      return React.DOM.span({ key: "caption" }, text);
+      if (this.state.loading && this.state.loadingCaption !== null) {
+        return d.span({ key: "caption" }, this.props.loadingCaption);
+      }
+      return d.span({ key: "caption" }, this.props.caption);
     },
 
     getNow: function () {
@@ -116,7 +130,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
 
     getClassNames: function () {
       var classNames = [ "btn" ];
-      if (this.props.className) {
+      if (typeof this.props.className === "string") {
         classNames.push(this.props.className);
       }
       if (this.props.size) {
@@ -141,9 +155,9 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
         }
       }
 
-      var factory = React.DOM.button;
+      var factory = d.button;
       if (typeof this.props.href === "string") {
-        factory = React.DOM.a;
+        factory = d.a;
       }
       var properties = _.extend({}, this.props, {
         onClick: this.beforeOnClick,
