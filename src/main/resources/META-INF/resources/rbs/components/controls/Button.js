@@ -17,6 +17,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
     propTypes: {
       icon: rpt.oneOfType([ rpt.string, rpt.node ]),
       caption: rpt.node,
+      loadingIcon: rpt.oneOfType([ rpt.string, rpt.node ]),
       loadingCaption: rpt.node,
       size: rpt.oneOf([ "xs", "sm", "lg" ]),
       block: rpt.bool,
@@ -31,6 +32,7 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
       return {
         icon: null,
         caption: null,
+        loadingIcon: null,
         loadingCaption: null,
         ajax: false,
         block: false,
@@ -86,24 +88,35 @@ define([ "react", "underscore", "../layout/Icon", "jquery", "util" ], function (
       }
     },
 
+    // return the appropriate icon, based on the loading state, loading icon, etc.
     getIcon: function () {
-      if (this.props.icon === null) {
+      var ic = this.props.icon;
+      if (this.state.loading && this.props.loadingIcon !== null) {
+        ic = this.props.loadingIcon
+      }
+      return this.iconFor(ic);
+    },
+
+    iconFor: function (nodeOrString) {
+      if (nodeOrString === null) {
         return null;
       }
-      if (typeof this.props.icon === "string") {
+      if (typeof nodeOrString === "string") {
         return icon({ key: "icon", name: this.props.icon });
+      } else {
+        return nodeOrString;
       }
-      return this.props.icon;
     },
 
     getCaption: function () {
-      if (this.props.caption === null) {
+      var tx = this.props.caption;
+      if (this.state.loading && this.props.loadingCaption !== null) {
+        tx = this.props.loadingCaption;
+      }
+      if (tx === null) {
         return null;
       }
-      if (this.state.loading && this.state.loadingCaption !== null) {
-        return d.span({ key: "caption" }, this.props.loadingCaption);
-      }
-      return d.span({ key: "caption" }, this.props.caption);
+      return d.span({ key: "caption" }, tx);
     },
 
     getNow: function () {
