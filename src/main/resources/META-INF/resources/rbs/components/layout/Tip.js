@@ -9,21 +9,27 @@ define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside
   var RIGHT = "right";
   var BOTTOM = "bottom";
   var placements = [ TOP, LEFT, RIGHT, BOTTOM ];
+
+  var rpt = React.PropTypes;
+  var d = React.DOM;
+
   return util.rf({
     displayName: "Tip",
 
     mixins: [ occ, React.addons.PureRenderMixin ],
 
     propTypes: {
-      tip: React.PropTypes.node.isRequired,
-      defaultPlacement: React.PropTypes.oneOf(placements),
-      auto: React.PropTypes.bool
+      tip: rpt.node.isRequired,
+      defaultPlacement: rpt.oneOf(placements),
+      auto: rpt.bool,
+      ignoreClick: rpt.bool
     },
 
     getDefaultProps: function () {
       return {
         defaultPlacement: "top",
-        auto: true
+        auto: true,
+        ignoreClick: false
       };
     },
 
@@ -112,6 +118,9 @@ define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside
     },
 
     handleClick: function (e) {
+      if (this.props.ignoreClick) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       this.setTipState(!this.state.open);
@@ -124,17 +133,17 @@ define([ "react", "react-dom", "jquery", "underscore", "../mixins/OnClickOutside
         className.push("tip-container-open");
       }
 
-      return React.DOM.span({
+      return d.span({
         className: className.join(" ")
       }, [
-        React.DOM.span(_.extend(_.omit(this.props, "placement"), {
+        d.span(_.extend(_.omit(this.props, "placement"), {
           key: "content",
           ref: "container",
           onMouseEnter: _.bind(this.setTipState, this, true),
           onMouseLeave: _.bind(this.setTipState, this, false),
           onClick: _.bind(this.handleClick, this)
         }), this.props.children),
-        React.DOM.span({
+        d.span({
           className: "tip no-select",
           key: "tip",
           ref: "tip",
