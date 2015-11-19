@@ -56,11 +56,12 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
       var w = $(window);
       var wst = w.scrollTop();
       var wht = w.height();
-      var el = $(this.refs.wrapper);
-      var of = el.offset();
-      var top = of.top - this.state.style.top;
+      var container = $(this.refs.container);
+      var wrapper = $(this.refs.wrapper);
+      var of = container.offset();
+      var top = of.top;
 
-      if (wst > top - this.props.buffer && wht > this.props.buffer * 2 + el.height()) {
+      if (wst > top - this.props.buffer && wht > this.props.buffer * 2 + wrapper.height()) {
         style.top = wst - (top - this.props.buffer);
       } else {
         style.top = 0;
@@ -80,10 +81,12 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
       }
       _.extend(style, this.state.style);
 
-      return d.div(_.extend({}, this.props, {
+      return d.span({
+        ref: "container"
+      }, d.div(_.extend({}, this.props, {
         style: style,
         ref: "wrapper"
-      }), c);
+      }), c));
     }
   });
 });
