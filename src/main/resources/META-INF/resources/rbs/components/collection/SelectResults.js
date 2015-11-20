@@ -188,6 +188,9 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
       render: function () {
         var results = this.getModels();
         if (this.props.loading) {
+          if (this.state.collection.length === 0) {
+            results = [];
+          }
           results.push(d.div({
             key: "loading-indicator",
             className: "react-select-search-result text-center"

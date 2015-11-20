@@ -101,7 +101,6 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       // update the search text and search for models that match the q
       doSearch: function (q) {
-        this.props.collection.setPageNo(0);
         this.setState({
           searchText: q,
           cursorPosition: 0
@@ -113,7 +112,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       // a server side search
       _doServerSearch: function () {
         this.setState({ loading: true });
-        this.props.collection.setParam(this.props.searchOn, this.state.searchText).fetch({
+        this.props.collection.setPageNo(0).setParam(this.props.searchOn, this.state.searchText).fetch({
           success: _.bind(function (collection) {
             this.setState({
               loading: false
@@ -121,6 +120,24 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
             this.state.results.set(collection.toArray());
           }, this)
         });
+      },
+
+      moreResults: function () {
+        if (!this.props.serverSide) {
+          return;
+        }
+        if (!this.state.loading && this.state.results.length < this.props.collection.size()) {
+          this.setState({ loading: true }, function () {
+            this.props.collection.nextPage().fetch({
+              success: _.bind(function (collection) {
+                this.setState({
+                  loading: false
+                });
+                this.state.results.add(collection.toArray());
+              }, this)
+            });
+          });
+        }
       },
 
       // a client side search
@@ -457,6 +474,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       // handle the user reaching the bottom of the results
       handleBottom: function () {
         util.debug("bottomed out on results");
+        this.moreResults();
       },
 
       // render the results div
