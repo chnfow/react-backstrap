@@ -31,6 +31,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       mixins: [ events ],
 
       propTypes: {
+        // the component used to render a single result
+        modelComponent: rpt.func.isRequired,
         // the currently selected value or values
         value: rpt.any,
         // handler for change of the currently selected value, takes one argument which is the new value
@@ -38,26 +40,19 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         // the attribute of the models passed to the collection that is used to represent the selection.
         // leave null to indicate that the entire model json should be set into the attribute
         valueAttribute: rpt.string,
-        // either an attribute name, a list of attribute names or a function that produces an array
-        // of values that can be searched
-        searchOn: rpt.oneOfType([
-          rpt.string,
-          rpt.arrayOf(rpt.string),
-          rpt.func
-        ]),
-        // what to break the search string on
-        breakOn: rpt.string,
-        emptyNode: rpt.node
+        // name of the model attribute to search on
+        searchOn: rpt.string,
+        // the node to display when there are no results
+        emptyMessage: rpt.node
       },
 
       getDefaultProps: function () {
         return {
           valueAttribute: null,
           searchOn: "name",
-          breakOn: " ",
           multiple: false,
           placeholder: "Select...",
-          emptyNode: "No results found."
+          emptyMessage: "No results found."
         };
       },
 
@@ -65,8 +60,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         return {
           // the user's currently typed search text
           searchText: "",
-          // the filtered results
-          filteredCollection: new Backbone.Collection(),
+          // the results to display
+          results: new Backbone.Collection(),
           // where the cursor is placed in a multi-select among the results
           cursorPosition: 0,
           // whether the dropdown is open
@@ -91,113 +86,16 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       // update the search text and search for models that match the q
       doSearch: function (q) {
         util.debug("updating filtered collection for a new search value", q);
-        this.updateFilteredCollection(q, this.props.value);
+        this.updateResults(q);
         this.setState({
           searchText: q,
           cursorPosition: 0
         });
       },
 
-      getDisplayItem: function (className, model) {
-        return d.span({
-          className: className,
-          key: "result-cid-" + model.cid
-        }, this.props.modelComponent({ model: model }));
-      },
+      // based on the search text and the passed in collection update the results collection
+      updateResults: function () {
 
-      // update this.state.filteredCollection to contain a filtered result set based on
-      // the current model value and the search function
-      updateFilteredCollection: function (q, selectedVals) {
-        return;
-        // get an array of current values
-        if (typeof selectedVals === "undefined" || selectedVals === null) {
-          selectedVals = [];
-        } else {
-          if (!_.isArray(selectedVals)) {
-            selectedVals = [ selectedVals ];
-          }
-        }
-        // the function that extracts searchable values out of a model
-        var svf = this.getSearchValueFunction();
-        // the function that determines whether a value matches the search string
-        var matcher = this.getMatcherFunction(q);
-
-        this.state.filteredCollection.set(this.props.collection.filter(function (oneModel) {
-          // val is already selected
-          if (_.contains(selectedVals, oneModel.get(this.props.valueAttribute))) {
-            return false;
-          }
-          // no search text entered
-          if (q.length === 0) {
-            return true;
-          }
-          var values = svf(oneModel);
-          return _.some(values, function (oneValue) {
-            if (typeof oneValue !== "string" || oneValue.length === 0) {
-              return false;
-            }
-            return matcher(oneValue);
-          });
-        }, this));
-      },
-
-      // get the function that will be used to extract values to check against the query string
-      getSearchValueFunction: function () {
-        var toReturn;
-        var caseInsensitive = this.props.caseInsensitive;
-        switch (typeof this.props.searchOn) {
-          case "function":
-            toReturn = _.bind(this.props.searchOn, this);
-            break;
-          case "string":
-            var attr = this.props.searchOn;
-            toReturn = function (model) {
-              var val = model.get(attr);
-              if (val && val.toString) {
-                val = val.toString();
-              }
-              if (caseInsensitive && typeof val === "string") {
-                val = val.toUpperCase();
-              }
-              return [ val ];
-            };
-            break;
-          case "object":
-            var attrs = this.props.searchOn;
-            toReturn = function (model) {
-              return _.map(attrs, function (oneAttr) {
-                var val = model.get(oneAttr);
-                if (val && val.toString) {
-                  val = val.toString();
-                }
-                if (caseInsensitive && typeof val === "string") {
-                  val = val.toUpperCase();
-                }
-                return val;
-              });
-            };
-            break;
-        }
-        return toReturn;
-      },
-
-      getMatcherFunction: function (q) {
-        if (this.props.caseInsensitive) {
-          q = q.toUpperCase();
-        }
-        var matcher = function (oneValue) {
-          return oneValue.indexOf(q) !== -1;
-        };
-        if (this.props.breakOn) {
-          q = _.uniq(q.split(this.props.breakOn));
-          // we need to use different logic for matching
-          matcher = function (oneValue) {
-            return _.all(q, function (oneQ) {
-              return oneValue.indexOf(oneQ) !== -1;
-            });
-          };
-        }
-        return matcher;
       },
 
       setCursorPosition: function (cp) {
@@ -309,24 +207,38 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           return;
         }
 
-        var modelVal = selectedModel.get(this.props.valueAttribute);
-        if (!this.props.multiple) {
-          this.props.onChange(modelVal);
-          dom.findDOMNode(this.refs.toFocus).focus();
-        } else {
-          var currentValue = this.props.value;
-          var newValue;
-          if (_.isArray(currentValue)) {
-            newValue = currentValue.concat([ modelVal ]);
+        var cv = this.props.value;
+
+        if (this.props.valueAttribute === null) {
+          var toAdd = selectedModel.toJSON();
+          if (this.props.multiple) {
+            if (_.isArray(cv)) {
+              this.props.onChange(cv.concat(toAdd));
+            } else {
+              this.props.onChange([ toAdd ]);
+            }
           } else {
-            newValue = [ modelVal ];
+            this.props.onChange(toAdd);
           }
-          this.setState({
-            searchText: ""
-          }, function () {
-            this.doSearch(this.state.searchText);
-            this.props.onChange(newValue);
-          });
+        } else {
+          var modelVal = selectedModel.get(this.props.valueAttribute);
+          if (this.props.multiple) {
+            var newValue;
+            if (_.isArray(cv)) {
+              newValue = cv.concat([ modelVal ]);
+            } else {
+              newValue = [ modelVal ];
+            }
+            this.setState({
+              searchText: ""
+            }, function () {
+              this.props.onChange(newValue);
+            });
+          } else {
+            this.props.onChange(modelVal);
+            dom.findDOMNode(this.refs.toFocus).focus();
+
+          }
         }
       },
 
@@ -340,10 +252,6 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         this.refs.search.focus();
       },
 
-      updateResults: function () {
-        this.updateFilteredCollection(this.state.searchText, this.props.value);
-      },
-
       setOpen: function (open) {
         this.setState({ open: open, searchText: "" }, function () {
           if (this.state.open) {
@@ -353,15 +261,15 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         });
       },
 
-      componentWillReceiveProps: function (nextProps) {
-        if (this.state.open && nextProps.value !== this.props.value) {
-          util.debug("updating filtered collection on receiving a new value");
-          this.updateFilteredCollection(this.state.searchText, nextProps.value);
+      componentDidUpdate: function (prevProps, prevState) {
+        if (this.state.open && prevProps !== this.props.value) {
+          util.debug("updating filtered collection after receiving a new value");
+          this.updateResults();
         }
         // re-listen
-        if (nextProps.collection !== this.props.collection) {
-          this.stopListening(this.props.collection);
-          this.listenTo(nextProps.collection);
+        if (prevProps.collection !== this.props.collection) {
+          this.stopListening(prevProps.collection);
+          this.listenTo(this.props.collection, "update reset", this.handleCollectionChange);
         }
       },
 
@@ -369,23 +277,15 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         // the currently selected values
         var currentValue = this.props.value;
 
-        // get all the views for the selected items
+        // get all the components for the selected items
         var selectedItems = [];
-        //if (!this.props.multiple) {
-        //  if (this.state.searchText.length === 0) {
-        //    var model = this.findModelByValue(currentValue);
-        //    if (model) {
-        //      selectedItems = [ this.getDisplayItem("react-select-single-choice", model) ];
-        //    }
-        //  }
-        //} else {
-        //  if (_.isArray(currentValue)) {
-        //    // items not found in the collection are not displayed
-        //    var selectedModels = _.filter(_.map(currentValue, this.findModelByValue, this), Boolean);
-        //    // map them into views
-        //    selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "react-select-multiple-choice"));
-        //  }
-        //}
+        if (this.props.multiple) {
+          if (_.isArray(currentValue)) {
+
+          }
+        } else {
+
+        }
 
         //only display the placeholder if there is no value selected
         var placeholder;
@@ -393,6 +293,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           placeholder = this.props.placeholder;
         }
 
+        // the fake input is always going to have an empty value, but it should be required if no option is selected
         var required = this.props.required;
         if (required && currentValue !== null && typeof currentValue !== "undefined") {
           if (this.props.multiple) {
@@ -422,7 +323,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           id: this.props.id
         });
 
-        // determine what will go into the final div that will look like the input
+        // determine where the typing area will go in the fake input
         var insideInput;
         if (!this.props.multiple || (!this.props.value) || (this.props.value.length === 0)) {
           insideInput = selectedItems.concat(typingArea);
@@ -438,22 +339,32 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           className: "caret"
         }));
 
-        var openClassName = "";
+        //fake input classname
+        var fiCn = [ "react-select-fake-input" ];
+        if (typeof this.props.className === "string") {
+          fiCn.push(this.props.className);
+        }
         if (this.state.open) {
-          openClassName = "dropup";
+          fiCn.push("dropup");
         }
 
-        var fakeInputProps = _.omit(_.extend({}, this.props, {
+        var fakeInputProps = {
           key: "fake-input",
           ref: "fakeInput",
           onMouseDown: this.doNothing,
           onClick: this.handleSelectClick,
-          className: "react-select-fake-input " + openClassName + " " + (this.props.className || "")
-        }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");
+          className: fiCn.join(" ")
+        };
 
         return d.div(fakeInputProps, insideInput);
       },
 
+      // handle the user reaching the bottom of the results
+      handleBottom: function () {
+        util.debug("bottomed out on results");
+      },
+
+      // render the results div
       renderResults: function () {
         var className;
         if (this.state.open) {
@@ -463,14 +374,19 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         return selectResults({
           key: "results",
           ref: "results",
-          collection: this.state.filteredCollection,
+          collection: this.state.results,
           onSelect: this.handleSelect,
+          onBottom: this.handleBottom,
           modelComponent: this.props.modelComponent,
           className: className,
-          emptyNode: this.props.emptyNode
+          emptyNode: d.div({
+            key: "empty-results-message",
+            className: "react-select-search-result"
+          }, this.props.emptyMessage)
         });
       },
 
+      // this div is focused when tabbing away from the select so tab can be used again to select the next element
       renderTabDiv: function () {
         return d.div({
           key: "toFocus",
