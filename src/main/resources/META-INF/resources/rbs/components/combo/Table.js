@@ -27,7 +27,7 @@ define([ "react", "underscore", "../model/TableRow", "../collection/TableBody", 
             label: rpt.string,
             sortOn: rpt.string
           })
-        )
+        ).isRequired
       },
 
       getDefaultProps: function () {

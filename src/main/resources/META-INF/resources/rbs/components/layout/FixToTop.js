@@ -1,5 +1,6 @@
 /**
- * uses relative positioning to fix the children to the top
+ * uses fixed positioning to fix the children to the top when the browser scrolls past it and the height of the window
+ * can contain the children
  */
 define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _) {
   "use strict";
@@ -22,10 +23,7 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
 
     getInitialState: function () {
       return {
-        style: {
-          position: "relative",
-          top: 0
-        }
+        fixed: false
       };
     },
 
@@ -39,52 +37,58 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
       $(window).off("resize scroll", this.boundStyle);
     },
 
-    componentDidUpdate: function (prevProps, prevState) {
-      if (prevProps.children !== this.props.children) {
-        this.calculateStyle();
-      }
-    },
-
     calculateStyle: function () {
       if (!this.isMounted()) {
         return;
       }
-      var style = {
-        position: "relative"
-      };
 
+      // window height and how far it's scrolled
       var w = $(window);
       var wst = w.scrollTop();
       var wht = w.height();
+
+      // get the refs to the wrapper elements
       var container = $(this.refs.container);
       var wrapper = $(this.refs.wrapper);
-      var of = container.offset();
-      var top = of.top;
 
-      if (wst > top - this.props.buffer && wht > this.props.buffer * 2 + wrapper.height()) {
-        style.top = wst - (top - this.props.buffer);
-      } else {
-        style.top = 0;
+      // this is used to determine whether the window is scrolled past where the element should be
+      var containerOffset = container.offset();
+
+      var fixed = false;
+
+      if (
+        // window is scrolled past the container's buffer zone
+      wst > containerOffset.top - this.props.buffer &&
+        // window height is enough to contain the entirety of the fixed element
+      wht > this.props.buffer * 2 + wrapper.height()
+      ) {
+        fixed = true;
       }
 
       this.setState({
-        style: style
+        fixed: fixed
       });
+    },
+
+    getStyle: function () {
+      if (!this.state.fixed) {
+        return this.props.style;
+      } else {
+        return _.extend({}, this.props, {
+          position: "fixed",
+          top: this.props.buffer,
+          width: "inherit"
+        });
+      }
     },
 
     render: function () {
       var c = React.Children.only(this.props.children);
 
-      var style = {};
-      if (this.props && this.props.style) {
-        _.extend(style, this.props.style);
-      }
-      _.extend(style, this.state.style);
-
-      return d.span({
+      return d.div({
         ref: "container"
       }, d.div(_.extend({}, this.props, {
-        style: style,
+        style: this.getStyle(),
         ref: "wrapper"
       }), c));
     }
