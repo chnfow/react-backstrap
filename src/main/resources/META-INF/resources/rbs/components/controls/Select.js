@@ -67,7 +67,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           // whether the dropdown is open
           open: false,
           // whether the collection is loading
-          loading: true
+          loading: false
         };
       },
 
