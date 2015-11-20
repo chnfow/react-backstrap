@@ -17,13 +17,14 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
 
     getDefaultProps: function () {
       return {
-        buffer: 25
+        buffer: 40
       };
     },
 
     getInitialState: function () {
       return {
-        fixed: false
+        fixed: false,
+        width: 0
       };
     },
 
@@ -66,7 +67,8 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
       }
 
       this.setState({
-        fixed: fixed
+        fixed: fixed,
+        width: container.width()
       });
     },
 
@@ -77,7 +79,7 @@ define([ "react", "util", "jquery", "underscore" ], function (React, util, $, _)
         return _.extend({}, this.props, {
           position: "fixed",
           top: this.props.buffer,
-          width: "inherit"
+          width: this.state.width
         });
       }
     },
