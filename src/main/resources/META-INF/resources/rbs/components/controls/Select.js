@@ -105,7 +105,9 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         this.setState({
           searchText: q,
           cursorPosition: 0
-        }, this.updateResults);
+        }, function () {
+          this.updateResults()
+        });
       },
 
       // a server side search
@@ -146,9 +148,13 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       // based on the search text and the passed in collection update the results collection
-      updateResults: function () {
+      updateResults: function (immediate) {
         if (this.props.serverSide) {
-          this.doServerSearch();
+          if (immediate === true) {
+            this._doServerSearch();
+          } else {
+            this.doServerSearch();
+          }
         } else {
           this.doClientSearch();
         }
@@ -311,7 +317,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       componentDidUpdate: function (prevProps, prevState) {
         if (!prevState.open && this.state.open) {
           util.debug("updating results on open");
-          this.updateResults();
+          this.updateResults(true);
         }
 
         if (prevProps.searchDelay !== this.props.searchDelay) {
