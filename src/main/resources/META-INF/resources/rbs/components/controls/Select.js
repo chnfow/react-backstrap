@@ -85,12 +85,10 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       // update the search text and search for models that match the q
       doSearch: function (q) {
-        util.debug("updating filtered collection for a new search value", q);
-        this.updateResults(q);
         this.setState({
           searchText: q,
           cursorPosition: 0
-        });
+        }, this.updateResults);
       },
 
       // based on the search text and the passed in collection update the results collection
@@ -236,8 +234,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
             });
           } else {
             this.props.onChange(modelVal);
-            dom.findDOMNode(this.refs.toFocus).focus();
-
+            this.refs.toFocus.focus();
           }
         }
       },
@@ -253,19 +250,15 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       setOpen: function (open) {
-        this.setState({ open: open, searchText: "" }, function () {
-          if (this.state.open) {
-            util.debug("updating filtered collection on open");
-            this.updateResults();
-          }
-        });
+        this.setState({ open: open, searchText: "" });
       },
 
       componentDidUpdate: function (prevProps, prevState) {
-        if (this.state.open && prevProps !== this.props.value) {
-          util.debug("updating filtered collection after receiving a new value");
+        if (!prevState.open && this.state.open) {
+          util.debug("updating filtered collection on open");
           this.updateResults();
         }
+
         // re-listen
         if (prevProps.collection !== this.props.collection) {
           this.stopListening(prevProps.collection);
@@ -273,19 +266,51 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         }
       },
 
+      /**
+       * Get components for all the currently selected items
+       */
+      getSelectedItems: function () {
+        var si = [], cv = this.props.value;
+
+        if (this.props.multiple) {
+          if (_.isArray(cv)) {
+            si = _.map(cv, this.getDisplayItem, this);
+          }
+        } else {
+          si = this.getDisplayItem(cv);
+        }
+
+        return si;
+      },
+
+      /**
+       * Get the display component for a currently selected value
+       *
+       * If a valueAttribute is specified, the collection must contain all the possible values or this will fail
+       * @param value
+       */
+      getDisplayItem: function (value) {
+        var va = this.props.valueAttribute, mdl;
+        var cn = this.props.multiple ? "react-select-multiple-choice" : "react-select-single-choice";
+        if (va === null) {
+          mdl = new Backbone.Model(value);
+        } else {
+          var where = {};
+          where[ va ] = value;
+          mdl = this.props.collection.findWhere(va);
+        }
+
+        return d.span({
+          className: cn
+        }, this.props.modelComponent({ model: mdl }));
+      },
+
       renderFakeInput: function () {
         // the currently selected values
         var currentValue = this.props.value;
 
         // get all the components for the selected items
-        var selectedItems = [];
-        if (this.props.multiple) {
-          if (_.isArray(currentValue)) {
-
-          }
-        } else {
-
-        }
+        var selectedItems = this.getSelectedItems();
 
         //only display the placeholder if there is no value selected
         var placeholder;
@@ -381,7 +406,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           className: className,
           emptyNode: d.div({
             key: "empty-results-message",
-            className: "react-select-search-result"
+            className: "react-select-search-result empty-message"
           }, this.props.emptyMessage)
         });
       },

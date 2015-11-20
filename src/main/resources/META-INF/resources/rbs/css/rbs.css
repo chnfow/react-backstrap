@@ -390,6 +390,11 @@ body.modal-open {
     cursor: pointer;
 }
 
+/* the empty message shouldn't have a cursor pointer */
+.react-select-search-result.empty-message {
+    cursor: default;
+}
+
 /* a hilited result */
 .react-select-search-result.hilited {
     background-color: #5897fb;
