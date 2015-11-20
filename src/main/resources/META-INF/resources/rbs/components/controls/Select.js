@@ -44,8 +44,10 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         searchOn: rpt.string,
         // the node to display when there are no results
         emptyMessage: rpt.node,
-        // the value of the model that should be unique among the selected items
-        uniqueKey: rpt.string
+        // whether the filtering happens on the server or the collection contains all the models
+        serverSide: rpt.bool,
+        // debounce for server searches
+        searchDelay: rpt.number
       },
 
       getDefaultProps: function () {
@@ -55,7 +57,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           multiple: false,
           placeholder: "Select...",
           emptyMessage: "No results found.",
-          uniqueKey: "id"
+          serverSide: false,
+          searchDelay: 200
         };
       },
 
@@ -75,12 +78,20 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       componentDidMount: function () {
+        this.makeServerSearchFunction();
         this.listenTo(this.props.collection, "update reset", this.handleCollectionChange);
+      },
+
+      makeServerSearchFunction: function () {
+        this.doServerSearch = _.debounce(_.bind(this._doServerSearch, this), this.props.searchDelay);
       },
 
       // when the collection is updated or reset we need to update the list of results
       handleCollectionChange: function () {
-        this.updateResults();
+        // in a server-side situation we expect the collection to change
+        if (!this.props.serverSide) {
+          this.updateResults();
+        }
       },
 
       // when the input changes we need to do a new search
@@ -97,38 +108,49 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         }, this.updateResults);
       },
 
+      // a server side search
+      _doServerSearch: function () {
+        this.setState({ loading: true });
+        this.props.collection.setParam(this.props.searchOn, this.state.searchText).fetch({
+          success: _.bind(function (collection) {
+            this.setState({
+              loading: false
+            });
+            this.state.results.set(collection.toArray());
+          }, this)
+        });
+      },
+
+      // a client side search
+      doClientSearch: function () {
+        // client side filtering
+        var so = this.props.searchOn;
+        var st = this.state.searchText;
+        this.state.results.set(this.props.collection.filter(function (oneM) {
+          if (st.length === 0) {
+            return true;
+          }
+          var v = oneM.get(so);
+          if (v === null || typeof v === "undefined") {
+            return false;
+          }
+          if (typeof v !== "string") {
+            if (typeof v.toString !== "function") {
+              return false;
+            } else {
+              v = v.toString();
+            }
+          }
+          return v.toUpperCase().indexOf(st) !== -1;
+        }));
+      },
+
       // based on the search text and the passed in collection update the results collection
       updateResults: function () {
-        if (this.props.collection.isServerSide()) {
-          this.setState({ loading: true });
-          this.props.collection.setParam(this.props.searchOn, this.state.searchText).fetch({
-            success: _.bind(function (collection) {
-              this.setState({
-                loading: false
-              });
-              this.state.results.set(collection.toArray());
-            }, this)
-          });
+        if (this.props.serverSide) {
+          this.doServerSearch();
         } else {
-          var so = this.props.searchOn;
-          var st = this.state.searchText;
-          this.state.results.set(this.props.collection.filter(function (oneM) {
-            if (st.length === 0) {
-              return true;
-            }
-            var v = oneM.get(so);
-            if (v === null || typeof v === "undefined") {
-              return false;
-            }
-            if (typeof v !== "string") {
-              if (typeof v.toString !== "function") {
-                return false;
-              } else {
-                v = v.toString();
-              }
-            }
-            return v.toUpperCase().indexOf(st) !== -1;
-          }));
+          this.doClientSearch();
         }
         util.debug("results updated");
       },
@@ -290,6 +312,10 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         if (!prevState.open && this.state.open) {
           util.debug("updating results on open");
           this.updateResults();
+        }
+
+        if (prevProps.searchDelay !== this.props.searchDelay) {
+          this.doServerSearch = _.debounce(_.bind(this._doServerSearch, this), this.props.searchDelay);
         }
 
         // re-listen

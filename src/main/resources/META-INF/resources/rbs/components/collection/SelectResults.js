@@ -80,7 +80,7 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
       scrollHiliteIntoView: function () {
         var resultsNode = this.refs.results;
         var hilitedNode = this.refs[ "result-" + this.state.hilite ];
-        if (hilitedNode === null) {
+        if (typeof hilitedNode === "undefined" || hilitedNode === null) {
           return;
         }
         var resultsTop = resultsNode.scrollTop;
