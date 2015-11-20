@@ -43,7 +43,9 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         // name of the model attribute to search on
         searchOn: rpt.string,
         // the node to display when there are no results
-        emptyMessage: rpt.node
+        emptyMessage: rpt.node,
+        // the value of the model that should be unique among the selected items
+        uniqueKey: rpt.string
       },
 
       getDefaultProps: function () {
@@ -52,7 +54,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           searchOn: "name",
           multiple: false,
           placeholder: "Select...",
-          emptyMessage: "No results found."
+          emptyMessage: "No results found.",
+          uniqueKey: "id"
         };
       },
 
@@ -87,6 +90,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       // update the search text and search for models that match the q
       doSearch: function (q) {
+        this.props.collection.setPageNo(0);
         this.setState({
           searchText: q,
           cursorPosition: 0
@@ -95,7 +99,37 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       // based on the search text and the passed in collection update the results collection
       updateResults: function () {
-        this.state.results.set(this.props.collection.toArray());
+        if (this.props.collection.isServerSide()) {
+          this.setState({ loading: true });
+          this.props.collection.setParam(this.props.searchOn, this.state.searchText).fetch({
+            success: _.bind(function (collection) {
+              this.setState({
+                loading: false
+              });
+              this.state.results.set(collection.toArray());
+            }, this)
+          });
+        } else {
+          var so = this.props.searchOn;
+          var st = this.state.searchText;
+          this.state.results.set(this.props.collection.filter(function (oneM) {
+            if (st.length === 0) {
+              return true;
+            }
+            var v = oneM.get(so);
+            if (v === null || typeof v === "undefined") {
+              return false;
+            }
+            if (typeof v !== "string") {
+              if (typeof v.toString !== "function") {
+                return false;
+              } else {
+                v = v.toString();
+              }
+            }
+            return v.toUpperCase().indexOf(st) !== -1;
+          }));
+        }
         util.debug("results updated");
       },
 
@@ -227,7 +261,9 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         this.setState({
           searchText: ""
         }, function () {
-          this.blur();
+          if (!this.props.multiple) {
+            this.blur();
+          }
           this.props.onChange(newValue);
         });
       },
@@ -273,7 +309,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           if (_.isArray(cv)) {
             var i = 0;
             si = _.map(cv, function (oneVal) {
-              this.getDisplayItem(oneVal, i++)
+              return this.getDisplayItem(oneVal, i++)
             }, this);
           }
         } else {
