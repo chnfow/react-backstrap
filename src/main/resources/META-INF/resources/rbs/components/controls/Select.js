@@ -65,7 +65,9 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           // where the cursor is placed in a multi-select among the results
           cursorPosition: 0,
           // whether the dropdown is open
-          open: false
+          open: false,
+          // whether the collection is loading
+          loading: true
         };
       },
 
@@ -93,7 +95,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       // based on the search text and the passed in collection update the results collection
       updateResults: function () {
-
+        this.state.results.set(this.props.collection.toArray());
+        util.debug("results updated");
       },
 
       setCursorPosition: function (cp) {
@@ -189,7 +192,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
             this.handleSelect(this.refs.results.getHilitedModel());
             break;
           case KEY_TAB:
-            if (this.state.filteredCollection.size() === 1) {
+            if (this.state.results.size() === 1) {
               var hm = this.refs.results.getHilitedModel();
               if (hm !== null) {
                 e.preventDefault();
@@ -206,37 +209,31 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         }
 
         var cv = this.props.value;
+        var newValue;
 
-        if (this.props.valueAttribute === null) {
-          var toAdd = selectedModel.toJSON();
-          if (this.props.multiple) {
-            if (_.isArray(cv)) {
-              this.props.onChange(cv.concat(toAdd));
-            } else {
-              this.props.onChange([ toAdd ]);
-            }
+        var mVal = (this.props.valueAttribute !== null) ? selectedModel.get(this.props.valueAttribute) : selectedModel.toJSON();
+
+        if (this.props.multiple) {
+          if (_.isArray(cv)) {
+            newValue = cv.concat(mVal);
           } else {
-            this.props.onChange(toAdd);
+            newValue = [ mVal ];
           }
         } else {
-          var modelVal = selectedModel.get(this.props.valueAttribute);
-          if (this.props.multiple) {
-            var newValue;
-            if (_.isArray(cv)) {
-              newValue = cv.concat([ modelVal ]);
-            } else {
-              newValue = [ modelVal ];
-            }
-            this.setState({
-              searchText: ""
-            }, function () {
-              this.props.onChange(newValue);
-            });
-          } else {
-            this.props.onChange(modelVal);
-            this.refs.toFocus.focus();
-          }
+          newValue = mVal;
         }
+
+        // do the setting of the new value
+        this.setState({
+          searchText: ""
+        }, function () {
+          this.blur();
+          this.props.onChange(newValue);
+        });
+      },
+
+      blur: function () {
+        this.refs.toFocus.focus();
       },
 
       doNothing: function (e) {
@@ -255,7 +252,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
       componentDidUpdate: function (prevProps, prevState) {
         if (!prevState.open && this.state.open) {
-          util.debug("updating filtered collection on open");
+          util.debug("updating results on open");
           this.updateResults();
         }
 
@@ -274,10 +271,15 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
 
         if (this.props.multiple) {
           if (_.isArray(cv)) {
-            si = _.map(cv, this.getDisplayItem, this);
+            var i = 0;
+            si = _.map(cv, function (oneVal) {
+              this.getDisplayItem(oneVal, i++)
+            }, this);
           }
         } else {
-          si = this.getDisplayItem(cv);
+          if (!this.state.searchText && cv) {
+            si.push(this.getDisplayItem(cv, 0));
+          }
         }
 
         return si;
@@ -287,9 +289,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
        * Get the display component for a currently selected value
        *
        * If a valueAttribute is specified, the collection must contain all the possible values or this will fail
-       * @param value
        */
-      getDisplayItem: function (value) {
+      getDisplayItem: function (value, ix) {
         var va = this.props.valueAttribute, mdl;
         var cn = this.props.multiple ? "react-select-multiple-choice" : "react-select-single-choice";
         if (va === null) {
@@ -301,7 +302,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         }
 
         return d.span({
-          className: cn
+          className: cn,
+          key: "selected-val-" + ix
         }, this.props.modelComponent({ model: mdl }));
       },
 
@@ -399,6 +401,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         return selectResults({
           key: "results",
           ref: "results",
+          loading: this.state.loading,
           collection: this.state.results,
           onSelect: this.handleSelect,
           onBottom: this.handleBottom,

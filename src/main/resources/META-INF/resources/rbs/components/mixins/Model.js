@@ -91,10 +91,11 @@ define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../c
         this.listenTo(this.props.model, "sync change", this.copyModelToState);
       },
 
-      componentWillReceiveProps: function (nextProps) {
-        if (nextProps.model !== this.props.model) {
-          this.stopListening(this.props.model);
-          this.listenTo(nextProps.model, "sync change", this.copyModelToState);
+      componentDidUpdate: function (prevProps, prevstate) {
+        if (prevProps.model !== this.props.model) {
+          this.stopListening(prevProps.model);
+          this.listenTo(this.props.model, "sync change", this.copyModelToState);
+          this.copyModelToState();
         }
       },
 

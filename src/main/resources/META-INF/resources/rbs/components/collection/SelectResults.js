@@ -1,12 +1,6 @@
-define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
-  function (React, dom, _, collection, util) {
+define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "../layout/Icon" ],
+  function (React, dom, _, collection, util, icon) {
     "use strict";
-
-
-    var MAX_HEIGHT_EM = 20;
-    var MIN_HEIGHT_EM = 3;
-    var BOTTOM_BUFFER = 1;
-    var ONE_EM = 16;
 
     var rpt = React.PropTypes;
     var d = React.DOM;
@@ -20,12 +14,24 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
 
       propTypes: {
         onSelect: rpt.func.isRequired,
-        onBottom: rpt.func
+        onBottom: rpt.func,
+        maxHeight: rpt.number,
+        minHeight: rpt.number,
+        windowBottomBuffer: rpt.number,
+        loading: rpt.bool.isRequired,
+        loadingIcon: rpt.node
       },
 
       getDefaultProps: function () {
         return {
-          onBottom: null
+          onBottom: null,
+          maxHeight: 320,
+          minHeight: 100,
+          windowBottomBuffer: 10,
+          loadingIcon: icon({
+            name: "refresh",
+            animate: "spin"
+          })
         };
       },
 
@@ -72,8 +78,8 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
       },
 
       scrollHiliteIntoView: function () {
-        var resultsNode = dom.findDOMNode(this.refs.results);
-        var hilitedNode = dom.findDOMNode(this.refs[ "result-" + this.state.hilite ]);
+        var resultsNode = this.refs.results;
+        var hilitedNode = this.refs[ "result-" + this.state.hilite ];
         if (hilitedNode === null) {
           return;
         }
@@ -120,19 +126,19 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
       _calculateMaxHeight: function () {
         if (this.isMounted()) {
           var wind = $(window);
-          var resultsDiv = $(dom.findDOMNode(this.refs.results));
+          var resultsDiv = $(this.refs.results);
           var windowScrollTop = wind.scrollTop();
           // how far from the top of the window the select results are
           var divDistanceFromTop = resultsDiv.offset().top - windowScrollTop;
           // how tall the window is
           var windowHeight = wind.height();
 
-          var maxHeightInEm = Math.round((windowHeight - divDistanceFromTop) / ONE_EM) - BOTTOM_BUFFER;
-          maxHeightInEm = Math.max(Math.min(MAX_HEIGHT_EM, maxHeightInEm), MIN_HEIGHT_EM);
+          var maxHeight = (windowHeight - divDistanceFromTop) - this.props.windowBottomBuffer;
+          maxHeight = Math.max(Math.min(this.props.maxHeight, maxHeight), this.props.minHeight);
 
-          if (this.state.maxHeight !== maxHeightInEm) {
+          if (this.state.maxHeight !== maxHeight) {
             this.setState({
-              maxHeight: maxHeightInEm
+              maxHeight: maxHeight
             });
           }
         }
@@ -144,11 +150,11 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
 
       calculateStyle: function () {
         if (this.state.maxHeight !== null) {
-          return {
-            maxHeight: this.state.maxHeight + "em"
-          };
+          return _.extend({
+            maxHeight: this.state.maxHeight
+          }, this.props.style);
         }
-        return {};
+        return this.props.style;
       },
 
       handleScroll: function () {
@@ -181,6 +187,12 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
 
       render: function () {
         var results = this.getModels();
+        if (this.props.loading) {
+          results.push(d.div({
+            key: "loading-indicator",
+            className: "react-select-search-result text-center"
+          }, this.props.loadingIcon));
+        }
 
         var style = this.calculateStyle();
 
