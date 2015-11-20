@@ -1,5 +1,5 @@
 /**
- * A searchable dropdown
+ * A searchable dropdown, controlled input
  */
 define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Events", "../collection/SelectResults",
     "./DynamicInput", "util" ],
@@ -23,6 +23,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
     var KEY_DELETE = 46;
 
     var rpt = React.PropTypes;
+    var d = React.DOM;
 
     return util.rf({
       displayName: "RBS Select",
@@ -30,10 +31,12 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       mixins: [ events ],
 
       propTypes: {
-        // the currently selected value
+        // the currently selected value or values
         value: rpt.any,
-        // handle change of the currently selected value
+        // handler for change of the currently selected value, takes one argument which is the new value
         onChange: rpt.func.isRequired,
+        // the attribute of the models passed to the collection that is used to represent the selection.
+        // leave null to indicate that the entire model json should be set into the attribute
         valueAttribute: rpt.string,
         // either an attribute name, a list of attribute names or a function that produces an array
         // of values that can be searched
@@ -42,36 +45,31 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           rpt.arrayOf(rpt.string),
           rpt.func
         ]),
-        caseInsensitive: rpt.bool,
         // what to break the search string on
-        breakOn: rpt.string
+        breakOn: rpt.string,
+        emptyNode: rpt.node
       },
 
       getDefaultProps: function () {
         return {
-          valueAttribute: "id",
+          valueAttribute: null,
           searchOn: "name",
           breakOn: " ",
-          caseInsensitive: true,
           multiple: false,
-          placeholder: "Select..."
+          placeholder: "Select...",
+          emptyNode: "No results found."
         };
-      },
-
-      findModelByValue: function (value) {
-        if (this.props.valueAttribute === "id") {
-          return this.props.collection.get(value);
-        }
-        var findObj = {};
-        findObj[ this.props.valueAttribute ] = value;
-        return this.props.collection.findWhere(findObj);
       },
 
       getInitialState: function () {
         return {
+          // the user's currently typed search text
           searchText: "",
+          // the filtered results
           filteredCollection: new Backbone.Collection(),
+          // where the cursor is placed in a multi-select among the results
           cursorPosition: 0,
+          // whether the dropdown is open
           open: false
         };
       },
@@ -80,15 +78,17 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         this.listenTo(this.props.collection, "update reset", this.handleCollectionChange);
       },
 
+      // when the collection is updated or reset we need to update the list of results
       handleCollectionChange: function () {
         this.updateResults();
-        this.update();
       },
 
+      // when the input changes we need to do a new search
       handleChange: function (e) {
         this.doSearch(e.target.value);
       },
 
+      // update the search text and search for models that match the q
       doSearch: function (q) {
         util.debug("updating filtered collection for a new search value", q);
         this.updateFilteredCollection(q, this.props.value);
@@ -99,7 +99,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       getDisplayItem: function (className, model) {
-        return React.DOM.span({
+        return d.span({
           className: className,
           key: "result-cid-" + model.cid
         }, this.props.modelComponent({ model: model }));
@@ -108,6 +108,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       // update this.state.filteredCollection to contain a filtered result set based on
       // the current model value and the search function
       updateFilteredCollection: function (q, selectedVals) {
+        return;
         // get an array of current values
         if (typeof selectedVals === "undefined" || selectedVals === null) {
           selectedVals = [];
@@ -365,25 +366,26 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       renderFakeInput: function () {
+        // the currently selected values
         var currentValue = this.props.value;
 
         // get all the views for the selected items
         var selectedItems = [];
-        if (!this.props.multiple) {
-          if (this.state.searchText.length === 0) {
-            var model = this.findModelByValue(currentValue);
-            if (model) {
-              selectedItems = [ this.getDisplayItem("react-select-single-choice", model) ];
-            }
-          }
-        } else {
-          if (_.isArray(currentValue)) {
-            // items not found in the collection are not displayed
-            var selectedModels = _.filter(_.map(currentValue, this.findModelByValue, this), Boolean);
-            // map them into views
-            selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "react-select-multiple-choice"));
-          }
-        }
+        //if (!this.props.multiple) {
+        //  if (this.state.searchText.length === 0) {
+        //    var model = this.findModelByValue(currentValue);
+        //    if (model) {
+        //      selectedItems = [ this.getDisplayItem("react-select-single-choice", model) ];
+        //    }
+        //  }
+        //} else {
+        //  if (_.isArray(currentValue)) {
+        //    // items not found in the collection are not displayed
+        //    var selectedModels = _.filter(_.map(currentValue, this.findModelByValue, this), Boolean);
+        //    // map them into views
+        //    selectedItems = _.map(selectedModels, _.bind(this.getDisplayItem, this, "react-select-multiple-choice"));
+        //  }
+        //}
 
         //only display the placeholder if there is no value selected
         var placeholder;
@@ -403,7 +405,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
             required = false;
           }
         }
-        // create the typing area
+
+        // create the typing area input
         var typingArea = dynamicInput({
           // don't take the styling for the input since this is just where the cursor goes
           className: "react-select-type-area",
@@ -430,7 +433,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         }
 
         // show a caret to indicate whether the input is open
-        insideInput.push(React.DOM.span({
+        insideInput.push(d.span({
           key: "caret",
           className: "caret"
         }));
@@ -448,7 +451,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           className: "react-select-fake-input " + openClassName + " " + (this.props.className || "")
         }), "id", "onKeyDown", "onFocus", "onBlur", "placeholder", "children", "onChange");
 
-        return React.DOM.div(fakeInputProps, insideInput);
+        return d.div(fakeInputProps, insideInput);
       },
 
       renderResults: function () {
@@ -463,12 +466,13 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           collection: this.state.filteredCollection,
           onSelect: this.handleSelect,
           modelComponent: this.props.modelComponent,
-          className: className
+          className: className,
+          emptyNode: this.props.emptyNode
         });
       },
 
       renderTabDiv: function () {
-        return React.DOM.div({
+        return d.div({
           key: "toFocus",
           ref: "toFocus",
           className: "react-select-search-focus-on-select",
@@ -477,7 +481,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       },
 
       render: function () {
-        return React.DOM.div({
+        return d.div({
           className: "react-select-container",
           ref: "container"
         }, [ this.renderFakeInput(), this.renderResults(), this.renderTabDiv() ]);

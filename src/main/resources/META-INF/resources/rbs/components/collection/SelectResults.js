@@ -8,6 +8,9 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
     var BOTTOM_BUFFER = 1;
     var ONE_EM = 16;
 
+    var rpt = React.PropTypes;
+    var d = React.DOM;
+
     // renders a collection of results as the results of a select dropdown
     // fires an onSelect(model) event for when an option is clicked
     return util.rf({
@@ -16,13 +19,13 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
       mixins: [ collection, React.addons.PureRenderMixin ],
 
       propTypes: {
-        onSelect: React.PropTypes.func.isRequired,
-        emptyMessage: React.PropTypes.node
+        onSelect: rpt.func.isRequired,
+        onBottom: rpt.func
       },
 
       getDefaultProps: function () {
         return {
-          emptyMessage: "No options found."
+          onBottom: null
         };
       },
 
@@ -148,17 +151,27 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
         return {};
       },
 
-      wrapperFunction: function (reactEl, oneModel, index) {
-        var optionClass = "react-select-search-result";
+      handleScroll: function () {
+        if (typeof this.props.onBottom === null) {
+          return;
+        }
+        var results = $(this.refs.results);
+        var resultsWrapper = $(this.refs.resultsWrapper);
+        if (results.height() + results.scrollTop() >= resultsWrapper.height()) {
+          this.props.onBottom();
+        }
+      },
 
-        util.debug("wrapping el");
+      wrapperFunction: function (reactEl, oneModel, index) {
+        var optionClasses = [ "react-select-search-result" ];
+
         if (index === this.state.hilite) {
-          optionClass += " hilited";
+          optionClasses.push("hilited");
         }
 
-        return React.DOM.div({
+        return d.div({
           key: "model-result-" + oneModel.cid,
-          className: optionClass,
+          className: optionClasses.join(" "),
           ref: "result-" + index,
           onMouseOver: _.bind(this.setHilite, this, index),
           onMouseDown: this.doNothing,
@@ -171,12 +184,18 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util" ],
 
         var style = this.calculateStyle();
 
+        var cn = [ "react-select-search-results" ];
+        if (typeof this.props.className === "string") {
+          cn.push(this.props.className);
+        }
+
         // put all the results in an absolutely positioned div under the search box
-        return React.DOM.div(_.extend({}, this.props, {
-          className: "react-select-search-results " + (this.props.className || ""),
+        return d.div(_.extend({}, this.props, {
+          className: cn.join(" "),
           style: style,
-          ref: "results"
-        }), results);
+          ref: "results",
+          onScroll: this.handleScroll
+        }), d.div({ ref: "resultsWrapper" }, results));
       }
     });
   });

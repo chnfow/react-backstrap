@@ -2,6 +2,7 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
   function (Backbone, JSOG, $, _, moment) {
     "use strict";
 
+    // this extension of the model allows setting/getting attributes that are multiple levels deep, e.g. get user.name or set user.name
     Backbone.Model = (function (oldModel) {
       var oldGet = oldModel.prototype.get;
       var oldSet = oldModel.prototype.set;
@@ -23,11 +24,6 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
             if (typeof val.get === "function") {
               val = val.get(pc);
             } else {
-              // an added benefit of this get, is that if the pc we're trying to get is not defined
-              // and the parent is an array, then we assume the user meant to get an attribute on the objects of the array
-              if (pcs.length === 0 && _.isArray(val) && typeof val[ pc ] === "undefined") {
-                return _.pluck(val, pc);
-              }
               val = val[ pc ];
             }
           }
@@ -86,18 +82,6 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
                 ptr = toSet[ nextPc ];
               }
               var lastPc = pcs.shift();
-              // if the last piece is a string, and the value we're setting is an array
-              // then assume we're setting a collection nested models
-              var setArrayOfObjects = false;
-              if (isNaN(+lastPc) && _.isArray(value)) {
-                setArrayOfObjects = true;
-                // transform the value to an array of objects
-                value = _.map(value, function (oneVal) {
-                  var toReturn = {};
-                  toReturn[ lastPc ] = oneVal;
-                  return toReturn;
-                });
-              }
 
               var oldVal = this.get(attribute);
               if (_.isEqual(oldVal, value)) {
@@ -105,17 +89,7 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
               }
               triggerChange = true;
 
-              if (setArrayOfObjects) {
-                // this means we are setting an array in the top leve
-                if (lastPtr === toSet) {
-                  toSet = value;
-                } else {
-                  // otherwise, set the previous piece in the ptr chain to the value
-                  lastPtr[ lastSetPc ] = value;
-                }
-              } else {
-                ptr[ lastPc ] = value;
-              }
+              ptr[ lastPc ] = value;
 
               oldSet.call(this, firstPc, toSet, silentOptions);
               this.trigger("change:" + attribute, this, value, options);
@@ -136,11 +110,12 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
           return this;
         },
 
+        // decode all responses using JSOG
         parse: function (response, options) {
           return _.isObject(response) ? JSOG.decode(response) : response;
         },
 
-        // failed validation should return a promise
+        // failed validation methods should return a promise
         save: function (attributes, options) {
           var toReturn = oldModel.prototype.save.apply(this, arguments);
           if (toReturn === false) {
@@ -153,6 +128,8 @@ define([ "original-backbone", "jsog", "jquery", "underscore", "moment" ],
       });
     })(Backbone.Model);
 
+    // this collection can be partially server side and supports sorting by attributes, for both client and server side
+    // collections. it also tracks parameters that are used to fetch the collection
     Backbone.Collection = (function (oldCollection) {
       return oldCollection.extend({
         model: Backbone.Model,
