@@ -6,7 +6,7 @@
   <artifactId>react-backstrap</artifactId>
   <groupId>com.moodysalem.js</groupId>
   <packaging>jar</packaging>
-  <version>0.0.23</version>
+  <version>0.0.24-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>JS Library for building Single Page Applications using Backbone, Bootstrap, and React</description>
   <url>https://github.com/moodysalem/react-backstrap</url>
@@ -23,7 +23,7 @@
     <url>https://github.com/moodysalem/react-backstrap</url>
     <connection>scm:git:https://github.com/moodysalem/react-backstrap.git</connection>
     <developerConnection>scm:git:https://github.com/moodysalem/react-backstrap.git</developerConnection>
-    <tag>react-backstrap-0.0.23</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <developers>
