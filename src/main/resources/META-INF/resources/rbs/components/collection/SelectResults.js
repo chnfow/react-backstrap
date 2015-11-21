@@ -16,7 +16,9 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         onSelect: rpt.func.isRequired,
         onBottom: rpt.func,
         loading: rpt.bool.isRequired,
-        loadingIcon: rpt.node
+        loadingIcon: rpt.node,
+        multiple: rpt.bool.isRequired,
+        value: rpt.any
       },
 
       getDefaultProps: function () {
@@ -124,13 +126,35 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
           optionClasses.push("hilited");
         }
 
+        // determine whether this option is currently selected
+        var selected = false;
+        if (this.props.multiple) {
+          if (_.isArray(this.props.value)) {
+            if (this.props.valueAttribute !== null) {
+              selected = _.contains(this.props.value, oneModel.get(this.props.valueAttribute));
+            } else {
+              selected = _.contains(_.pluck(this.props.value, "id"), oneModel.get("id"));
+            }
+          }
+        } else {
+          if (this.props.valueAttribute !== null) {
+            selected = this.props.value === oneModel.get(this.props.valueAttribute);
+          } else {
+            selected = this.props.value.id === oneModel.get("id");
+          }
+        }
+
+        if (selected) {
+          optionClasses.push("selected");
+        }
+
         return d.div({
           key: "model-result-" + oneModel.cid,
           className: optionClasses.join(" "),
           ref: "result-" + index,
           onMouseOver: _.bind(this.setHilite, this, index),
           onMouseDown: this.doNothing,
-          onClick: _.bind(this.handleSelect, this, oneModel)
+          onClick: selected ? this.doNothing : _.bind(this.handleSelect, this, oneModel)
         }, reactEl);
       },
 

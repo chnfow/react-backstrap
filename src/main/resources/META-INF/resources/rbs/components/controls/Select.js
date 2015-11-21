@@ -492,6 +492,9 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           onSelect: this.handleSelect,
           onBottom: this.handleBottom,
           modelComponent: this.props.modelComponent,
+          multiple: this.props.multiple,
+          value: this.props.value,
+          valueAttribute: this.props.valueAttribute,
           className: className,
           emptyNode: d.div({
             key: "empty-results-message",

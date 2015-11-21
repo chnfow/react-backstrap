@@ -401,6 +401,16 @@ body.modal-open {
     color: white;
 }
 
+.react-select-search-result.selected {
+    background-color: lightgray;
+    color: white;
+}
+
+.react-select-search-result.selected.hilited {
+    background-color: gray;
+    color: white;
+}
+
 /* this class wraps each of the selected options in a single select */
 .react-select-single-choice {
     display: inline-block;
