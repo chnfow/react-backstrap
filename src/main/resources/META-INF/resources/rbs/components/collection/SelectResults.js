@@ -15,9 +15,6 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
       propTypes: {
         onSelect: rpt.func.isRequired,
         onBottom: rpt.func,
-        maxHeight: rpt.number,
-        minHeight: rpt.number,
-        windowBottomBuffer: rpt.number,
         loading: rpt.bool.isRequired,
         loadingIcon: rpt.node
       },
@@ -25,9 +22,6 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
       getDefaultProps: function () {
         return {
           onBottom: null,
-          maxHeight: 320,
-          minHeight: 100,
-          windowBottomBuffer: 10,
           loadingIcon: icon({
             name: "refresh",
             animate: "spin"
@@ -37,8 +31,7 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
 
       getInitialState: function () {
         return {
-          hilite: 0,
-          maxHeight: null
+          hilite: 0
         };
       },
 
@@ -50,20 +43,16 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         this.setHilite(this.state.hilite - 1);
       },
       pageDown: function () {
-        this.setHilite(this.state.hilite + this.getPageSize());
+        this.setHilite(this.state.hilite + 5);
       },
       pageUp: function () {
-        this.setHilite(this.state.hilite - this.getPageSize());
+        this.setHilite(this.state.hilite - 5);
       },
       home: function () {
         this.setHilite(0);
       },
       end: function () {
         this.setHilite(this.state.collection.length - 1);
-      },
-
-      getPageSize: function () {
-        return Math.max(Math.floor(this.state.maxHeight / 3), 1)
       },
 
       setHilite: function (newHilite) {
@@ -113,48 +102,8 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         return null;
       },
 
-      componentDidMount: function () {
-        this.calculateMaxHeight = _.debounce(_.bind(this._calculateMaxHeight, this), 20);
-        this.calculateMaxHeight();
-        $(window).on("resize", this.calculateMaxHeight);
-      },
-
-      componentWillUnmount: function () {
-        $(window).off("resize", this.calculateMaxHeight);
-      },
-
-      _calculateMaxHeight: function () {
-        if (this.isMounted()) {
-          var wind = $(window);
-          var resultsDiv = $(this.refs.results);
-          var windowScrollTop = wind.scrollTop();
-          // how far from the top of the window the select results are
-          var divDistanceFromTop = resultsDiv.offset().top - windowScrollTop;
-          // how tall the window is
-          var windowHeight = wind.height();
-
-          var maxHeight = (windowHeight - divDistanceFromTop) - this.props.windowBottomBuffer;
-          maxHeight = Math.max(Math.min(this.props.maxHeight, maxHeight), this.props.minHeight);
-
-          if (this.state.maxHeight !== maxHeight) {
-            this.setState({
-              maxHeight: maxHeight
-            });
-          }
-        }
-      },
-
       componentDidUpdate: function () {
         this.setHilite(this.state.hilite);
-      },
-
-      calculateStyle: function () {
-        if (this.state.maxHeight !== null) {
-          return _.extend({
-            maxHeight: this.state.maxHeight
-          }, this.props.style);
-        }
-        return this.props.style;
       },
 
       handleScroll: function () {
@@ -197,8 +146,6 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
           }, this.props.loadingIcon));
         }
 
-        var style = this.calculateStyle();
-
         var cn = [ "react-select-search-results" ];
         if (typeof this.props.className === "string") {
           cn.push(this.props.className);
@@ -207,7 +154,6 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         // put all the results in an absolutely positioned div under the search box
         return d.div(_.extend({}, this.props, {
           className: cn.join(" "),
-          style: style,
           ref: "results",
           onScroll: this.handleScroll
         }), d.div({ ref: "resultsWrapper" }, results));
