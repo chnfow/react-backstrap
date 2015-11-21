@@ -93,7 +93,17 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
       },
 
       handleSelect: function (model, e) {
+        if (this.isSelected(model)) {
+          return;
+        }
         this.props.onSelect(model, e);
+      },
+
+      selectHilitedModel: function () {
+        var m = this.getHilitedModel();
+        if (m !== null) {
+          this.handleSelect(m, null);
+        }
       },
 
       getHilitedModel: function () {
@@ -119,6 +129,28 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         }
       },
 
+      isSelected: function (model) {
+        var sel = false;
+
+        if (this.props.multiple) {
+          if (_.isArray(this.props.value)) {
+            if (this.props.valueAttribute !== null) {
+              sel = _.contains(this.props.value, model.get(this.props.valueAttribute));
+            } else {
+              sel = _.contains(_.pluck(this.props.value, "id"), model.get("id"));
+            }
+          }
+        } else {
+          if (this.props.valueAttribute !== null) {
+            sel = this.props.value === model.get(this.props.valueAttribute);
+          } else {
+            sel = this.props.value.id === model.get("id");
+          }
+        }
+
+        return sel;
+      },
+
       wrapperFunction: function (reactEl, oneModel, index) {
         var optionClasses = [ "react-select-search-result" ];
 
@@ -127,23 +159,7 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         }
 
         // determine whether this option is currently selected
-        var selected = false;
-        if (this.props.multiple) {
-          if (_.isArray(this.props.value)) {
-            if (this.props.valueAttribute !== null) {
-              selected = _.contains(this.props.value, oneModel.get(this.props.valueAttribute));
-            } else {
-              selected = _.contains(_.pluck(this.props.value, "id"), oneModel.get("id"));
-            }
-          }
-        } else {
-          if (this.props.valueAttribute !== null) {
-            selected = this.props.value === oneModel.get(this.props.valueAttribute);
-          } else {
-            selected = this.props.value.id === oneModel.get("id");
-          }
-        }
-
+        var selected = this.isSelected(oneModel);
         if (selected) {
           optionClasses.push("selected");
         }

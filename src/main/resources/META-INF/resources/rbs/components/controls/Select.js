@@ -268,7 +268,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           // handle key selection of a result
           case KEY_ENTER:
             e.preventDefault();
-            this.handleSelect(this.refs.results.getHilitedModel());
+            this.refs.results.selectHilitedModel();
             break;
           case KEY_TAB:
             if (this.state.results.size() === 1) {
