@@ -144,7 +144,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       doClientSearch: function () {
         // client side filtering
         var so = this.props.searchOn;
-        var st = this.state.searchText;
+        var st = this.state.searchText.toUpperCase();
         this.state.results.set(this.props.collection.filter(function (oneM) {
           if (st.length === 0) {
             return true;
@@ -383,7 +383,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         } else {
           var where = {};
           where[ va ] = value;
-          mdl = this.props.collection.findWhere(va);
+          mdl = this.props.collection.findWhere(where);
         }
 
         return d.span({
