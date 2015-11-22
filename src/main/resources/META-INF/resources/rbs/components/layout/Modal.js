@@ -32,6 +32,13 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
         };
       },
 
+      getInitialState: function () {
+        return {
+          // whether this is the first modal that opened
+          firstModal: false
+        };
+      },
+
       closeOnClick: function () {
         if (this.props.backdrop === "static") {
           return;
@@ -45,24 +52,38 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
       },
 
       componentWillReceiveProps: function (nextProps) {
-        if (this.isMounted()) {
-          var st;
-          var body = $("body");
-          if (nextProps.open && !this.props.open) {
+        var st;
+        var body = $("body");
+        // modal is being opened
+        if (nextProps.open && !this.props.open) {
+          var mo = body.hasClass("modal-open");
+          if (!mo) {
+            this.setState({
+              firstModal: true
+            });
             st = $(window).scrollTop();
             body.addClass("modal-open").css("top", st * -1);
+          }
 
-            if (isSafari) {
+          // for safari we have to repaint because there are bugs with opening modals from tables
+          if (isSafari) {
+            window.requestAnimationFrame(function () {
+              body.css("display", "none");
               window.requestAnimationFrame(function () {
-                body.css("display", "none");
-                window.requestAnimationFrame(function () {
-                  body.css("display", "");
-                });
+                body.css("display", "");
               });
-            }
-          } else if (!nextProps.open && this.props.open) {
+            });
+          }
+        } else if (!nextProps.open && this.props.open) {
+          // modal is being closed
+          if (this.state.firstModal) {
             st = parseInt(body.css("top")) * -1;
             body.removeClass("modal-open").css("top", "");
+            this.setState({
+              firstModal: false
+            });
+
+            // set the scroll top of the window after the modal open class is removed
             if (!isNaN(st)) {
               window.requestAnimationFrame(function () {
                 $(window).scrollTop(st);
@@ -73,8 +94,8 @@ define([ "react", "jquery", "underscore", "../controls/TimeoutTransitionGroup", 
       },
 
       componentWillUnmount: function () {
-        if (this.props.open) {
-          $("body").removeClass("modal-open");
+        if (this.props.open && this.state.firstModal) {
+          $("body").removeClass("modal-open").css("top", "");
         }
       },
 
