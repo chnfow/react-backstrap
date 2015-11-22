@@ -47,7 +47,10 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         // whether the filtering happens on the server or the collection contains all the models
         serverSide: rpt.bool,
         // debounce for server searches
-        searchDelay: rpt.number
+        searchDelay: rpt.number,
+        // the attribute that uniquely identifies a model, used for determining which models in the dropdown should be
+        // considered as selected
+        idAttribute: rpt.string
       },
 
       getDefaultProps: function () {
@@ -58,7 +61,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           placeholder: "Select...",
           emptyMessage: "No results found.",
           serverSide: false,
-          searchDelay: 200
+          searchDelay: 200,
+          idAttribute: "id"
         };
       },
 
@@ -496,6 +500,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           value: this.props.value,
           valueAttribute: this.props.valueAttribute,
           className: className,
+          idAttribute: this.props.idAttribute,
           emptyNode: d.div({
             key: "empty-results-message",
             className: "react-select-search-result empty-message"

@@ -18,7 +18,8 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
         loading: rpt.bool.isRequired,
         loadingIcon: rpt.node,
         multiple: rpt.bool.isRequired,
-        value: rpt.any
+        value: rpt.any,
+        idAttribute: rpt.string
       },
 
       getDefaultProps: function () {
@@ -27,7 +28,8 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
           loadingIcon: icon({
             name: "refresh",
             animate: "spin"
-          })
+          }),
+          idAttribute: "id"
         };
       },
 
@@ -132,19 +134,26 @@ define([ "react", "react-dom", "underscore", "../mixins/Collection", "util", "..
       isSelected: function (model) {
         var sel = false;
 
+        var ida = this.props.idAttribute;
+        var va = this.props.valueAttribute;
+        var v = this.props.value;
+        if (v === null || typeof v === "undefined") {
+          return false;
+        }
+
         if (this.props.multiple) {
-          if (_.isArray(this.props.value)) {
-            if (this.props.valueAttribute !== null) {
-              sel = _.contains(this.props.value, model.get(this.props.valueAttribute));
+          if (_.isArray(v)) {
+            if (va !== null) {
+              sel = _.contains(v, model.get(va));
             } else {
-              sel = _.contains(_.pluck(this.props.value, "id"), model.get("id"));
+              sel = _.contains(_.pluck(v, ida), model.get(ida));
             }
           }
         } else {
           if (this.props.valueAttribute !== null) {
-            sel = this.props.value === model.get(this.props.valueAttribute);
+            sel = v === model.get(va);
           } else {
-            sel = this.props.value.id === model.get("id");
+            sel = v[ ida ] === model.get(ida);
           }
         }
 
