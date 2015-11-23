@@ -276,7 +276,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
             this.refs.results.selectHilitedModel();
             break;
           case KEY_TAB:
-            if (this.state.results.size() === 1) {
+            if (this.state.results.size() === 1 && this.state.searchText.trim().length > 0) {
               this.refs.results.selectHilitedModel();
             }
             break;
