@@ -371,6 +371,7 @@ body.modal-open {
     border: 0.1em solid #dddddd;
     border-top-width: 0;
     visibility: hidden;
+    max-height: 20em;
 }
 
 .react-select-search-results.react-select-search-results-open {

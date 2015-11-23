@@ -96,6 +96,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         if (!this.props.serverSide) {
           this.updateResults();
         }
+        this.update();
       },
 
       // when the input changes we need to do a new search
@@ -388,6 +389,10 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
           var where = {};
           where[ va ] = value;
           mdl = this.props.collection.findWhere(where);
+        }
+        // this is going to happen when the collection isn't yet loaded
+        if (mdl === null || typeof mdl === "undefined") {
+          return null;
         }
 
         return d.span({
