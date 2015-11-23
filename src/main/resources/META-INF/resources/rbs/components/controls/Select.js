@@ -277,11 +277,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
             break;
           case KEY_TAB:
             if (this.state.results.size() === 1) {
-              var hm = this.refs.results.getHilitedModel();
-              if (hm !== null) {
-                e.preventDefault();
-                this.handleSelect(hm);
-              }
+              this.refs.results.selectHilitedModel();
             }
             break;
         }
