@@ -42,6 +42,8 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         valueAttribute: rpt.string,
         // name of the model attribute to search on
         searchOn: rpt.string,
+        // what to break the value of the attribute on for searching
+        breakOn: rpt.string,
         // the node to display when there are no results
         emptyMessage: rpt.node,
         // whether the filtering happens on the server or the collection contains all the models
@@ -57,6 +59,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
         return {
           valueAttribute: null,
           searchOn: "name",
+          breakOn: null,
           multiple: false,
           placeholder: "Select...",
           emptyMessage: "No results found.",
@@ -149,6 +152,7 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
       doClientSearch: function () {
         // client side filtering
         var so = this.props.searchOn;
+        var bo = this.props.breakOn;
         var st = this.state.searchText.toUpperCase();
         this.state.results.set(this.props.collection.filter(function (oneM) {
           if (st.length === 0) {
@@ -165,7 +169,14 @@ define([ "react", "react-dom", "underscore", "jquery", "backbone", "../mixins/Ev
               v = v.toString();
             }
           }
-          return v.toUpperCase().indexOf(st) !== -1;
+          var sv = v.toUpperCase();
+          if (bo !== null) {
+            var pcs = st.split(bo);
+            return _.every(pcs, function (p) {
+              return sv.indexOf(p) !== -1;
+            });
+          }
+          return sv.indexOf(st) !== -1;
         }));
       },
 
