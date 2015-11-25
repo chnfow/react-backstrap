@@ -8,6 +8,8 @@
 
   // the optimizer engine
   optimize: "uglify2",
+  preserveLicenseComments: false,
+  generateSourceMaps: true,
 
   paths: {
     "backbone": "rbs/etc/library-extensions/Backbone",
