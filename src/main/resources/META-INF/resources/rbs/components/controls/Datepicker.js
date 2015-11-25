@@ -42,11 +42,11 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
       },
 
       getInitialState: function () {
-        var d = new Date();
+        var today = new Date();
         return {
           open: false,
-          currentMonth: d.getMonth(),
-          currentYear: d.getFullYear(),
+          currentMonth: today.getMonth(),
+          currentYear: today.getFullYear(),
           // this value stores the value of the input while it's focused
           transientValue: null
         };
@@ -213,9 +213,9 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
         var isActive;
         var lastMonthDays = util.numDays(lastMonth, lastYear);
         while (firstDayOfMonth > 0) {
-          var d = lastMonthDays - (--firstDayOfMonth);
-          isActive = (lastYear === selectedYear && lastMonth === selectedMonth && d === selectedDay);
-          days.push(this.getDaySpan(lastYear, lastMonth, d, isActive));
+          var diff = lastMonthDays - (--firstDayOfMonth);
+          isActive = (lastYear === selectedYear && lastMonth === selectedMonth && diff === selectedDay);
+          days.push(this.getDaySpan(lastYear, lastMonth, diff, isActive));
         }
         var numDays = util.numDays(this.state.currentMonth, this.state.currentYear);
         for (var x = 1; x <= numDays; x++) {
@@ -232,7 +232,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           days.push(this.getDaySpan(nextYear, nextMonth, nmd, isActive));
         }
 
-        return d.div({
+        return diff.div({
           className: "datepicker-calendar-body",
           key: "calendarbody"
         }, days);
