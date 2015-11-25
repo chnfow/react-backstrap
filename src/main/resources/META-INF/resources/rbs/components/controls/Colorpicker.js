@@ -49,12 +49,23 @@ define([ "react", "util", "underscore" ],
         });
       },
 
+      getSwatchContainer: function () {
+        var cn = [ "colorpicker-swatch-container" ];
+        if (this.state.open) {
+          cn.push("colorpicker-swatch-container-open")
+        }
+        return d.div({
+          key: "colorpicker",
+          className: cn.join(" ")
+        }, []);
+      },
+
       render: function () {
-        var inputProps = _.extend({}, this.props, {
+        var inputProps = _.omit(_.extend({}, this.props, {
           type: "text",
           onFocus: this.handleFocus,
           onBlur: this.handleBlur
-        });
+        }), "children");
 
         return d.div({
           className: "colorpicker-container"
@@ -63,10 +74,7 @@ define([ "react", "util", "underscore" ],
             key: "input",
             className: "colorpicker-input-container"
           }, d.input(inputProps)),
-          d.div({
-            key: "colorpicker",
-            className: "colorpicker-swatch-container"
-          })
+          this.getSwatchContainer()
         ])
       }
     });
