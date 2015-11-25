@@ -232,7 +232,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           days.push(this.getDaySpan(nextYear, nextMonth, nmd, isActive));
         }
 
-        return diff.div({
+        return d.div({
           className: "datepicker-calendar-body",
           key: "calendarbody"
         }, days);
