@@ -34,13 +34,15 @@ define([ "react", "util", "underscore" ],
       propTypes: {
         onChange: rpt.func.isRequired,
         value: rpt.string,
-        colors: rpt.arrayOf(rpt.arrayOf(rpt.string))
+        colors: rpt.arrayOf(rpt.arrayOf(rpt.string)),
+        right: rpt.bool
       },
 
       getDefaultProps: function () {
         return {
           value: null,
-          colors: default_colors
+          colors: default_colors,
+          right: false
         };
       },
 
@@ -83,14 +85,17 @@ define([ "react", "util", "underscore" ],
       getSwatchContainer: function () {
         var cn = [ "colorpicker-swatch-container" ];
         if (this.state.open) {
-          cn.push("colorpicker-swatch-container-open")
+          cn.push("colorpicker-swatch-container-open");
+        }
+        if (this.props.open) {
+          cn.push("colorpicker-swatch-container-right");
         }
         var val = this.props.value;
         var i = 0, ii = 0;
         return d.div({
           key: "colorpicker",
           className: cn.join(" "),
-          onClick: this.doNothing
+          onMouseDown: this.doNothing
         }, [
           _.map(this.props.colors, function (row) {
             if (row.length === 0) {
@@ -106,13 +111,11 @@ define([ "react", "util", "underscore" ],
               if (val === hex) {
                 cn.push("color-selected");
               }
-              return d.div({
-                key: ii++,
+              return d.div({ className: "colorpicker-color-swatch-container", key: ii++ }, d.div({
                 className: cn.join(" "),
                 style: { backgroundColor: "#" + hex },
-                onMouseDown: this.doNothing,
                 onClick: _.bind(this.handleSelect, this, hex)
-              });
+              }));
             }, this))
           }, this)
         ]);

@@ -572,17 +572,30 @@ body.modal-open {
     overflow: auto;
 }
 
+.colorpicker-swatch-container.colorpicker-swatch-container-right {
+    right: 0;
+}
+
 .colorpicker-swatch-container.colorpicker-swatch-container-open {
     display: block;
 }
 
-.colorpicker-swatch-container .colorpicker-color-swatch {
-    height: 24px;
-    width: 16%;
+.colorpicker-swatch-container .colorpicker-color-swatch-container {
+    height: 1.5em;
+    width: 16.66%;
     display: inline-block;
+    padding: 0.1em;
+}
+
+.colorpicker-swatch-container .colorpicker-color-swatch {
     -webkit-border-radius: 0.2em;
     -moz-border-radius: 0.2em;
     border-radius: 0.2em;;
+    height: 100%;
+}
+
+.colorpicker-swatch-container hr {
+    margin: 0.4em !important;
 }
 
 .colorpicker-color-swatch.color-selected {
