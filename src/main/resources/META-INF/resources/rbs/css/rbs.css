@@ -449,11 +449,11 @@ body.modal-open {
 /** datepicker stuff */
 .datepicker-container {
     position: relative;
-    z-index: 1;
 }
 
 .datepicker-calendar {
     position: absolute;
+    z-index: 2;
     width: 220px;
     background-color: white;
     padding: 0.5em;
@@ -533,10 +533,10 @@ body.modal-open {
 /* timepicker stuff */
 .timepicker-container {
     position: relative;
-    z-index: 1;
 }
 
 .timepicker {
+    z-index: 2;
     position: absolute;
     width: 240px;
     background-color: white;
@@ -558,6 +558,7 @@ body.modal-open {
 }
 
 .colorpicker-swatch-container {
+    z-index: 2;
     position: absolute;
     width: 240px;
     height: 240px;
