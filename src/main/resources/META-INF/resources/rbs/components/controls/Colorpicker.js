@@ -6,7 +6,7 @@ define([ "react", "util", "underscore" ],
     var rpt = React.PropTypes;
 
     return util.rf({
-      displayName: "Datepicker Input",
+      displayName: "Colorpicker Input",
 
       mixins: [ React.addons.PureRenderMixin ],
 
@@ -30,9 +30,6 @@ define([ "react", "util", "underscore" ],
       componentDidMount: function () {
       },
       componentWillReceiveProps: function (nextProps) {
-      },
-      shouldComponentUpdate: function () {
-        return true;
       },
       componentWillUpdate: function (nextProps, nextState) {
       },
