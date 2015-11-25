@@ -1,5 +1,5 @@
-@import url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css');
-@import url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css');
 
 /* don't allow selection of text in this class- used everywhere */
 .no-select {
@@ -449,6 +449,7 @@ body.modal-open {
 /** datepicker stuff */
 .datepicker-container {
     position: relative;
+    z-index: 1;
 }
 
 .datepicker-calendar {
@@ -456,7 +457,6 @@ body.modal-open {
     width: 220px;
     background-color: white;
     padding: 0.5em;
-    z-index: 1000;
     -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
@@ -533,6 +533,7 @@ body.modal-open {
 /* timepicker stuff */
 .timepicker-container {
     position: relative;
+    z-index: 1;
 }
 
 .timepicker {
@@ -540,7 +541,6 @@ body.modal-open {
     width: 240px;
     background-color: white;
     padding: 0.5em;
-    z-index: 1000;
     -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
     box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
@@ -550,6 +550,24 @@ body.modal-open {
 
 .timepicker .timepicker-buttons {
     cursor: pointer;
+}
+
+/*colorpicker stuff*/
+.colorpicker-container {
+    position: relative;
+}
+
+.colorpicker-swatch-container {
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    background-color: white;
+    padding: 0.5em;
+    -webkit-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    -moz-box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    box-shadow: 0 0.1em 0.3em 0.1em aliceblue;
+    border-bottom-left-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
 }
 
 /* a fade transition for using with the timeout transition group */

@@ -65,11 +65,6 @@
           <configFile>
             ${basedir}/src/main/config/buildconfig.js
           </configFile>
-          <!-- optional parameters to optimizer executable -->
-          <optimizerParameters>
-            <parameter>optimize=uglify2</parameter>
-            <parameter>baseUrl=${baseDir}</parameter>
-          </optimizerParameters>
           <!--
           Whether or not to process configFile with maven filters.
           If you use this option, some options in your configFile

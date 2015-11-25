@@ -31,7 +31,10 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
         allowedFormats: [ "HH:mm", "H:mm", "hh:mma", "h:mma", "hh:mmA", "h:mmA", "hh:mm A", "h:mm A" ],
         saveFormat: "HH:mm",
         displayFormat: "h:mm A",
-        polyfillOnly: false
+        polyfillOnly: false,
+        meridiemPlaceholder: "XM",
+        hourPlaceholder: "HH",
+        minutePlaceholder: "MM"
       };
     },
 
@@ -222,15 +225,18 @@ define([ "react", "underscore", "modernizr", "moment", "../layout/Icon", "util" 
           d.div({ key: "h", className: "col-xs-4" }, d.input({
             value: (mt !== null) ? mt.format("h") : "",
             readOnly: true,
+            placeholder: this.props.hourPlaceholder,
             className: "form-control text-center"
           })),
           d.div({ key: "m", className: "col-xs-4" }, d.input({
             value: (mt !== null) ? mt.format("mm") : "",
+            placeholder: this.props.minutePlaceholder,
             readOnly: true,
             className: "form-control text-center"
           })),
           d.div({ key: "a", className: "col-xs-4" }, d.input({
             value: (mt !== null) ? mt.format("A") : "",
+            placeholder: this.props.meridiemPlaceholder,
             readOnly: true,
             className: "form-control text-center"
           }))

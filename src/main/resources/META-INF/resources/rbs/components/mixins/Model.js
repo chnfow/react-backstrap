@@ -3,12 +3,13 @@
  * Also provides a method for converting an array of attribute descriptions to an array of components
  */
 define([ "react", "underscore", "./Events", "../controls/AttributeBinder", "../controls/Datepicker", "../controls/Timepicker",
-    "../controls/Select", "../layout/Icon", "util" ],
-  function (React, _, events, binder, datepicker, timepicker, select, icon, util) {
+    "../controls/Colorpicker", "../controls/Select", "../layout/Icon", "util" ],
+  function (React, _, events, binder, datepicker, timepicker, colorpicker, select, icon, util) {
     "use strict";
 
     var attributeComponentMap = {};
     attributeComponentMap.date = datepicker;
+    attributeComponentMap.color = colorpicker;
     attributeComponentMap.select = select;
     attributeComponentMap.time = timepicker;
     attributeComponentMap.text = util.rf({
