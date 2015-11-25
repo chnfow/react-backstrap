@@ -9,6 +9,9 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
     var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     var DAYS = [ "Su", "Mo", "Tu", "We", "Tr", "Fr", "Sa" ];
 
+    var rpt = React.PropTypes;
+    var d = React.DOM;
+
     var KEY_ENTER = 13;
 
     return util.rf({
@@ -17,14 +20,14 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
       mixins: [ React.addons.PureRenderMixin ],
 
       propTypes: {
-        onChange: React.PropTypes.func.isRequired,
-        value: React.PropTypes.string,
-        min: React.PropTypes.instanceOf(Date),
-        max: React.PropTypes.instanceOf(Date),
-        allowedFormats: React.PropTypes.arrayOf(React.PropTypes.string),
-        saveFormat: React.PropTypes.string,
-        displayFormat: React.PropTypes.string,
-        polyfillOnly: React.PropTypes.bool
+        onChange: rpt.func.isRequired,
+        value: rpt.string,
+        min: rpt.instanceOf(Date),
+        max: rpt.instanceOf(Date),
+        allowedFormats: rpt.arrayOf(rpt.string),
+        saveFormat: rpt.string,
+        displayFormat: rpt.string,
+        polyfillOnly: rpt.bool
       },
 
       getDefaultProps: function () {
@@ -122,11 +125,11 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
 
 
       getHeader: function () {
-        return React.DOM.div({
+        return d.div({
           key: "datepickerheader",
           className: "datepicker-header"
         }, [
-          React.DOM.div({
+          d.div({
             key: "prev",
             onMouseDown: this.doNothing,
             onClick: _.bind(this.moveMonth, this, -1),
@@ -134,11 +137,11 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           }, icon({
             name: "chevron-left"
           })),
-          React.DOM.div({
+          d.div({
             key: "header-label",
             className: "datepicker-header-label"
           }, MONTHS[ this.state.currentMonth ] + " " + this.state.currentYear),
-          React.DOM.div({
+          d.div({
             key: "next",
             onMouseDown: this.doNothing,
             onClick: _.bind(this.moveMonth, this, 1),
@@ -146,11 +149,11 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           }, icon({
             name: "chevron-right"
           })),
-          React.DOM.div({
+          d.div({
             key: "day-labels",
             className: "datepicker-header-days"
           }, _.map(DAYS, function (oneDay) {
-            return React.DOM.span({ key: oneDay }, oneDay);
+            return d.span({ key: oneDay }, oneDay);
           }))
         ]);
       },
@@ -229,7 +232,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           days.push(this.getDaySpan(nextYear, nextMonth, nmd, isActive));
         }
 
-        return React.DOM.div({
+        return d.div({
           className: "datepicker-calendar-body",
           key: "calendarbody"
         }, days);
@@ -248,7 +251,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
           classes.push("invalid-day-option");
         }
         var fn = (valid) ? _.bind(this.setDate, this, year, month, day) : this.doNothing;
-        return React.DOM.span({
+        return d.span({
           key: "calendar-day-" + year + "-" + month + "-" + day,
           className: classes.join(" "),
           onMouseDown: this.doNothing,
@@ -341,12 +344,12 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
 
       render: function () {
         if (this.props.polyfillOnly && Modernizr.inputtypes.date) {
-          return React.DOM.input(_.extend({}, this.props, { type: "date" }));
+          return d.input(_.extend({}, this.props, { type: "date" }));
         }
 
         var datepicker = null;
         if (this.state.open) {
-          datepicker = React.DOM.div({
+          datepicker = d.div({
             key: "dp",
             className: "datepicker-calendar",
             onMouseDown: this.doNothing,
@@ -369,7 +372,7 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
         // show clear button if there's a value
         var clearButton = null;
         if ((displayValue && displayValue.length > 0) && !this.props.disabled && !this.props.readOnly) {
-          clearButton = React.DOM.div({
+          clearButton = d.div({
             key: "clear",
             className: "datepicker-clear-button",
             onMouseDown: this.doNothing,
@@ -378,10 +381,10 @@ define([ "react", "underscore", "moment", "../layout/Icon", "modernizr", "util" 
         }
 
         var className = "datepicker-container";
-        return React.DOM.div({
+        return d.div({
           className: className
         }, [
-          React.DOM.input(_.extend({}, this.props, {
+          d.input(_.extend({}, this.props, {
             key: "input",
             type: "text",
             value: displayValue,
