@@ -569,10 +569,26 @@ body.modal-open {
     border-bottom-left-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
     display: none;
+    overflow: auto;
 }
 
 .colorpicker-swatch-container.colorpicker-swatch-container-open {
     display: block;
+}
+
+.colorpicker-swatch-container .colorpicker-color-swatch {
+    height: 24px;
+    width: 16%;
+    display: inline-block;
+    -webkit-border-radius: 0.2em;
+    -moz-border-radius: 0.2em;
+    border-radius: 0.2em;;
+}
+
+.colorpicker-color-swatch.color-selected {
+    -webkit-box-shadow: 0 0 2px gray;
+    -moz-box-shadow: 0 0 2px gray;
+    box-shadow: 0 0 2px gray;
 }
 
 /* a fade transition for using with the timeout transition group */
